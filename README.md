@@ -1,27 +1,70 @@
-# Project
+# Nền tảng họp trực tuyến tích hợp AI
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.15.
+Dự án này là một nền tảng họp trực tuyến được phát triển bằng Spring Boot và Angular, tích hợp các tính năng AI để nâng cao trải nghiệm người dùng.
 
-## Development server
+## Các tính năng chính
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+- **Họp trực tuyến**: Tạo và tham gia các phòng họp trực tuyến với video và âm thanh chất lượng cao.
+- **Tích hợp AI**:
+  - Nhận diện giọng nói và chuyển đổi thành văn bản.
+  - Tóm tắt nội dung cuộc họp tự động.
+- **Quản lý người dùng**: Đăng ký, đăng nhập, và quản lý tài khoản.
+- **Lịch sử cuộc họp**: Lưu trữ và xem lại nội dung các cuộc họp trước đó.
 
-## Code scaffolding
+## Công nghệ sử dụng
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- **Backend**: Spring Boot
+- **Frontend**: Angular
+- **Cơ sở dữ liệu**: MySQL
+- **AI**: Tích hợp các API AI như Google Cloud Speech-to-Text, OpenAI GPT, hoặc các mô hình AI tùy chỉnh.
 
-## Build
+## Cách chạy dự án
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+### Yêu cầu hệ thống
 
-## Running unit tests
+- **Java**: Phiên bản 11 hoặc mới hơn.
+- **Node.js**: Phiên bản 12 hoặc mới hơn.
+- **Angular CLI**: Phiên bản 9.1.15 hoặc mới hơn.
+- **MySQL**: Phiên bản 5.7 hoặc mới hơn.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### Hướng dẫn cài đặt
 
-## Running end-to-end tests
+1. **Clone repository**:
+   - ```bash
+   - git clone <repository-url>
+   - cd <repository-folder>
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+2. **Cấu hình cơ sở dữ liệu**:
+    - Tạo một cơ sở dữ liệu MySQL.
+    - Cập nhật thông tin kết nối trong file application.properties của Spring Boot.
 
-## Further help
+3. **Chạy backend**:
+   - Điều hướng đến thư mục backend:
+     ```bash
+     cd backend
+     ```
+   - Build và chạy ứng dụng:
+     ```bash
+     ./mvnw spring-boot:run
+     ```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+4. **Chạy frontend**:
+   - Điều hướng đến thư mục frontend:
+     ```bash
+     cd frontend
+     ```
+   - Cài đặt các dependencies:
+     ```bash
+     npm install
+     ```
+   - Chạy ứng dụng Angular:
+     ```bash
+     ng serve
+     ```
+
+5. **Truy cập ứng dụng**:
+   - Mở trình duyệt và truy cập: `http://localhost:4200`.
+
+6. **Lưu ý**:
+   - Đảm bảo rằng backend và frontend đều đang chạy để ứng dụng hoạt động đầy đủ.
+   - Kiểm tra kết nối cơ sở dữ liệu MySQL trước khi chạy backend.
