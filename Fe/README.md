@@ -30,9 +30,11 @@ Dự án này là một nền tảng họp trực tuyến được phát triển
 ### Hướng dẫn cài đặt
 
 1. **Clone repository**:
-   - ```bash
-   - git clone <repository-url>
-   - cd <repository-folder>
+    ```bash
+    git clone <repository-url>
+    cd <repository-folder>
+    ```
+
 
 2. **Cấu hình cơ sở dữ liệu**:
     - Tạo một cơ sở dữ liệu MySQL.
