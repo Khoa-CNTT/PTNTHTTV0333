@@ -1,0 +1,186 @@
+<html>
+<head>
+    <title>DTU Meet</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: white;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .text-red {
+            color: #dc2626;
+        }
+        
+        .font-bold {
+            font-weight: 700;
+        }
+        
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-top: 2.5rem;
+            width: 100%;
+            padding: 0 1rem;
+        }
+        
+        @media (min-width: 1024px) {
+            main {
+                flex-direction: row;
+            }
+        }
+        
+        .main-content {
+            width: 100%;
+        }
+        
+        @media (min-width: 1024px) {
+            .main-content {
+                width: 58.3333%;
+            }
+        }
+        
+        h1 {
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+            font-weight: 700;
+        }
+        
+        .options-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            margin-top: 2.5rem;
+            gap: 1rem;
+        }
+        
+        .option-card {
+            background-color: #dc2626;
+            color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            width: 100%;
+        }
+        
+        @media (min-width: 1024px) {
+            .option-card {
+                width: 41.6667%;
+            }
+        }
+        
+        .option-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .image-container {
+            width: 100%;
+            margin-top: 2.5rem;
+        }
+        
+        @media (min-width: 1024px) {
+            .image-container {
+                width: 33.3333%;
+                margin-top: 0;
+                margin-left: 2.5rem;
+            }
+        }
+        
+        .image-container img {
+            width: 100%;
+        }
+        
+        .image-container img:last-child {
+            margin-top: 2.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-video text-red"></i>
+                <span class="text-red font-bold">DTU MEET</span>
+            </div>
+            
+            <div class="header-icons text-red">
+                <div class="text-red">
+                    11:24 • Mon, 21 Feb
+                </div>
+                <i class="fas fa-question-circle"></i>
+                <i class="fas fa-cog"></i>
+                <i class="fa-solid fa-bars"></i>
+                <i class="fas fa-user-circle"></i>
+            </div>
+            
+        </header>
+        <main>
+            <div class="main-content" >
+                <h1>Cuộc họp video chất lượng cao. Miễn phí cho mọi người!</h1>
+                <p>Chúng tôi tái thiết kế dịch vụ họp bảo mật để mọi người đều có thể sử dụng miễn phí!</p>
+                <div class="options-container">
+                    <div class="option-card">
+                        <div class="option-header">
+                            <i class="fas fa-plus"></i>
+                            <span class="font-bold">Create New Meeting</span>
+                        </div>
+                        <p>Start an instant meeting</p>
+                    </div>
+                    <div class="option-card">
+                        <div class="option-header">
+                            <i class="fas fa-users"></i>
+                            <span class="font-bold">Join Meeting</span>
+                        </div>
+                        <p>Via code or link</p>
+                    </div>
+                    <div class="option-card">
+                        <div class="option-header">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span class="font-bold">Plan Ahead</span>
+                        </div>
+                        <p>Schedule a meeting for later</p>
+                    </div>
+                </div>
+            </div>
+            <div class="image-container">
+                <img src="https://placehold.co/400x200" alt="Illustration of people having a video meeting"/>
+                <img src="https://placehold.co/400x200" alt="Illustration of a video call with multiple participants"/>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
