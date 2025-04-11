@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng ký</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 16px;
+    }
+    .container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      width: 100%;
+      max-width: 800px;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .image-container {
+      flex: 1;
+      margin-right: 32px;
+    }
+    .image-container img {
+      width: 100%;
+      height: auto;
+    }
+    .form-container {
+      flex: 1;
+      width: 100%;
+      padding: 24px;
+    }
+    .back-link {
+      display: flex;
+      align-items: center;
+      margin-bottom: 16px;
+      color: #c2363f;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .back-link i {
+      margin-right: 8px;
+    }
+    .form-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .form-header i {
+      color: #c2363f;
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+    .form-header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0;
+    }
+    .form-header p {
+      color: #6b7280;
+      margin: 0;
+      font-size: 14px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 16px;
+      outline: none;
+    }
+    .form-group input:focus {
+      border-color: #c2363f;
+    }
+    .submit-btn {
+      width: 100%;
+      padding: 12px;
+      background-color:#c2363f;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .submit-btn:hover {
+      background-color: #c3656c;
+    }
+    .google-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      background-color: white;
+      border: 1px solid #d1d5db;
+      color: #6b7280;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .google-btn i {
+      color: #c2363f;
+      margin-right: 8px;
+    }
+    .google-btn:hover {
+      background-color: #f3f4f6;
+    }
+
+    /* Responsive styling */
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        max-width: 100%;
+      }
+      .image-container {
+        display: none;
+      }
+      .form-container {
+        padding: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .form-header h1 {
+        font-size: 20px;
+      }
+      .form-group input, .submit-btn, .google-btn {
+        font-size: 14px;
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="image-container">
+      <img src="https://storage.googleapis.com/a1aa/image/91iwh06dzx7cgX6TO6_upZH9pCNBKt0cTnEHBhagDyU.jpg" alt="Two people working on a computer with code on the screen">
+    </div>
+    <div class="form-container">
+      <a href="#" class="back-link">
+        <i class="fas fa-arrow-left"></i> Quay lại
+      </a>
+      <div class="form-header">
+        <i class="fas fa-video"></i>
+        <h1>Đăng ký</h1>
+        <p>Đăng ký nhanh, hợp dễ dàng!</p>
+      </div>
+      <form>
+        <div class="form-group">
+          <input type="text" placeholder="Tên tài khoản">
+        </div>
+        <div class="form-group">
+          <input type="email" placeholder="Email hoặc số điện thoại">
+        </div>
+        <div class="form-group">
+          <input type="password" placeholder="Mật khẩu">
+        </div>
+        <div class="form-group">
+          <input type="password" placeholder="Nhập lại mật khẩu">
+        </div>
+        <button type="submit" class="submit-btn">Đăng ký</button>
+      </form>
+      <div class="form-group" style="margin-top:16px">
+        <button class="google-btn">
+          <i class="fab fa-google"></i> Đăng nhập bằng Google
+        </button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
