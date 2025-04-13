@@ -32,10 +32,11 @@ public class UserService implements IUserService {
 
     @Override
     public boolean deleteUser(Long userId) {
-        User user = userRepo.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
-        userRepo.delete(user);
-        return true;
+        if (userRepo.existsById(userId)){
+            userRepo.delete(userRepo.findById(userId).get());
+            return true;
+        }
+        return false;
     }
 
     @Override
