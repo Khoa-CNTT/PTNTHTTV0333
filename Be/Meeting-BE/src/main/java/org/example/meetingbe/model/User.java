@@ -15,7 +15,7 @@ public class User {
     private Long id;
     @Column(columnDefinition = "varchar(50)")
     private String email;
-    @Column(columnDefinition = "varchar(50)")
+    @Column(columnDefinition = "varchar(255)")
     private String password;
     @Column(columnDefinition = "varchar(50)")
     private String firstName;
@@ -35,6 +35,15 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     Set<Role> roles = new HashSet<>();
     public User() {
+    }
+
+    public User(String email, String firstName, String password, String lastName, String userName, Set<Role> roles) {
+        this.email = email;
+        this.firstName = firstName;
+        this.password = password;
+        this.lastName = lastName;
+        this.userName = userName;
+        this.roles = roles;
     }
 
     public Long getId() {

@@ -1,0 +1,260 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>
+        Meet
+    </title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        .header,
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header .left,
+        .header .right,
+        .footer .left,
+        .footer .right {
+            display: flex;
+            align-items: center;
+        }
+
+        .header .left i,
+        .header .right i,
+        .footer .left i,
+        .footer .right i {
+            margin-right: 10px;
+        }
+
+        .main {
+            display: flex;
+            height: calc(100vh - 100px);
+        }
+
+        .video-panel {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #4b5563;
+            border-right: 1px solid #374151;
+        }
+
+        .video-panel:last-child {
+            border-right: none;
+        }
+
+        .video-panel img {
+            display: block;
+            margin: 0 auto 10px;
+        }
+
+        .video-panel span {
+            color: white;
+        }
+
+        .meeting-details {
+            width: 25%;
+            background-color: white;
+            padding: 20px;
+            border-left: 1px solid #d1d5db;
+        }
+
+        .meeting-details .header {
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .meeting-details .header span {
+            font-weight: bold;
+        }
+
+        .meeting-details .header i {
+            cursor: pointer;
+        }
+
+        .meeting-details .meeting-code,
+        .meeting-details .people {
+            margin-bottom: 20px;
+        }
+
+        .meeting-details .meeting-code span,
+        .meeting-details .people span {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .meeting-details .people .person {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .meeting-details .people .person img {
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .footer {
+            background-color: #1f2937;
+            color: white;
+            padding: 10px;
+        }
+
+        .footer .left,
+        .footer .right {
+            display: flex;
+            align-items: center;
+        }
+
+        .footer .left i,
+        .footer .right i {
+            margin-right: 10px;
+        }
+
+        .footer .center {
+            display: flex;
+            align-items: center;
+        }
+
+        .footer .center i {
+            margin-right: 10px;
+        }
+
+        .footer .center button {
+            background-color: #dc2626;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="left">
+            <i class="fas fa-bars">
+            </i>
+            <span>
+                Meet
+            </span>
+        </div>
+        <div class="right">
+            <span>
+                4:30 PM
+            </span>
+            <i class="fas fa-question-circle">
+            </i>
+            <i class="fas fa-exclamation-circle">
+            </i>
+            <i class="fas fa-cog">
+            </i>
+            <i class="fas fa-user-circle">
+            </i>
+        </div>
+    </div>
+    <div class="main">
+        <div class="video-panel">
+            <div class="text-center">
+                <img alt="Avatar of John Doe" src="https://placehold.co/100x100" />
+                <span>
+                    John Doe
+                </span>
+            </div>
+        </div>
+
+        <div class="video-panel">
+            <div class="text-center">
+                <img alt="Avatar of Jane Smith" src="https://placehold.co/100x100" />
+                <span>
+                    Jane Smith
+                </span>
+            </div>
+        </div>
+        <div class="meeting-details">
+            <div class="header">
+                <span>
+                    Meeting details
+                </span>
+                <i class="fas fa-times">
+                </i>
+            </div>
+            <div class="meeting-code">
+                <span>
+                    Meeting code
+                </span>
+                <div>
+                    <span>
+                        abc-defg-hij
+                    </span>
+                    <i class="fas fa-lock">
+                    </i>
+                </div>
+            </div>
+            <div class="people">
+                <span>
+                    People
+                </span>
+                <div class="person">
+                    <img alt="Avatar of John Doe" src="https://placehold.co/30x30" />
+                    <span>
+                        John Doe (Host)
+                    </span>
+                </div>
+                <div class="person">
+                    <img alt="Avatar of Jane Smith" src="https://placehold.co/30x30" />
+                    <span>
+                        Jane Smith
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="left">
+            <span>
+                4:30 PM | abc-defg-hij
+            </span>
+        </div>
+        <div class="center">
+            <i class="fas fa-microphone">
+            </i>
+            <i class="fas fa-video">
+            </i>
+            <i class="fas fa-closed-captioning">
+            </i>
+            <i class="fas fa-hand-paper">
+            </i>
+            <i class="fas fa-ellipsis-h">
+            </i>
+            <button>
+                Leave call
+            </button>
+        </div>
+        <div class="right">
+            <i class="fas fa-user-friends">
+            </i>
+            <i class="fas fa-comment-dots">
+            </i>
+            <i class="fas fa-info-circle">
+            </i>
+        </div>
+    </div>
+</body>
+
+</html>

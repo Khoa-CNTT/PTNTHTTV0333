@@ -1,0 +1,202 @@
+<html>
+
+<head>
+    <title>DTU Meet</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .text-red {
+            color: #c2363f;
+            font-size: 24px;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .main-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            width: 100%;
+            max-width: 1400px;
+            padding: 2rem;
+        }
+
+        .main-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 50%;
+        }
+
+        .main-image img {
+            width: 542px;
+            height: 392px;
+        }
+
+        .main-top-text {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem;
+            width: 50%;
+        }
+
+        .main-top-text h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .main-top-text p {
+            font-size: 1.25rem;
+            color: #4a5568;
+            margin-bottom: 2rem;
+        }
+
+        .options-container {
+            width: 50%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            margin-top: 2.5rem;
+            gap: 1rem;
+        }
+
+        .option-card {
+            background-color: #c2363f;
+            color: white;
+            padding: 40px 20px;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        @media (min-width: 1024px) {
+            .option-card {
+                width: 41.6667%;
+            }
+        }
+
+        .option-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .option-header i, .option-header span {
+            font-size: 20px;
+        }
+
+        .option-card p {
+            margin-top: 1rem;
+            font-size: 1rem;
+        }
+
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-video text-red"></i>
+            <span class="text-red"><b>DTU</b> MEET</span>
+        </div>
+
+        <div class="header-icons text-red">
+            <div class="text-red">
+                11:24 • Mon, 21 Feb
+            </div>
+            <i class="fas fa-question-circle"></i>
+            <i class="fas fa-cog"></i>
+            <i class="fas fa-user-circle"></i>
+        </div>
+    </header>
+
+    <main>
+        <div class="main-content">
+            <div class="main-top-text">
+                <h1>Cuộc họp video chất lượng cao. Miễn phí cho mọi người!</h1>
+                <p>Chúng tôi tái thiết kế dịch vụ họp bảo mật để mọi người đều có thể sử dụng miễn phí!</p>
+            </div>
+
+            <div class="main-image">
+                <img src="/Prototype/images/undraw_pair-programming_9jyg.png"
+                    alt="Illustration of a video call with multiple participants" />
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="options-container">
+                <button class="option-card">
+                    <div class="option-header">
+                        <i class="fas fa-plus"></i>
+                        <span class="font-bold">Tạo cuộc họp mới</span>
+                    </div>
+                    <p>Bắt đầu cuộc họp ngay lập tức</p>
+                </button>
+                <button class="option-card">
+                    <div class="option-header">
+                        <i class="fas fa-users"></i>
+                        <span class="font-bold">Tham gia cuộc họp</span>
+                    </div>
+                    <p>Thông qua mã hoặc liên kết</p>
+                </button>
+                <button class="option-card">
+                    <div class="option-header">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span class="font-bold">Lên kế hoạch trước</span>
+                    </div>
+                    <p>Lên lịch cuộc họp sau</p>
+                </button>
+            </div>
+
+            <div class="main-image">
+                <img src="/Prototype//images/undraw_conference-call_ccsp.png"
+                    alt="Illustration of people having a video meeting" />
+            </div>
+
+        </div>
+    </main>
+
+</body>
+
+</html>
