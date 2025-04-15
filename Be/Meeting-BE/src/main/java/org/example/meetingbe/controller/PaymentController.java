@@ -1,5 +1,6 @@
 package org.example.meetingbe.controller;
 
+import org.example.meetingbe.model.Payment;
 import org.example.meetingbe.repository.IPaymentRepo;
 import org.example.meetingbe.service.payment.IPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/payment")
@@ -23,14 +25,14 @@ public class PaymentController {
     public int countSuccessfulPayments(){
         return paymentService.countSuccessfulPayments().intValue();
     }
-    @GetMapping("/revenue")//Tong doanh thu tu ngay start - end
+    @GetMapping("/revenue/between")//Tong doanh thu tu ngay start - end
     public Double getRevenueBetween(
             @RequestParam @DateTimeFormat (iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
         return paymentService.getRevenueBetween(start, end);
     }
-    @GetMapping("/year/{year}")
-    public Double getRevenueByYear(@PathVariable int year) {
+    @GetMapping("/revenue/year/{year}")
+    public List<Payment> getRevenueByYear(@PathVariable int year) {
         return paymentService.getRevenueByYear(year);
     }
 

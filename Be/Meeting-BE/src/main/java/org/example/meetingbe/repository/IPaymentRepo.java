@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 public interface IPaymentRepo extends JpaRepository<Payment, Long> {
@@ -20,4 +21,7 @@ public interface IPaymentRepo extends JpaRepository<Payment, Long> {
 
     @Query("SELECT SUM(p.total) FROM Payment p WHERE p.status = true AND p.user.id = :userId")
     Double getTotalSpentByUser(@Param("userId") Long userId);
+    @Query("SELECT p FROM Payment p WHERE p.status = true AND FUNCTION('YEAR', p.createAt) = :year")
+    List<Payment> getAllByYear(@Param("year") int year);
+
 }
