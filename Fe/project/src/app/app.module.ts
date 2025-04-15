@@ -16,6 +16,9 @@ import { PagesModule } from './modules/pages/pages.module';
 import { SupportiveRoutingModule } from './modules/supportive/supportive-routing.module';
 import { SupportiveModule } from './modules/supportive/supportive.module';
 import { SharedModule } from './modules/shared/shared.module';
+import { RxStompService } from '@stomp/ng2-stompjs';
+import { InjectableRxStompConfig, rxStompServiceFactory } from '@stomp/ng2-stompjs';
+import { myRxStompConfig } from './stomp.config';
 
 
 @NgModule({
@@ -39,7 +42,17 @@ import { SharedModule } from './modules/shared/shared.module';
     PagesRoutingModule,
     SupportiveRoutingModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: InjectableRxStompConfig,
+      useValue: myRxStompConfig
+    },
+    {
+      provide: RxStompService,
+      useFactory: rxStompServiceFactory,
+      deps: [InjectableRxStompConfig]
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
