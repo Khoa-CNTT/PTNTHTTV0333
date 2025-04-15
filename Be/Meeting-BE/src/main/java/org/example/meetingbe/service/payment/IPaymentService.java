@@ -8,4 +8,5 @@ public interface IPaymentService {
     Double getRevenueBetween(LocalDateTime start, LocalDateTime end);
 
     Double getTotalSpentByUser(Long userId);
+    Double getRevenueByYear(int year);
 }

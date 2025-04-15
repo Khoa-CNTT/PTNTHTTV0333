@@ -29,6 +29,10 @@ public class PaymentController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
         return paymentService.getRevenueBetween(start, end);
     }
+    @GetMapping("/year/{year}")
+    public Double getRevenueByYear(@PathVariable int year) {
+        return paymentService.getRevenueByYear(year);
+    }
 
     @GetMapping("/total-spent")//tong chi tieu cua 1 user
     public Double getTotalSpentByUser(@RequestParam Long userId) {
