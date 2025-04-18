@@ -2,6 +2,7 @@ package org.example.meetingbe.security.userpricipal;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.example.meetingbe.dto.Login;
+import org.example.meetingbe.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,10 +17,9 @@ public class UserPrinciple implements UserDetails {
     private String userName;
     @JsonIgnore
     private String password;
-
-    public UserPrinciple(){}
+    private User user;
     public UserPrinciple(Login login) {}
-
+    public UserPrinciple(User user) {}
     public Collection<? extends GrantedAuthority> authorities;
     public UserPrinciple(Long id, String userName, String password, Collection<? extends GrantedAuthority> authorities) {
         super();
@@ -32,7 +32,7 @@ public class UserPrinciple implements UserDetails {
         List<GrantedAuthority> authorities = login.getRoles().stream().map(role ->
                 new SimpleGrantedAuthority(role.getRoleName())).collect(Collectors.toList());
         return new UserPrinciple(
-                login.getId(), // User principle co name
+                login.getId(),
                 login.getUsername(),
                 login.getPassword(),
                 authorities
@@ -46,6 +46,9 @@ public class UserPrinciple implements UserDetails {
 
     @Override
     public String getPassword() {
+        if("google".equals(user.getProvider())){
+            return "";
+        }
         return this.password;
     }
 

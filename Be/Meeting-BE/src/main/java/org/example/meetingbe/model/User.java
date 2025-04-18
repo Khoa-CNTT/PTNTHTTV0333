@@ -28,6 +28,8 @@ public class User {
     private Boolean isVip;
     @Column(name = "avater", columnDefinition = "TEXT")
     private String avatar;
+    @Column(name = "provider", columnDefinition = "varchar(20)")
+    private String provider;
     @Column(name = "create_at", columnDefinition = "DATETIME")
     private LocalDateTime createAt;
     @ManyToMany(fetch = FetchType.EAGER)
@@ -37,13 +39,22 @@ public class User {
     public User() {
     }
 
-    public User(String email, String firstName, String password, String lastName, String userName, Set<Role> roles) {
+    public User(String email, String firstName, String password, String lastName, String userName, Set<Role> roles, String provider) {
         this.email = email;
         this.firstName = firstName;
         this.password = password;
         this.lastName = lastName;
         this.userName = userName;
         this.roles = roles;
+        this.provider = provider;
+    }
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
     }
 
     public Long getId() {
