@@ -18,4 +18,5 @@ public interface IUserRepo extends JpaRepository<User, Long> {
     long countByIsVipTrue();
     List<User> getAllByIsVipTrue();
     List<User> getAllByIsVipFalse();
+
 }
