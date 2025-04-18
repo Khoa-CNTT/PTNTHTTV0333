@@ -8,6 +8,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import jakarta.mail.MessagingException;
 import org.example.meetingbe.dto.LoginForm;
 import org.example.meetingbe.dto.Register;
+import org.example.meetingbe.dto.UserDto;
 import org.example.meetingbe.model.User;
 import org.example.meetingbe.repository.IUserRepo;
 import org.example.meetingbe.response.JwtResponse;
@@ -27,16 +28,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import org.example.meetingbe.dto.UserDto;
-import org.example.meetingbe.model.User;
-import org.example.meetingbe.service.user.IUserService;
-import org.example.meetingbe.service.user.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
