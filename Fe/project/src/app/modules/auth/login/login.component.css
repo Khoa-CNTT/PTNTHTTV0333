@@ -1,0 +1,163 @@
+.wrap-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 16px;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    max-width: 1000px;
+    width: 100%;
+}
+
+.form-container {
+    flex: 1;
+    padding: 32px;
+    max-width: 500px;
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.form-header i {
+    color: #c2363f;
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.form-header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.form-header p {
+    color: #6b7280;
+    margin: 4px 0 0;
+    font-size: 14px;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+}
+
+.form-group input:focus {
+    border-color: #c2363f;
+}
+
+.checkbox-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+.checkbox-row label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #374151;
+}
+
+.checkbox-row a {
+    color: #c2363f;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #c2363f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background-color: #c3656c;
+}
+
+.google-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    background-color: white;
+    border: 1px solid #d1d5db;
+    color: #6b7280;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 16px;
+}
+
+.google-btn i {
+    color: #c2363f;
+    margin-right: 8px;
+}
+
+.google-btn:hover {
+    background-color: #f3f4f6;
+}
+
+.register {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 14px;
+}
+
+.register a {
+    color: #c2363f;
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 4px;
+}
+
+.image-container {
+    flex: 1;
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+}
+
+.image-container img {
+    max-width: 450px;
+    height: 500px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column-reverse;
+        padding: 0;
+    }
+
+    .form-container {
+        max-width: 100%;
+        padding: 20px;
+    }
+
+    .image-container {
+        display: none;
+    }
+}
