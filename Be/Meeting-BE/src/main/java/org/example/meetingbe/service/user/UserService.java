@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -26,7 +27,7 @@ public class UserService implements IUserService {
     @Override
     public void register(Register register) throws MessagingException {
         Set<Role> role = roleRepo.findByRoleName("USER");
-        User user = new User(register.getEmail(), register.getFirstName(), passwordEncoder.encode(register.getPassword()), register.getLastName(),register.getUserName(), role);
+        User user = new User(register.getEmail(), register.getFirstName(), passwordEncoder.encode(register.getPassword()), register.getLastName(),register.getUserName(), role, "local");
         userRepo.save(user);
         mailRegister.sendEmailRegister(register.getEmail());
     }
@@ -39,5 +40,10 @@ public class UserService implements IUserService {
     @Override
     public Boolean exitsByEmail(String email) {
         return userRepo.existsByEmail(email);
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userRepo.findByEmail(email);
     }
 }
