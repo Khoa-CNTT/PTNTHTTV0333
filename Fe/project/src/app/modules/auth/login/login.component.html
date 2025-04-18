@@ -1,1 +1,31 @@
-<p>login works!</p>
+<div class="wrap-container">
+    <div class="container">
+        <div class="form-container">
+            <div class="form-header">
+                <i class="fas fa-video"></i>
+                <h1>Đăng nhập</h1>
+                <p>Sẵn sàng kết nối họp mọi lúc!</p>
+            </div>
+            <form>
+                <div class="form-group">
+                    <input type="email" placeholder="Email hoặc số điện thoại" />
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Mật khẩu" />
+                </div>
+                <div class="checkbox-row">
+                    <label><input type="checkbox" /> Ghi nhớ đăng nhập</label>
+                    <a routerLink="/forgot-password">Quên mật khẩu?</a>
+                </div>
+                <button type="submit" class="submit-btn">Đăng nhập</button>
+                <button class="google-btn"><i class="fab fa-google"></i>Đăng nhập bằng Google</button>
+                <div class="register">
+                    Chưa có tài khoản? <a routerLink="/registration">Đăng ký ngay</a>
+                </div>
+            </form>
+        </div>
+        <div class="image-container">
+            <img src="assets/imgs/undraw_login_weas.png" alt="Minh họa người mở cửa">
+        </div>
+    </div>
+</div>
