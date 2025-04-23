@@ -24,7 +24,7 @@ import { LayoutModule } from '../shared/layout/layout.module';
     AuthRoutingModule,
     AuthenticationModule,
     LayoutModule,
-    ToastrModule.forRoot(),
+    ToastrModule.forRoot()
   ]
 })
 export class AuthModule { }
