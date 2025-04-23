@@ -1,6 +1,7 @@
 package org.example.meetingbe.model;
 
 import jakarta.persistence.*;
+import org.example.meetingbe.dto.ContactDto;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
@@ -24,6 +25,13 @@ public class Contact {
     public Contact() {
     }
 
+    public Contact(ContactDto contactDto) {
+      this.content = contactDto.getContent();
+      this.dateSend = contactDto.getDateSend();
+      this.status = contactDto.getStatus();
+      this.user = contactDto.getUser();
+    }
+
     public Contact(Long id, String content, LocalDate dateSend, Boolean status, User user) {
         this.id = id;
         this.content = content;
@@ -31,6 +39,8 @@ public class Contact {
         this.status = status;
         this.user = user;
     }
+
+
 
     public Long getId() {
         return id;
