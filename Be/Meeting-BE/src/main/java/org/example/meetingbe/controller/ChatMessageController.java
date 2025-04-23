@@ -17,9 +17,9 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:4200/", allowedHeaders = "*")
 public class ChatMessageController {
+
     @MessageMapping("chat.sendMessage")  // Maps messages sent to "chat.sendMessage" WebSocket destination
     @SendTo("/topic/public")  // Specifies that the return message will be sent to "/topic/public"
     public WsChatMessage sendMessage(@Payload WsChatMessage msg) {
