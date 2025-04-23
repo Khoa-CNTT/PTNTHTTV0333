@@ -7,15 +7,17 @@ import org.springframework.web.socket.config.annotation.*;
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
-
-    @Override
-    public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/meeting");
-        config.setApplicationDestinationPrefixes("/app");
-    }
-
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ichat").setAllowedOrigins("*");
+        registry.addEndpoint("/ws")
+                .setAllowedOrigins("http://localhost:4200")
+                .withSockJS();
+    }
+
+
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry registry) {
+        registry.setApplicationDestinationPrefixes("/app");
+        registry.enableSimpleBroker("/topic");
     }
 }

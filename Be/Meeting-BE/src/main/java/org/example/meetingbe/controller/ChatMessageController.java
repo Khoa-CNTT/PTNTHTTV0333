@@ -20,23 +20,27 @@ import java.util.List;
 @RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:4200/", allowedHeaders = "*")
 public class ChatMessageController {
-    @Autowired
-    private SimpMessagingTemplate template;
-    @Autowired
-    private IChatMessageRepo chatMessageRepo;
-    @Autowired
-    private IMeetingRepo meetingRepo;
+    @MessageMapping("chat.sendMessage")  // Maps messages sent to "chat.sendMessage" WebSocket destination
+    @SendTo("/topic/public")  // Specifies that the return message will be sent to "/topic/public"
+    public WsChatMessage sendMessage(@Payload WsChatMessage msg) {
+        // Log the sender and content of the message for debugging
+        System.out.println("Message received from " + msg.getSender() + ": " + msg.getContent());
 
-    @MessageMapping("/messages")
-    public void handleMessage(ChatMessage message) {
-        message.setSendAt(LocalDateTime.now());
-        chatMessageRepo.save(message);
-        template.convertAndSend("/meeting/chat/" + message.getMeeting().getId(), message);
+        // Broadcast the message to all subscribers on the "/topic/public" topic
+        return msg;
     }
-    @GetMapping(value = "/messages/{channelId}")
-    public List<ChatMessage> findMessages(@PathVariable("meetingId") Long meetingId) {
-        Meeting meeting = meetingRepo.findById(meetingId).get();
-        return chatMessageRepo.findAllByMeeting(meeting);
+
+    @MessageMapping("chat.addUser")  // Maps messages sent to "chat.addUser" WebSocket destination
+    @SendTo("/topic/chat")  // Specifies that the return message will be sent to "/topic/chat"
+    public WsChatMessage addUser(@Payload WsChatMessage msg, SimpMessageHeaderAccessor headerAccessor) {
+        // Store the username in the WebSocket session attributes
+        headerAccessor.getSessionAttributes().put("username", msg.getSender());
+
+        // Log when a user joins the chat
+        System.out.println("User joined: " + msg.getSender());
+
+        // Broadcast the user join event to all subscribers on the "/topic/chat" topic
+        return msg;
     }
 
 }

@@ -19,6 +19,7 @@ public class ChatMessage {
     @ManyToOne
     @JoinColumn(name = "sender_id")
     private User user;
+
     public ChatMessage() {
     }
 
