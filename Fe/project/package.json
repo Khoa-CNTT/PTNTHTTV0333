@@ -20,6 +20,7 @@
     "@angular/platform-browser": "~9.1.13",
     "@angular/platform-browser-dynamic": "~9.1.13",
     "@angular/router": "~9.1.13",
+    "@stomp/stompjs": "^6.1.2",
     "chart.js": "^3.9.1",
     "firebase": "^8.8.0",
     "ngx-toastr": "^12.0.1",

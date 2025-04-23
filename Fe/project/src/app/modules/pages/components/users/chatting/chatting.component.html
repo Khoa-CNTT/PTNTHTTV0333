@@ -1,1 +1,68 @@
-<p>chatting works!</p>
+<!-- If the user is not connected, show the username input page -->
+<div *ngIf="!isConnected" id="username-page">
+    <div class="username-page-container">
+      <!-- Title of the username page -->
+      <h1 class="title">Type your username to join the Chatroom</h1>
+  
+      <!-- Form to input the username -->
+      <!-- When the form is submitted, it calls the connect() method -->
+      <form (ngSubmit)="connect()">
+        <div class="form-group">
+          <!-- Username input field bound to the username property -->
+          <input [(ngModel)]="username" name="username" type="text" id="name" placeholder="Username" autocomplete="off" class="form-control" />
+        </div>
+  
+        <!-- Button to submit the username and connect to the chat -->
+        <div class="form-group">
+          <button type="submit" class="accent username-submit">Start Chatting</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <!-- If the user is connected, show the chatroom interface -->
+  <div *ngIf="isConnected" id="chatroom">
+    <div class="chat-container">
+      <!-- Chatroom header with title -->
+      <div class="chat-header">
+        <h2>Spring Boot WebSocket Demo App!</h2>
+      </div>
+  
+      <!-- If a connection message exists, show it (e.g., "Connecting...") -->
+      <div *ngIf="connectingMessage" class="connecting">{{ connectingMessage }}</div>
+  
+      <!-- Display the list of messages -->
+      <ul id="messageArea">
+        <!-- Loop through each message in the messages array -->
+        <!-- Use ngClass to conditionally apply a class based on the message type -->
+        <li *ngFor="let message of messages" [ngClass]="{'event-message': message.type !== 'CHAT', 'chat-message': message.type === 'CHAT'}">
+          <!-- If the message is a chat message, show the sender's avatar (first letter of their name) with a background color -->
+          <i *ngIf="message.type === 'CHAT'" [style.backgroundColor]="getAvatarColor(message.sender)">{{ message.sender.charAt(0) }}</i>
+  
+          <!-- Display the sender's name if it's a chat message -->
+          <span *ngIf="message.type === 'CHAT'">{{ message.sender }}</span>
+  
+          <!-- Display the content of the message -->
+          <!-- If it's a chat message, show the content -->
+          <!-- If it's an event message (JOIN/LEAVE), show a notification like "User joined!" -->
+          <p>{{ message.type === 'CHAT' ? message.content : message.sender + ' ' + (message.type === 'JOIN' ? 'joined!' : 'left!') }}</p>
+        </li>
+      </ul>
+  
+      <!-- Form to type and send new chat messages -->
+      <!-- When the form is submitted, it calls the sendMessage() method -->
+      <form (ngSubmit)="sendMessage()" id="typingArea">
+        <div class="form-group">
+          <div class="input-group clearfix">
+            <!-- Input field bound to the message property for typing new messages -->
+            <input [(ngModel)]="message" name="message" type="text" id="message" placeholder="Write a message..." autocomplete="off" class="form-control" />
+            
+            <!-- Button to send the message -->
+            <button type="submit" class="primary">Send</button>
+          </div>
+        </div>
+      </form>
+  
+    </div>
+  </div>
+  
