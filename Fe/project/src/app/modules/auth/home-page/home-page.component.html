@@ -1,0 +1,11 @@
+<h2>💬 Chat Realtime</h2>
+<input [(ngModel)]="messageText" placeholder="Nhập tin nhắn..." />
+<button (click)="send()">Gửi</button>
+
+<ul>
+  <li *ngFor="let msg of messages">
+    <p>
+    <strong>{{ msg.user?.username }}:</strong> {{ msg.content }}
+    </p>
+  </li>
+</ul>
