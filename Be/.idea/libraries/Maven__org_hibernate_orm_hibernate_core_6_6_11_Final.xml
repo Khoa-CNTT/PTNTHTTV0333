@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Maven: org.hibernate.orm:hibernate-core:6.6.11.Final" type="java-imported" external-system-id="Maven">
+    <properties groupId="org.hibernate.orm" artifactId="hibernate-core" version="6.6.11.Final" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/hibernate/orm/hibernate-core/6.6.11.Final/hibernate-core-6.6.11.Final.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/hibernate/orm/hibernate-core/6.6.11.Final/hibernate-core-6.6.11.Final-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/hibernate/orm/hibernate-core/6.6.11.Final/hibernate-core-6.6.11.Final-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

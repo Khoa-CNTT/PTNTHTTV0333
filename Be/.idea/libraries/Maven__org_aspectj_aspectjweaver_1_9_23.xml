@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Maven: org.aspectj:aspectjweaver:1.9.23" type="java-imported" external-system-id="Maven">
+    <properties groupId="org.aspectj" artifactId="aspectjweaver" version="1.9.23" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/aspectj/aspectjweaver/1.9.23/aspectjweaver-1.9.23.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/aspectj/aspectjweaver/1.9.23/aspectjweaver-1.9.23-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/aspectj/aspectjweaver/1.9.23/aspectjweaver-1.9.23-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Maven: org.attoparser:attoparser:2.0.7.RELEASE" type="java-imported" external-system-id="Maven">
+    <properties groupId="org.attoparser" artifactId="attoparser" version="2.0.7.RELEASE" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/attoparser/attoparser/2.0.7.RELEASE/attoparser-2.0.7.RELEASE.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/attoparser/attoparser/2.0.7.RELEASE/attoparser-2.0.7.RELEASE-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/attoparser/attoparser/2.0.7.RELEASE/attoparser-2.0.7.RELEASE-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Maven: com.sun.xml.messaging.saaj:saaj-impl:3.0.4" type="java-imported" external-system-id="Maven">
+    <properties groupId="com.sun.xml.messaging.saaj" artifactId="saaj-impl" version="3.0.4" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/sun/xml/messaging/saaj/saaj-impl/3.0.4/saaj-impl-3.0.4.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/sun/xml/messaging/saaj/saaj-impl/3.0.4/saaj-impl-3.0.4-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/sun/xml/messaging/saaj/saaj-impl/3.0.4/saaj-impl-3.0.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
