@@ -12,4 +12,5 @@ public interface IPaymentService {
 
     Double getTotalSpentByUser(Long userId);
     List<Payment> getRevenueByYear(int year);
+    List<Integer> getAllYears();
 }

@@ -31,13 +31,18 @@ public class PaymentController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
         return paymentService.getRevenueBetween(start, end);
     }
-    @GetMapping("/revenue/year/{year}")
-    public List<Payment> getRevenueByYear(@PathVariable int year) {
+    @GetMapping("/revenue/getByYear")
+    public List<Payment> getRevenueByYear(@RequestParam(name = "year") int year) {
         return paymentService.getRevenueByYear(year);
     }
 
     @GetMapping("/total-spent")//tong chi tieu cua 1 user
     public Double getTotalSpentByUser(@RequestParam Long userId) {
         return paymentService.getTotalSpentByUser(userId);
+    }
+
+    @GetMapping("/years")
+    public List<Integer> getRegistrationYears() {
+        return paymentService.getAllYears();
     }
 }
