@@ -29,6 +29,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+
 import org.example.meetingbe.dto.UserDto;
 import org.example.meetingbe.model.User;
 import org.example.meetingbe.service.user.IUserService;
@@ -102,7 +103,7 @@ public class UserController {
             }
         }
         user = new User();
-        if(!existsEmail){
+        if (!existsEmail) {
             user.setEmail(email);
             user.setUserName(name);
             user.setPassword("");
@@ -147,6 +148,7 @@ public class UserController {
             return null;
         }
     }
+
     // Lấy tất cả người dùng
     @GetMapping
     public List<User> getAllUsers() {
@@ -182,10 +184,12 @@ public class UserController {
     public long countVipUsers() {
         return userService.countVipUsers();
     }
+
     @GetMapping("/vip")
     public List<User> getVipUsers() {
         return userService.getVipUsers();
     }
+
     @GetMapping("/normal")
     public List<User> getNormalUsers() {
         return userService.getNormalUsers();

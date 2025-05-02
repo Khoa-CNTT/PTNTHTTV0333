@@ -38,6 +38,7 @@ import { SharedModule } from './modules/shared/shared.module';
     AuthRoutingModule,
     PagesRoutingModule,
     SupportiveRoutingModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

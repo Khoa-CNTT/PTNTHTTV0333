@@ -1,2 +1,29 @@
-VVVV
-<p>statistical-management works!</p>
+<div class="container">
+  <div class="stats-box">
+    <div class="stat-item">
+      <h4>Tổng cuộc họp hôm nay</h4>
+      <p>{{ totalMeetingsToday }}</p>
+    </div>
+    <div class="stat-item">
+      <h4>Tổng cuộc họp đã diễn ra</h4>
+      <p>{{ totalMeetingsPast }}</p>
+    </div>
+  </div>
+
+  <div class="year-selector">
+    <div class="selector">
+      <label for="year">Chọn năm:</label>
+      <select id="year" [(ngModel)]="selectedYear" (ngModelChange)="onYearChange()">
+        <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="chart-container">
+    <canvas id="lineChart"></canvas>
+  </div>
+
+  <div class="chart-container taller-chart">
+    <canvas id="barChart"></canvas>
+  </div>
+</div>

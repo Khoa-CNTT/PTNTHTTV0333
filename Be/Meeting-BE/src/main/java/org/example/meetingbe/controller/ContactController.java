@@ -20,11 +20,13 @@ import org.springframework.web.bind.annotation.*;
 public class ContactController {
     @Autowired
     private IContactService icontactService;
+
     @PostMapping("/addNewContact")
     public ResponseEntity<Contact> addNewContact(@RequestBody @Valid ContactDto contact) {
         Contact saveContact = icontactService.addNewContact(contact);
         return new ResponseEntity<>(saveContact, HttpStatus.CREATED);
     }
+
     @GetMapping("/getPageContact")
     public ResponseEntity<Page<Contact>> getPageContact(
             @RequestParam(defaultValue = "0") int page,
@@ -39,7 +41,7 @@ public class ContactController {
     }
 
     @PutMapping("/updateContact")
-    public ResponseEntity<String> updateContact(@RequestBody  ContactDto contactDto) {
+    public ResponseEntity<String> updateContact(@RequestBody ContactDto contactDto) {
         try {
             icontactService.updateContact(contactDto);
             return new ResponseEntity<>("updated successfully", HttpStatus.OK);
