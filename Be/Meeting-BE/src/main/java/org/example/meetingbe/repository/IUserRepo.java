@@ -1,7 +1,10 @@
 package org.example.meetingbe.repository;
 
+import org.example.meetingbe.model.Payment;
 import org.example.meetingbe.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,5 +21,10 @@ public interface IUserRepo extends JpaRepository<User, Long> {
     long countByIsVipTrue();
     List<User> getAllByIsVipTrue();
     List<User> getAllByIsVipFalse();
+    @Query("SELECT DISTINCT FUNCTION('YEAR', u.createAt) FROM User u ORDER BY FUNCTION('YEAR', u.createAt)")
+    List<Integer> findAllYears();
+
+    @Query("SELECT u FROM User u WHERE FUNCTION('YEAR', u.createAt) = :year")
+    List<User> getAllByYear(@Param("year") int year);
 
 }

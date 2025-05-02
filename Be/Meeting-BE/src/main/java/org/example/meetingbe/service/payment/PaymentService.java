@@ -36,6 +36,11 @@ public class PaymentService implements IPaymentService {
     }
 
     @Override
+    public List<Integer> getAllYears() {
+        return paymentRepo.findAllYears();
+    }
+
+    @Override
     public Double getTotalSpentByUser(Long userId) {
         Double totalSpent = paymentRepo.getTotalSpentByUser(userId);
         return totalSpent != null ? totalSpent : 0.0;

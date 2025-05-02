@@ -8,6 +8,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import jakarta.mail.MessagingException;
 import org.example.meetingbe.dto.LoginForm;
 import org.example.meetingbe.dto.Register;
+import org.example.meetingbe.model.Payment;
 import org.example.meetingbe.model.User;
 import org.example.meetingbe.repository.IUserRepo;
 import org.example.meetingbe.response.JwtResponse;
@@ -194,5 +195,13 @@ public class UserController {
     public List<User> getNormalUsers() {
         return userService.getNormalUsers();
     }
+    @GetMapping("/years")
+    public List<Integer> getRegistrationYears() {
+        return userService.getAllYears();
+    }
+    @GetMapping("/getByYear")
+    public List<User> getByYear(@RequestParam(name = "year") int year) {
+        return userService.getAllByYear(year);
+    }
 
-}
+    }
