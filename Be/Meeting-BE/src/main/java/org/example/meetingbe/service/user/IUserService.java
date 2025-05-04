@@ -26,5 +26,7 @@ public interface IUserService {
     long countVipUsers();
     List<User> getVipUsers();
     List<User> getNormalUsers();
+    List<Integer> getAllYears();
+    List<User> getAllByYear(int year);
 
 }

@@ -1,0 +1,145 @@
+.nav-info {
+    height: 60px;
+    width: 100%;
+    background-color: #fff;
+}
+
+.nav-main {
+    width: 100%;
+    height: 53px;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    border-top: 1px solid #e0e0ec;
+    box-shadow: 0 8px 16px 0 rgba(8, 35, 171, 0.1) !important;
+}
+
+.nav-menu {
+    width: 1110px;
+    height: 100%;
+    padding: 0 15px;
+    margin: 0 auto;
+}
+
+.nav-list {
+    padding: 0px !important;
+    margin: 0px !important;
+}
+
+.nav-list li {
+    list-style: none;
+    float: left;
+    padding: 16px 28px;
+    margin: 0 2px;
+}
+
+.items {
+    position: relative;
+}
+
+.sub-menu {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    top: 52.5px;
+    margin: 0px;
+    padding: 0px;
+    min-width: 190px;
+    background-color: #fff;
+    box-shadow: 0 0 0 1px #fff, 0 2px 17px 2px rgb(8, 35, 171, 0.1) !important;
+    opacity: 0;
+    visibility: hidden;
+    transform: rotateX(-75deg);
+    transform-origin: 0% 0%;
+    transform-style: preserve-3d;
+    transition: transform .3s, opacity .3s;
+}
+
+li:hover {
+    cursor: pointer;
+}
+
+.nav-list li a {
+    color: black;
+    text-decoration: none;
+}
+
+.nav-list li:hover a {
+    color: #3454f5;
+    cursor: pointer;
+}
+
+.nav-list li .sub-menu li a {
+    color: black;
+    text-decoration: none;
+}
+
+.nav-list li .sub-menu li:hover a {
+    color: #3454f5;
+    cursor: pointer;
+}
+
+.nav-list li:hover .sub-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: rotateX(0);
+}
+
+.footer {
+    height: 62px;
+    padding: 20px 30px;
+    background-color: white;
+}
+
+.chart-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 1048px;
+    margin: auto;
+}
+
+h4 {
+    text-align: center;
+}
+
+.chart {
+    width: 100%;
+    max-width: 1028px;
+    margin: 10px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    
+}
+
+.button-container {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.detailButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #3454f5;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.detailButton:hover {
+    background-color: #1e40ee;
+    cursor: pointer;
+}
+
+.chart-inline {
+    margin: 10px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

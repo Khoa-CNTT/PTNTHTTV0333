@@ -100,6 +100,14 @@ public class UserService implements IUserService {
     public List<User> getNormalUsers() {
         return userRepo.getAllByIsVipFalse();
     }
+    public List<Integer> getAllYears() {
+        return userRepo.findAllYears();
+    }
+
+    @Override
+    public List<User> getAllByYear(int year) {
+        return userRepo.getAllByYear(year);
+    }
 
     public User dtoToObject(UserDto dto){
         User user = new User();
