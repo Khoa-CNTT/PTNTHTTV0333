@@ -1,5 +1,6 @@
 package org.example.meetingbe.service.payment;
 
+import org.example.meetingbe.dto.MonthlyTotalDTO;
 import org.example.meetingbe.model.Payment;
 
 import java.time.LocalDateTime;
@@ -11,6 +12,6 @@ public interface IPaymentService {
     Double getRevenueBetween(LocalDateTime start, LocalDateTime end);
 
     Double getTotalSpentByUser(Long userId);
-    List<Payment> getRevenueByYear(int year);
+    List<MonthlyTotalDTO> getRevenueByYear(int year);
     List<Integer> getAllYears();
 }

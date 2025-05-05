@@ -1,5 +1,6 @@
 package org.example.meetingbe.controller;
 
+import org.example.meetingbe.dto.MonthlyTotalDTO;
 import org.example.meetingbe.model.Payment;
 import org.example.meetingbe.repository.IPaymentRepo;
 import org.example.meetingbe.service.payment.IPaymentService;
@@ -32,7 +33,7 @@ public class PaymentController {
         return paymentService.getRevenueBetween(start, end);
     }
     @GetMapping("/revenue/getByYear")
-    public List<Payment> getRevenueByYear(@RequestParam(name = "year") int year) {
+    public List<MonthlyTotalDTO> getRevenueByYear(@RequestParam(name = "year") int year) {
         return paymentService.getRevenueByYear(year);
     }
 
