@@ -29,7 +29,7 @@ const routes: Routes = [
       {path: 'chatting', component: ChattingComponent},
       {path: 'creating-room', component: CreatingRoomComponent},
       {path: 'meeting-history', component: MeetingHistoryComponent},
-      {path: 'meeting-room', component: MeetingRoomComponent},
+      {path: 'meeting-room/:id', component: MeetingRoomComponent},
       {path: 'payment', component: PaymentComponent},
       {path: 'recording', component: RecordingComponent},
       {path: 'scheduling', component: SchedulingComponent},

@@ -12,9 +12,9 @@ export class HomePageComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const script = this.render.createElement('script');
-    script.src = 'assets/js/slide.js';
-    this.render.appendChild(document.body, script);
+    // const script = this.render.createElement('script');
+    // script.src = 'assets/js/slide.js';
+    // this.render.appendChild(document.body, script);
   }
 
 }

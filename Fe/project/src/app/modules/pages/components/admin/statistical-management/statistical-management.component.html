@@ -1,8 +1,29 @@
-<div class="chart-container clearfix d-flex ">
-    <div id="totalChart" class="chart">
-        <div class="d-flex justify-content-between">
-            <h4>Biểu Đồ Tổng Doanh Thu Trong Năm 2025</h4>
+<div class="container">
+    <div class="stats-box">
+        <div class="stat-item">
+            <h4>Tổng cuộc họp hôm nay</h4>
+            <!-- <p>{{ totalMeetingsToday }}</p> -->
         </div>
+        <div class="stat-item">
+            <h4>Tổng cuộc họp đã diễn ra</h4>
+            <!-- <p>{{ totalMeetingsPast }}</p> -->
+        </div>
+    </div>
+
+    <div class="year-selector">
+        <div class="selector">
+            <label for="year">Chọn năm:</label>
+            <select id="year" [value]="selectedYear">
+                <option *ngFor="let year of yearList" [value]="year">{{ year }}</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="chart-container">
         <canvas id="LinechartTotal"></canvas>
+    </div>
+
+    <div class="chart-container taller-chart">
+        <canvas id="barChart"></canvas>
     </div>
 </div>
