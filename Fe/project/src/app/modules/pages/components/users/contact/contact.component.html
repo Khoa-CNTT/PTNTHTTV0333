@@ -1,1 +1,33 @@
-<p>contact works!</p>
+
+<div class="container">
+   
+
+  
+  
+    <h2>Thêm mới Contact</h2>
+  
+    <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label>Nội dung</label>
+        <input formControlName="content" class="form-control">
+      </div>
+  
+      <div class="mb-3">
+        <label>Ngày gửi</label>
+        <input formControlName="dateSend" type="date" class="form-control">
+      </div>
+  
+      <div class="mb-3">
+        <label>Trạng thái</label>
+        <select formControlName="status" class="form-select">
+          <option [value]="false">Chưa xử lý</option>
+          <option [value]="true">Đã xử lý</option>
+        </select>
+      </div>
+  
+     
+  
+      <button class="btn btn-primary" type="submit" [disabled]="contactForm.invalid">Thêm mới</button>
+    </form>
+  </div>
+  
