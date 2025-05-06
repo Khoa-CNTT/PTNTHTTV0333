@@ -8,7 +8,12 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import jakarta.mail.MessagingException;
 import org.example.meetingbe.dto.*;
 import org.example.meetingbe.model.Payment;
+import org.example.meetingbe.dto.LoginForm;
+import org.example.meetingbe.dto.Register;
+import org.example.meetingbe.dto.UserDto;
+import org.example.meetingbe.model.Role;
 import org.example.meetingbe.model.User;
+import org.example.meetingbe.repository.IRoleRepo;
 import org.example.meetingbe.repository.IUserRepo;
 import org.example.meetingbe.response.JwtResponse;
 import org.example.meetingbe.response.ResponseMessage;
@@ -22,6 +27,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,11 +43,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/user")
 @CrossOrigin(origins = "http://localhost:4200/", allowedHeaders = "*")
 public class UserController {
+    @Autowired
+    private IRoleRepo roleRepo;
     @Autowired
     private IUserService userService;
     @Autowired
@@ -102,27 +112,30 @@ public class UserController {
             }
         }
         user = new User();
+        Set<Role> role = roleRepo.findByRoleName("USER");
         if(!existsEmail){
             user.setEmail(email);
             user.setUserName(name);
             user.setPassword("");
             user.setProvider("google");
+            user.setRoles(role);
             user = userRepo.save(user);
         }
-
+        Optional<User> userAfterSave = userService.findByEmail(email);
         try {
-//            Authentication authentication = new UsernamePasswordAuthenticationToken(user.getUserName(), null);
             UserPrinciple userPrinciple = new UserPrinciple(user);
-
             Authentication authentication = new UsernamePasswordAuthenticationToken(userPrinciple, null, userPrinciple.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String token = jwtTokenProvider.generateToken(authentication);
 
-//            UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
             LocalDateTime time = LocalDateTime.now();
 
             return ResponseEntity.ok(
-                    new JwtResponse(token, userPrinciple.getUsername(), userPrinciple.getAuthorities(), time)
+                    new JwtResponse(token, userAfterSave.get().getUserName(),
+                            userAfterSave.get().getRoles().stream()
+                                    .map(role1 -> new SimpleGrantedAuthority(role1.getRoleName()))
+                                    .collect(Collectors.toList()),
+                            time)
             );
         } catch (Exception e) {
             return ResponseEntity
@@ -131,14 +144,13 @@ public class UserController {
         }
     }
 
-
     private GoogleIdToken verifyGoogleToken(String idTokenString) {
         try {
             HttpTransport transport = new NetHttpTransport();
             JacksonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 
             GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
-                    .setAudience(Collections.singletonList("407408718192.apps.googleusercontent.com"))
+                    .setAudience(Collections.singletonList("705757181216-610b41ap71n8d08rblrmkk643muc33t3.apps.googleusercontent.com"))
                     .build();
 
             return verifier.verify(idTokenString);
