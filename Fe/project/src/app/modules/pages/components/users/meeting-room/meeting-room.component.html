@@ -1,62 +1,65 @@
 <div class="meet-container">
-    <!-- Header -->
-    <div class="meet-header">
-      <div class="room-info">
-        <span class="room-id">Phòng: {{ roomId }}</span>
-        <div class="room-link">
-          <input type="text" [value]="roomLink" readonly>
-          <button class="copy-btn" (click)="copyLink()" title="Sao chép liên kết">
-            <i class="fas fa-copy"></i>
-          </button>
-        </div>
+  <!-- Header -->
+  <div class="meet-header">
+    <div class="room-info">
+      <span class="room-id">Phòng: {{ roomId }}</span>
+      <div class="room-link">
+        <input type="text" [value]="roomLink" readonly>
+        <button class="copy-btn" (click)="copyLink()" title="Sao chép liên kết">
+          <i class="fas fa-copy"></i>
+        </button>
       </div>
-    </div>
-  
-    <!-- Error Message -->
-    <div *ngIf="errorMessage" class="error-banner">
-      {{ errorMessage }}
-    </div>
-  
-    <!-- Video Grid -->
-    <div class="video-grid">
-      <!-- Local Video (Camera) -->
-      <div class="video-container">
-        <video autoplay playsinline id="localVideo" muted></video>
-        <div class="video-overlay" *ngIf="!videoEnabled || !micEnabled">
-          <i class="fas fa-video-slash" *ngIf="!videoEnabled"></i>
-          <i class="fas fa-microphone-slash" *ngIf="!micEnabled"></i>
-        </div>
-        <div class="video-label">Bạn (Camera)</div>
-      </div>
-      <!-- Local Screen (if sharing) -->
-      <div class="video-container" *ngIf="isScreenSharing">
-        <video autoplay playsinline id="localScreen"></video>
-        <div class="video-label">Bạn (Màn hình)</div>
-      </div>
-      <!-- Peer Videos -->
-      <div class="video-container" *ngFor="let peer of peers; trackBy: trackByPeerId">
-        <video autoplay playsinline [id]="'peerVideo-' + peer.id"></video>
-        <div class="video-overlay" *ngIf="!peer.videoEnabled || !peer.micEnabled">
-          <i class="fas fa-video-slash" *ngIf="!peer.videoEnabled"></i>
-          <i class="fas fa-microphone-slash" *ngIf="!peer.micEnabled"></i>
-        </div>
-        <div class="video-label">Người tham gia {{ peer.id }}</div>
-      </div>
-    </div>
-  
-    <!-- Control Bar -->
-    <div class="control-bar">
-      <button class="control-btn" [ngClass]="{'active': !micEnabled}" (click)="toggleMic()" title="{{ micEnabled ? 'Tắt mic' : 'Bật mic' }}">
-        <i class="fas" [ngClass]="micEnabled ? 'fa-microphone' : 'fa-microphone-slash'"></i>
-      </button>
-      <button class="control-btn" [ngClass]="{'active': !videoEnabled}" (click)="toggleVideo()" title="{{ videoEnabled ? 'Tắt video' : 'Bật video' }}">
-        <i class="fas" [ngClass]="videoEnabled ? 'fa-video' : 'fa-video-slash'"></i>
-      </button>
-      <button class="control-btn" [ngClass]="{'active': isScreenSharing}" (click)="toggleScreenShare()" title="{{ isScreenSharing ? 'Dừng chia sẻ màn hình' : 'Chia sẻ màn hình' }}">
-        <i class="fas fa-desktop"></i>
-      </button>
-      <button class="control-btn disconnect-btn" (click)="disconnect()" title="Ngắt kết nối">
-        <i class="fas fa-sign-out-alt"></i>
-      </button>
     </div>
   </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="error-banner">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Video Grid -->
+  <div class="video-grid">
+    <!-- Local Video (Camera) -->
+    <div class="video-container">
+      <video autoplay playsinline id="localVideo" muted></video>
+      <div class="video-overlay" *ngIf="!videoEnabled || !micEnabled">
+        <i class="fas fa-video-slash" *ngIf="!videoEnabled"></i>
+        <i class="fas fa-microphone-slash" *ngIf="!micEnabled"></i>
+      </div>
+      <div class="video-label">Bạn (Camera)</div>
+    </div>
+    <!-- Local Screen (if sharing) -->
+    <div class="video-container" *ngIf="isScreenSharing">
+      <video autoplay playsinline id="localScreen"></video>
+      <div class="video-label">Bạn (Màn hình)</div>
+    </div>
+    <!-- Peer Videos -->
+    <div class="video-container" *ngFor="let peer of peers; trackBy: trackByPeerId">
+      <video autoplay playsinline [id]="'peerVideo-' + peer.id"></video>
+      <div class="video-overlay" *ngIf="!peer.videoEnabled || !peer.micEnabled">
+        <i class="fas fa-video-slash" *ngIf="!peer.videoEnabled"></i>
+        <i class="fas fa-microphone-slash" *ngIf="!peer.micEnabled"></i>
+      </div>
+      <div class="video-label">Người tham gia {{ peer.id }}</div>
+    </div>
+  </div>
+
+  <!-- Control Bar -->
+  <div class="control-bar">
+    <button class="control-btn" [ngClass]="{'active': !micEnabled}" (click)="toggleMic()"
+      title="{{ micEnabled ? 'Tắt mic' : 'Bật mic' }}">
+      <i class="fas" [ngClass]="micEnabled ? 'fa-microphone' : 'fa-microphone-slash'"></i>
+    </button>
+    <button class="control-btn" [ngClass]="{'active': !videoEnabled}" (click)="toggleVideo()"
+      title="{{ videoEnabled ? 'Tắt video' : 'Bật video' }}">
+      <i class="fas" [ngClass]="videoEnabled ? 'fa-video' : 'fa-video-slash'"></i>
+    </button>
+    <button class="control-btn" [ngClass]="{'active': isScreenSharing}" (click)="toggleScreenShare()"
+      title="{{ isScreenSharing ? 'Dừng chia sẻ màn hình' : 'Chia sẻ màn hình' }}">
+      <i class="fas fa-desktop"></i>
+    </button>
+    <button class="control-btn disconnect-btn" (click)="disconnect()" title="Ngắt kết nối">
+      <i class="fas fa-sign-out-alt"></i>
+    </button>
+  </div>
+</div>

@@ -1,9 +1,15 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MeetingService } from 'src/app/services/meeting.service';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
+import { MeetingService } from 'src/app/services/meeting.service';
 
-
+declare global {
+  interface MediaDevices {
+    getDisplayMedia(constraints: MediaStreamConstraints): Promise<MediaStream>;
+  }
+}
 @Component({
   selector: 'app-meeting-room',
   templateUrl: './meeting-room.component.html',
@@ -25,6 +31,7 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
   errorMessage: string | null = null;
+  private disconnectedPeers: Set<string> = new Set(); // Track disconnected peers
 
   constructor(
     private route: ActivatedRoute,
@@ -39,7 +46,10 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
     console.log('Joining room:', this.roomId, 'with participantId:', this.participantId);
     this.meetingService.joinRoom(this.roomId, this.participantId).subscribe({
       next: () => console.log('Joined room successfully'),
-      error: (err) => console.error('Error joining room:', err),
+      error: (err) => {
+        console.error('Error joining room:', err);
+        this.cdr.detectChanges();
+      },
     });
     await this.startWebRTC();
     this.connectWebSocket();
@@ -75,12 +85,11 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
       try {
         this.screenStream = await navigator.mediaDevices.getDisplayMedia({
           video: true,
-          audio: false, // Có thể bật nếu cần âm thanh
+          audio: false,
         });
         this.isScreenSharing = true;
         console.log('Screen stream initialized with tracks:', this.screenStream.getTracks());
 
-        // Đợi DOM cập nhật và gán srcObject
         this.cdr.detectChanges();
         setTimeout(() => {
           const localScreen = document.getElementById('localScreen') as HTMLVideoElement;
@@ -199,6 +208,12 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
           return;
         }
 
+        // Ignore signals from disconnected peers
+        if (this.disconnectedPeers.has(peerId)) {
+          console.log(`Ignoring signal from disconnected peer: ${peerId}, type: ${signal.type}`);
+          return;
+        }
+
         let peerConnection = this.peerConnections.get(peerId);
         if (!peerConnection && signal.type !== 'new-participant' && signal.type !== 'participant-left' && signal.type !== 'status-update') {
           console.log('Creating new peer connection for:', peerId);
@@ -225,8 +240,10 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
           }
         } else if (signal.type === 'new-participant') {
           console.log('New participant joined:', peerId);
-          this.peers = [...this.peers, { id: peerId, videoEnabled: true, micEnabled: true }];
-          this.cdr.detectChanges();
+          if (!this.peers.some(peer => peer.id === peerId) && !this.disconnectedPeers.has(peerId)) {
+            this.peers = [...this.peers, { id: peerId, videoEnabled: true, micEnabled: true }];
+            this.cdr.detectChanges();
+          }
           if (!this.peerConnections.has(peerId)) {
             peerConnection = this.createPeerConnection(peerId);
             this.peerConnections.set(peerId, peerConnection);
@@ -245,14 +262,7 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
           }
         } else if (signal.type === 'participant-left') {
           console.log('Participant left:', peerId);
-          if (peerConnection) {
-            peerConnection.close();
-            this.peerConnections.delete(peerId);
-            this.signalQueue.delete(peerId);
-          }
-          this.peers = this.peers.filter(peer => peer.id !== peerId);
-          this.cdr.detectChanges();
-          console.log('Removed peer and closed connection for:', peerId);
+          this.cleanupPeer(peerId);
         } else if (signal.type === 'status-update') {
           console.log('Received status update from:', peerId, signal.status);
           this.peers = this.peers.map(peer =>
@@ -287,7 +297,55 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
     };
   }
 
+  cleanupPeer(peerId: string) {
+    console.log(`Cleaning up peer: ${peerId}`);
+
+    // Mark peer as disconnected
+    this.disconnectedPeers.add(peerId);
+
+    // Close and remove peer connection
+    const peerConnection = this.peerConnections.get(peerId);
+    if (peerConnection) {
+      peerConnection.close();
+      this.peerConnections.delete(peerId);
+      console.log(`Closed peer connection for peer: ${peerId}`);
+    }
+
+    // Remove from signal queue
+    this.signalQueue.delete(peerId);
+
+    // Remove from peers array
+    const peerExists = this.peers.some(peer => peer.id === peerId);
+    if (peerExists) {
+      this.peers = this.peers.filter(peer => peer.id !== peerId);
+      console.log(`Removed peer ${peerId} from peers array`);
+    } else {
+      console.log(`Peer ${peerId} not found in peers array`);
+    }
+
+    // Remove video element from DOM
+    const videoElement = document.getElementById(`peerVideo-${peerId}`) as HTMLVideoElement;
+    if (videoElement) {
+      videoElement.srcObject = null;
+      videoElement.remove();
+      console.log(`Removed video element for peer: ${peerId}`);
+    } else {
+      console.log(`No video element found for peer: ${peerId}`);
+    }
+
+    // Trigger UI update
+    this.cdr.detectChanges();
+    console.log(`Completed cleanup for peer: ${peerId}`);
+  }
+
   async processSignalQueue(peerId: string) {
+    // Skip processing if peer is disconnected
+    if (this.disconnectedPeers.has(peerId)) {
+      console.log(`Skipping signal queue for disconnected peer: ${peerId}`);
+      this.signalQueue.delete(peerId);
+      return;
+    }
+
     const queue = this.signalQueue.get(peerId);
     if (!queue || queue.length === 0) return;
 
@@ -350,10 +408,15 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
   }
 
   createPeerConnection(peerId: string): RTCPeerConnection {
+    // Prevent creating peer connection for disconnected peer
+    if (this.disconnectedPeers.has(peerId)) {
+      console.log(`Prevented creating peer connection for disconnected peer: ${peerId}`);
+      throw new Error(`Peer ${peerId} is disconnected`);
+    }
+
     const peerConnection = new RTCPeerConnection({
       iceServers: [
         { urls: 'stun:stun.l.google.com:19302' },
-        // Thêm TURN server nếu có
       ],
     });
 
@@ -376,6 +439,12 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
     }
 
     peerConnection.ontrack = (e) => {
+      // Skip if peer is disconnected
+      if (this.disconnectedPeers.has(peerId)) {
+        console.log(`Ignoring ontrack event for disconnected peer: ${peerId}`);
+        return;
+      }
+
       console.log('Received remote stream for peer:', peerId, e.streams);
       if (e.streams && e.streams[0]) {
         const remoteStream = e.streams[0];
@@ -385,21 +454,35 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
           console.log('Creating video element for peer:', peerId);
           if (!this.peers.some(peer => peer.id === peerId)) {
             this.peers = [...this.peers, { id: peerId, videoEnabled: true, micEnabled: true }];
+            this.cdr.detectChanges();
           }
-          this.cdr.detectChanges();
           setTimeout(() => {
             videoElement = document.getElementById(`peerVideo-${peerId}`) as HTMLVideoElement;
-            if (videoElement) {
-              videoElement.srcObject = remoteStream;
-              videoElement.play().catch((err) => console.error('Error playing video:', err));
-              console.log('Assigned stream to video element for peer:', peerId);
+            if (videoElement && !this.disconnectedPeers.has(peerId)) {
+              if (videoElement.srcObject !== remoteStream) {
+                videoElement.srcObject = remoteStream;
+                videoElement.play().catch((err) => {
+                  console.error('Error playing video for peer:', peerId, err);
+                  if (err.name === 'NotAllowedError') {
+                    this.errorMessage = 'Vui lòng tương tác với trang (nhấp chuột) để phát video.';
+                    this.cdr.detectChanges();
+                  }
+                });
+                console.log('Assigned stream to video element for peer:', peerId);
+              }
             } else {
-              console.error('Video element not found after DOM update for peer:', peerId);
+              console.error('Video element not found or peer disconnected for peer:', peerId);
             }
           }, 500);
-        } else {
+        } else if (videoElement.srcObject !== remoteStream && !this.disconnectedPeers.has(peerId)) {
           videoElement.srcObject = remoteStream;
-          videoElement.play().catch((err) => console.error('Error playing video:', err));
+          videoElement.play().catch((err) => {
+            console.error('Error playing video for peer:', peerId, err);
+            if (err.name === 'NotAllowedError') {
+              this.errorMessage = 'Vui lòng tương tác với trang (nhấp chuột) để phát video.';
+              this.cdr.detectChanges();
+            }
+          });
           console.log('Assigned stream to existing video element for peer:', peerId);
         }
       } else {
@@ -426,14 +509,21 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
 
     peerConnection.onconnectionstatechange = () => {
       console.log(`Peer ${peerId} connection state: ${peerConnection.connectionState}`);
-      if (peerConnection.connectionState === 'failed') {
+      if (peerConnection.connectionState === 'disconnected' || peerConnection.connectionState === 'closed') {
+        console.log(`Peer ${peerId} connection ${peerConnection.connectionState}, cleaning up`);
+        this.cleanupPeer(peerId);
+      } else if (peerConnection.connectionState === 'failed') {
         console.error('Connection failed for peer:', peerId);
+        this.recreatePeerConnection(peerId);
       }
     };
 
     peerConnection.oniceconnectionstatechange = () => {
       console.log(`Peer ${peerId} ICE connection state: ${peerConnection.iceConnectionState}`);
-      if (peerConnection.iceConnectionState === 'failed') {
+      if (peerConnection.iceConnectionState === 'disconnected' || peerConnection.iceConnectionState === 'closed') {
+        console.log(`Peer ${peerId} ICE connection ${peerConnection.iceConnectionState}, cleaning up`);
+        this.cleanupPeer(peerId);
+      } else if (peerConnection.iceConnectionState === 'failed') {
         console.error('ICE connection failed for peer:', peerId);
         this.recreatePeerConnection(peerId);
       }
@@ -443,6 +533,12 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
   }
 
   async recreatePeerConnection(peerId: string) {
+    // Skip if peer is disconnected
+    if (this.disconnectedPeers.has(peerId)) {
+      console.log(`Skipping recreate peer connection for disconnected peer: ${peerId}`);
+      return;
+    }
+
     console.log('Recreating peer connection for:', peerId);
     let peerConnection = this.peerConnections.get(peerId);
     if (peerConnection) {
@@ -513,7 +609,6 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
 
   disconnect() {
     console.log('Disconnecting from room:', this.roomId);
-    this.reconnectAttempts--;
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
       this.ws.send(
         JSON.stringify({
@@ -528,6 +623,9 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
     this.stopScreenShare();
     this.localStream?.getTracks().forEach((track) => track.stop());
     this.peerConnections.forEach((pc) => pc.close());
+    this.peerConnections.clear();
+    this.peers = [];
+    this.disconnectedPeers.clear();
     if (this.ws) {
       this.ws.close();
       this.ws = null;
@@ -552,6 +650,9 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
     this.stopScreenShare();
     this.localStream?.getTracks().forEach((track) => track.stop());
     this.peerConnections.forEach((pc) => pc.close());
+    this.peerConnections.clear();
+    this.peers = [];
+    this.disconnectedPeers.clear();
     if (this.ws) {
       this.ws.close();
       this.ws = null;
@@ -562,5 +663,4 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
   trackByPeerId(index: number, peer: { id: string }): string {
     return peer.id;
   }
-
 }

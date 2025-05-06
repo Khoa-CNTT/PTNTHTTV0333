@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class MeetingService {
-  private apiUrl = 'http://localhost:8080/api'; // Kiểm tra URL chính xác
+  private apiUrl = 'http://localhost:8080/api';
 
   constructor(private http: HttpClient) { }
 
@@ -19,8 +19,8 @@ export class MeetingService {
   }
 
   joinRoom(roomId: string, participantId: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/${roomId}/join`, participantId, {
-      headers: { 'Content-Type': 'text/plain' }, // Đảm bảo đúng content type
+    return this.http.post(`${this.apiUrl}/${roomId}/join`, { userId: participantId }, {
+      headers: { 'Content-Type': 'application/json' }
     });
   }
 }

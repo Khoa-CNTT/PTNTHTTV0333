@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit, Renderer2 } from '@angular/core';
 import { Chart, registerables } from 'chart.js';
 import { PaymentService } from 'src/app/services/payment.service';
+import { UserService } from 'src/app/services/user.service';
 
 Chart.register(...registerables);
 
@@ -10,7 +11,8 @@ Chart.register(...registerables);
   styleUrls: ['./statistical-management.component.css']
 })
 export class StatisticalManagementComponent implements OnInit, AfterViewInit {
-  chartData: any[] = [];
+  chartLineData: any[] = [];
+  chartBarData: any[] = [];
   yearList: number[] = [];
   selectedYear: number = new Date().getFullYear();
   months: number[] = Array.from({ length: 12 }, (_, i) => i + 1);
@@ -18,6 +20,7 @@ export class StatisticalManagementComponent implements OnInit, AfterViewInit {
 
   constructor(
     private paymentService: PaymentService,
+    private userService: UserService,
     private renderer: Renderer2
   ) { }
 
@@ -42,8 +45,15 @@ export class StatisticalManagementComponent implements OnInit, AfterViewInit {
   private loadRevenueData(year: number): void {
     this.paymentService.GetRevenueByYear(year).subscribe({
       next: (data: any) => {
-        this.chartData = data;
+        this.chartLineData = data;
         this.renderLineChart();
+      },
+      error: (error) => console.error(`Error fetching revenue for year ${year}:`, error)
+    });
+
+    this.userService.getMonthlyUserRegistrations(year).subscribe({
+      next: (data: any) => {
+        this.chartBarData = data;
         this.renderBarChart();
       },
       error: (error) => console.error(`Error fetching revenue for year ${year}:`, error)
@@ -64,7 +74,7 @@ export class StatisticalManagementComponent implements OnInit, AfterViewInit {
 
   private renderLineChart(): void {
     const labels = this.months.map(month => `Tháng ${month}`);
-    const realData = this.chartData.map(item => item.total);
+    const realData = this.chartLineData.map(item => item.total);
 
     this.chart = new Chart('LinechartTotal', {
       type: 'line',
@@ -98,7 +108,8 @@ export class StatisticalManagementComponent implements OnInit, AfterViewInit {
 
   private renderBarChart(): void {
     const labels = this.months.map(month => `Tháng ${month}`);
-    const realData = this.chartData.map(item => item.total);
+    console.log('chartBarData', this.chartBarData);
+    const realDataBar = this.chartBarData.map(items => items.count);
 
     this.chart = new Chart('barChart', {
       type: 'bar',
@@ -106,7 +117,7 @@ export class StatisticalManagementComponent implements OnInit, AfterViewInit {
         labels,
         datasets: [{
           label: 'My First Dataset',
-          data: realData,
+          data: realDataBar,
           backgroundColor: '#c2363f',
           borderColor: 'rgba(255, 99, 132, 1)',
           borderWidth: 1,
