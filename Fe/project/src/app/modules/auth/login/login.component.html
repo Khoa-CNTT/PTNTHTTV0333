@@ -6,19 +6,19 @@
                 <h1>Đăng nhập</h1>
                 <p>Sẵn sàng kết nối họp mọi lúc!</p>
             </div>
-            <form>
+            <form [formGroup]="formLogin" (ngSubmit)="loginSubmit()">
                 <div class="form-group">
-                    <input type="email" placeholder="Email hoặc số điện thoại" />
+                    <input type="email" placeholder="Email hoặc số điện thoại" formControlName="userName" />
                 </div>
                 <div class="form-group">
-                    <input type="password" placeholder="Mật khẩu" />
+                    <input type="password" placeholder="Mật khẩu" formControlName="password" />
                 </div>
                 <div class="checkbox-row">
                     <label><input type="checkbox" /> Ghi nhớ đăng nhập</label>
                     <a routerLink="/forgot-password">Quên mật khẩu?</a>
                 </div>
                 <button type="submit" class="submit-btn">Đăng nhập</button>
-                <button class="google-btn"><i class="fab fa-google"></i>Đăng nhập bằng Google</button>
+                <div id="google-btn" class="google-btn"><i class="fab fa-google"></i>Đăng nhập bằng Google</div>
                 <div class="register">
                     Chưa có tài khoản? <a routerLink="/registration">Đăng ký ngay</a>
                 </div>

@@ -17,7 +17,6 @@ public class UserPrinciple implements UserDetails {
     private String userName;
     @JsonIgnore
     private String password;
-    private User user;
     public UserPrinciple(Login login) {}
     public UserPrinciple(User user) {}
     public Collection<? extends GrantedAuthority> authorities;
@@ -46,9 +45,9 @@ public class UserPrinciple implements UserDetails {
 
     @Override
     public String getPassword() {
-        if("google".equals(user.getProvider())){
-            return "";
-        }
+//        if("google".equals(user.getProvider())){
+//            return "";
+//        }
         return this.password;
     }
 

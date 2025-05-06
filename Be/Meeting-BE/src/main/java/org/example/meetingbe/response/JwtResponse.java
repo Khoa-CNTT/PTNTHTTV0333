@@ -1,9 +1,11 @@
 package org.example.meetingbe.response;
 
+import org.example.meetingbe.model.Role;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Set;
 
 public class JwtResponse {
     private String token;
