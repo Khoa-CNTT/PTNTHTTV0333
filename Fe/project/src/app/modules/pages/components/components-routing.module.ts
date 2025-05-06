@@ -15,6 +15,7 @@ import { RecordingComponent } from './users/recording/recording.component';
 import { SchedulingComponent } from './users/scheduling/scheduling.component';
 import { SumaryAiComponent } from './users/sumary-ai/sumary-ai.component';
 import { UserInfoComponent } from './users/user-info/user-info.component';
+import { ContactComponent } from './users/contact/contact.component';
 
 
 
@@ -24,6 +25,7 @@ const routes: Routes = [
     children: [
       {path: 'home-main', component: HomeMainComponent},
       {path: 'contact-management', component: ContactManagementComponent},
+      {path: 'contact', component: ContactComponent},
       {path: 'statistical-management', component: StatisticalManagementComponent},
       {path: 'users-management', component: UsersManagementComponent},
       {path: 'chatting', component: ChattingComponent},

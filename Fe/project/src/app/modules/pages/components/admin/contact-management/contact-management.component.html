@@ -1,1 +1,17 @@
-<p>contact-management works!</p>
+<!-- contact.component.html -->
+<h2>Danh sách liên hệ</h2>
+
+<div *ngFor="let contact of contacts" class="contact-card">
+  <p><strong>Người gửi:</strong> {{ contact.user.firstName }} {{ contact.user.lastName }} ({{ contact.user.email }})</p>
+  <p><strong>Nội dung:</strong> {{ contact.content }}</p>
+  <p><strong>Ngày gửi:</strong> {{ contact.dateSend }}</p>
+  <p [ngClass]="{ 'status': true, 'pending': !contact.status, 'done': contact.status }">
+    <strong>Trạng thái:</strong> {{ contact.status ? 'Đã xử lý' : 'Chưa xử lý' }}
+  </p>
+</div>
+
+<div class="pagination">
+  <button (click)="prevPage()">⬅ Trang trước</button>
+  <span>Trang {{ currentPage + 1 }} / {{ totalPages }}</span>
+  <button (click)="nextPage()">Trang sau ➡</button>
+</div>
