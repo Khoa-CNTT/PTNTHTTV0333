@@ -63,11 +63,15 @@ main {
     border-radius: 0.5rem;
     border: none;
     cursor: pointer;
+    transition: transform 0.2s ease;
 }
 
+
 .option-card:hover {
-    background-color: #c3656c;
+    transform: scale(1.05);
+    transition: transform 0.2s ease;
 }
+
 
 @media (min-width: 1024px) {
     .option-card {
@@ -89,4 +93,13 @@ main {
 .option-card p {
     margin-top: 1rem;
     font-size: 1rem;
+}
+
+.modal-content {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.modal-body input:focus {
+  border-color: #c2363f;
+  box-shadow: 0 0 0 0.2rem rgba(194, 54, 63, 0.25);
 }

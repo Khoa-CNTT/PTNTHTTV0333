@@ -22,13 +22,16 @@
                 </div>
                 <p>Bắt đầu cuộc họp ngay lập tức</p>
             </button>
-            <button class="option-card">
+
+            <button class="option-card" data-bs-toggle="modal" data-bs-target="#joinMeetingModal">
                 <div class="option-header">
                     <i class="fas fa-users"></i>
                     <span class="font-bold">Tham gia cuộc họp</span>
                 </div>
                 <p>Thông qua mã hoặc liên kết</p>
             </button>
+
+
             <button class="option-card">
                 <div class="option-header">
                     <i class="fas fa-calendar-alt"></i>
@@ -45,3 +48,24 @@
 
     </div>
 </main>
+
+<div class="modal fade" id="joinMeetingModal" tabindex="-1" aria-labelledby="joinMeetingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 12px;">
+            <div class="modal-header" style="background-color: #c2363f; color: white;">
+                <h5 class="modal-title" id="joinMeetingModalLabel">Nhập mã cuộc họp</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"
+                    style="filter: invert(1);"></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control border-danger-subtle" [(ngModel)]="meetingCode"
+                    placeholder="Nhập đường link phòng" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="color: #c2363f;">Hủy</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="background-color: #c2363f;"
+                    (click)="joinMeeting()">Tham gia</button>
+            </div>
+        </div>
+    </div>
+</div>

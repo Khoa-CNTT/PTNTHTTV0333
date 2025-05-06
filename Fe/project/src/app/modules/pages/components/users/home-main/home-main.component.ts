@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { MeetingService } from 'src/app/services/meeting.service';
 
 @Component({
@@ -7,9 +8,14 @@ import { MeetingService } from 'src/app/services/meeting.service';
   templateUrl: './home-main.component.html',
   styleUrls: ['./home-main.component.css']
 })
-export class HomeMainComponent{
+export class HomeMainComponent {
+  meetingCode: string = '';
 
-  constructor(private meetingService: MeetingService, private router: Router) {}
+  constructor(
+    private meetingService: MeetingService,
+    private router: Router,
+    private toastr: ToastrService,
+  ) { }
 
   createRoom() {
     this.meetingService.createRoom().subscribe((meeting) => {
@@ -18,6 +24,15 @@ export class HomeMainComponent{
     });
   }
 
-  
+  joinMeeting() {
+    try {
+      const url = new URL(this.meetingCode.trim());
+      window.location.href = url.href;
+    } catch (err) {
+      this.toastr.error('Đường link phòng không tồn tại!', 'Error');
+    }
+  }
+
+
 
 }

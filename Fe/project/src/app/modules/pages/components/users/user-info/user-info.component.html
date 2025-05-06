@@ -1,1 +1,30 @@
-<p>user-info works!</p>
+<app-navigation></app-navigation>
+
+<div class="profile-container">
+    <h2>Thông tin cá nhân</h2>
+  
+    <div class="profile-avatar">
+      <img [src]="previewImage || 'assets/imgs/default-avatar.png'" alt="Avatar" />
+      <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+    </div>
+  
+    <form class="profile-form" (ngSubmit)="onSubmit()" #form="ngForm">
+      <div class="form-group">
+        <label>Họ và tên</label>
+        <input type="text" class="form-control" [(ngModel)]="profile.fullName" name="fullName" required />
+      </div>
+  
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" class="form-control" [(ngModel)]="profile.email" name="email" required />
+      </div>
+  
+      <div class="form-group">
+        <label>Số điện thoại</label>
+        <input type="text" class="form-control" [(ngModel)]="profile.phone" name="phone" />
+      </div>
+  
+      <button type="submit" class="btn-save">Lưu thay đổi</button>
+    </form>
+  </div>
+  

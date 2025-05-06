@@ -632,7 +632,7 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
     }
     console.log('Cleaned up resources and disconnected');
 
-    this.router.navigate(['/']);
+    this.router.navigate(['/pages/components/home-main']);
   }
 
   ngOnDestroy() {

@@ -1,33 +1,27 @@
+<app-navigation></app-navigation>
 
-<div class="container">
-   
+<div class="wrap-container">
+  <div class="contact-container">
+    <div class="form-section">
+      <button class="back-btn" routerLink="/pages/components/home-main">
+        <i class="fas fa-arrow-left"></i> Quay lại
+      </button>
+      <div class="form-header">
+        <h1>Liên hệ với chúng tôi</h1>
+        <p>Hãy để lại nội dung, chúng tôi sẽ phản hồi sớm nhất có thể!</p>
+      </div>
+      <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="content">Nội dung</label>
+          <textarea id="content" formControlName="content" class="form-control" rows="5"
+            placeholder="Nhập nội dung liên hệ..."></textarea>
+        </div>
+        <button class="submit-btn" type="submit" [disabled]="contactForm.invalid">Gửi liên hệ</button>
+      </form>
+    </div>
 
-  
-  
-    <h2>Thêm mới Contact</h2>
-  
-    <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
-      <div class="mb-3">
-        <label>Nội dung</label>
-        <input formControlName="content" class="form-control">
-      </div>
-  
-      <div class="mb-3">
-        <label>Ngày gửi</label>
-        <input formControlName="dateSend" type="date" class="form-control">
-      </div>
-  
-      <div class="mb-3">
-        <label>Trạng thái</label>
-        <select formControlName="status" class="form-select">
-          <option [value]="false">Chưa xử lý</option>
-          <option [value]="true">Đã xử lý</option>
-        </select>
-      </div>
-  
-     
-  
-      <button class="btn btn-primary" type="submit" [disabled]="contactForm.invalid">Thêm mới</button>
-    </form>
+    <div class="image-section">
+      <img src="assets/imgs/image.png" alt="Minh họa người mở cửa" />
+    </div>
   </div>
-  
+</div>
