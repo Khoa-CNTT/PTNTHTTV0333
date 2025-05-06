@@ -27,4 +27,11 @@ public interface IUserRepo extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE FUNCTION('YEAR', u.createAt) = :year")
     List<User> getAllByYear(@Param("year") int year);
 
+    @Query("SELECT FUNCTION('MONTH', u.createAt), COUNT(u) " +
+            "FROM User u " +
+            "WHERE FUNCTION('YEAR', u.createAt) = :year " +
+            "GROUP BY FUNCTION('MONTH', u.createAt) " +
+            "ORDER BY FUNCTION('MONTH', u.createAt)")
+    List<Object[]> countRegistrationsByMonth(@Param("year") int year);
+
 }

@@ -1,6 +1,7 @@
 package org.example.meetingbe.service.user;
 
 import jakarta.mail.MessagingException;
+import org.example.meetingbe.dto.MonthlyUserCountDTO;
 import org.example.meetingbe.dto.Register;
 import org.example.meetingbe.model.Role;
 import org.example.meetingbe.model.User;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -107,6 +109,24 @@ public class UserService implements IUserService {
     @Override
     public List<User> getAllByYear(int year) {
         return userRepo.getAllByYear(year);
+    }
+    public List<MonthlyUserCountDTO> getUserRegistrationsByYear(int year) {
+        List<Object[]> resultList = userRepo.countRegistrationsByMonth(year);
+        List<MonthlyUserCountDTO> monthlyCounts = new ArrayList<>();
+
+        long[] counts = new long[13];
+
+        for (Object[] row : resultList) {
+            Integer month = (Integer) row[0];
+            Long count = ((Number) row[1]).longValue();
+            counts[month] = count;
+        }
+
+        for (int i = 1; i <= 12; i++) {
+            monthlyCounts.add(new MonthlyUserCountDTO(i, counts[i]));
+        }
+
+        return monthlyCounts;
     }
 
     public User dtoToObject(UserDto dto){

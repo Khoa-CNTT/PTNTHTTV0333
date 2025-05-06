@@ -1,6 +1,7 @@
 package org.example.meetingbe.service.user;
 
 import jakarta.mail.MessagingException;
+import org.example.meetingbe.dto.MonthlyUserCountDTO;
 import org.example.meetingbe.dto.Register;
 import org.example.meetingbe.dto.UserDto;
 import org.example.meetingbe.model.User;
@@ -28,5 +29,6 @@ public interface IUserService {
     List<User> getNormalUsers();
     List<Integer> getAllYears();
     List<User> getAllByYear(int year);
+    List<MonthlyUserCountDTO> getUserRegistrationsByYear(int year);
 
 }

@@ -6,8 +6,7 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import jakarta.mail.MessagingException;
-import org.example.meetingbe.dto.LoginForm;
-import org.example.meetingbe.dto.Register;
+import org.example.meetingbe.dto.*;
 import org.example.meetingbe.model.Payment;
 import org.example.meetingbe.model.User;
 import org.example.meetingbe.repository.IUserRepo;
@@ -30,7 +29,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
-import org.example.meetingbe.dto.UserDto;
+
 import org.example.meetingbe.model.User;
 import org.example.meetingbe.service.user.IUserService;
 import org.example.meetingbe.service.user.UserService;
@@ -194,6 +193,10 @@ public class UserController {
     @GetMapping("/years")
     public List<Integer> getRegistrationYears() {
         return userService.getAllYears();
+    }
+    @GetMapping("/monthly-registrations/{year}")
+    public List<MonthlyUserCountDTO> getMonthlyUserRegistrations(@PathVariable("year") int year) {
+        return userService.getUserRegistrationsByYear(year);
     }
     @GetMapping("/getByYear")
     public List<User> getByYear(@RequestParam(name = "year") int year) {
