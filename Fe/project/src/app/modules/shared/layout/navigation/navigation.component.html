@@ -10,17 +10,17 @@
 
   <div class="header-icons text-red">
     <i class="fas fa-envelope icon" title="Contact Us" routerLink="/pages/components/contact"></i>
-  
+
     <!-- Admin dropdown -->
     <div class="admin-menu">
       <i class="fas fa-cogs icon" title="Quản lý tài khoản" (click)="toggleAdminDropdown()"></i>
       <div class="admin-sub-menu" [class.show]="adminDropdownVisible">
-        <div><a routerLink="/admin/accounts"><i class="fas fa-users-cog"></i> Quản lý người dùng</a></div>
-        <div><a routerLink="/admin/meetings"><i class="fas fa-calendar-alt"></i> Quản lý cuộc họp</a></div>
-        <div><a routerLink="/admin/settings"><i class="fas fa-sliders-h"></i> Cài đặt hệ thống</a></div>
+        <div><a routerLink="/admin/accounts"> Quản lý người dùng</a></div>
+        <div><a routerLink="/pages/components/statistical-management"> Quản lý thống kê</a></div>
+        <div><a routerLink="/admin/settings"> Cài đặt hệ thống</a></div>
       </div>
     </div>
-  
+
     <!-- User dropdown -->
     <div class="user-menu">
       <i class="fas fa-user-circle icon" title="Profile" (click)="toggleDropdown()"></i>
@@ -32,5 +32,5 @@
       </div>
     </div>
   </div>
-  
+
 </header>
