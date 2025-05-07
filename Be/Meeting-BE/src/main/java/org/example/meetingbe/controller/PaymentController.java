@@ -23,8 +23,8 @@ public class PaymentController {
         return paymentService.getTotalRevenue();
     }
         @GetMapping("/countSuccessful")//Dem so giao dich thanh cong
-    public int countSuccessfulPayments(){
-        return paymentService.countSuccessfulPayments().intValue();
+    public int countSuccessfulPayments(@RequestParam("Year") int year){
+        return paymentService.countSuccessfulPayments(year).intValue();
     }
     @GetMapping("/revenue/between")//Tong doanh thu tu ngay start - end
     public Double getRevenueBetween(

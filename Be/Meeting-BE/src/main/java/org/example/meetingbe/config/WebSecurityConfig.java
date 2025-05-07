@@ -51,7 +51,7 @@ public class WebSecurityConfig {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(jwtEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().requestMatchers("api/user/login", "api/user/register", "api/user/google","api/addNewContact","api/page","api/updateContact").permitAll()
+                .authorizeRequests().requestMatchers("api/user/login", "api/user/register", "api/user/google","api/addNewContact","api/page","api/updateContact","api/payment/revenue/getByYear").permitAll()
                 .anyRequest().authenticated();
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

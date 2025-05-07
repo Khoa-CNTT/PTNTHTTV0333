@@ -17,7 +17,10 @@ public interface IUserRepo extends JpaRepository<User, Long> {
     Boolean existsByUserName(String userName);
     Boolean existsByEmail(String email);
     Optional<User> findByEmail(String email);
-
+    @Query("UPDATE User u SET u.status = true WHERE u.id = :id")
+    Boolean updateStatusUser(Long id);
+    @Query("SELECT COUNT(u) FROM User u WHERE FUNCTION('YEAR', u.createAt) = :year")
+    long countByYear(int year);
     long countByIsVipTrue();
     List<User> getAllByIsVipTrue();
     List<User> getAllByIsVipFalse();

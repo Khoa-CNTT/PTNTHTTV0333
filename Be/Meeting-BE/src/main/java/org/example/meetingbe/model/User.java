@@ -32,6 +32,8 @@ public class User {
     private String provider;
     @Column(name = "create_at", columnDefinition = "DATETIME")
     private LocalDateTime createAt;
+    @Column(name = "status", columnDefinition = "BIT")
+    private Boolean status = false;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -47,6 +49,28 @@ public class User {
         this.userName = userName;
         this.roles = roles;
         this.provider = provider;
+    }
+
+    public User(String email, String password, String firstName, String lastName, String userName, Boolean isVip, String avatar, String provider, LocalDateTime createAt, Boolean status, Set<Role> roles) {
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userName = userName;
+        this.isVip = isVip;
+        this.avatar = avatar;
+        this.provider = provider;
+        this.createAt = createAt;
+        this.status = status;
+        this.roles = roles;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 
     public String getProvider() {

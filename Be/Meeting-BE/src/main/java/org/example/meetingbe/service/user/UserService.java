@@ -64,14 +64,14 @@ public class UserService implements IUserService {
         if (userRepo.existsById(userId)) {
             return userRepo.save(dtoToObject(updatedUser));
         } else {
-            throw new EntityNotFoundException("Product with id " + userId + " not found");
+            throw new EntityNotFoundException("User with id " + userId + " not found");
         }
     }
 
     @Override
     public boolean deleteUser(Long userId) {
         if (userRepo.existsById(userId)){
-            userRepo.delete(userRepo.findById(userId).get());
+            userRepo.updateStatusUser(userRepo.findById(userId).get().getId());
             return true;
         }
         return false;
@@ -84,13 +84,15 @@ public class UserService implements IUserService {
 
 
     @Override
-    public long countTotalUsers() {
-        return userRepo.count();
+    public long countTotalUsers(int year) {
+        Long count =userRepo.countByYear(year);
+        return count != null ? count : 0L;
     }
 
     @Override
     public long countVipUsers() {
-        return userRepo.countByIsVipTrue();
+        Long count = userRepo.countByIsVipTrue();
+        return count != null ? count : 0L;
     }
 
     @Override

@@ -159,6 +159,11 @@ public class UserController {
             return null;
         }
     }
+
+    @PutMapping("/delete")
+    public Boolean deleteUser(@RequestParam Long id){
+        return userService.deleteUser(id);
+    }
     // Lấy tất cả người dùng
     @GetMapping
     public List<User> getAllUsers() {
@@ -166,27 +171,21 @@ public class UserController {
     }
 
     // Lấy thông tin người dùng theo ID
-    @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id) {
+    @GetMapping("/")
+    public User getUserById(@RequestParam Long id) {
         return userService.getUserById(id);
     }
 
     // Cập nhật người dùng
-    @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody UserDto userDTO) {
+    @PutMapping("/")
+    public User updateUser(@RequestParam Long id, @RequestBody UserDto userDTO) {
         return userService.updateUser(id, userDTO);
     }
 
-    // Xoá người dùng
-    @DeleteMapping("/{id}")
-    public boolean deleteUser(@PathVariable Long id) {
-        return userService.deleteUser(id);
-    }
-
-    // Đếm tổng số người dùng
+    // Đếm tổng số người dùng trong năm
     @GetMapping("/count")
-    public long countTotalUsers() {
-        return userService.countTotalUsers();
+    public long countTotalUsers(@RequestParam("year") int year) {
+        return userService.countTotalUsers(year);
     }
 
     // Đếm số người dùng VIP

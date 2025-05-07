@@ -23,7 +23,7 @@ public interface IUserService {
     boolean deleteUser(Long userId);
     List<User> getAllUsers();
 
-    long countTotalUsers();
+    long countTotalUsers(int year);
     long countVipUsers();
     List<User> getVipUsers();
     List<User> getNormalUsers();
