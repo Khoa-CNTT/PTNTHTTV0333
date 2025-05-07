@@ -7,12 +7,10 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import jakarta.mail.MessagingException;
 import org.example.meetingbe.dto.*;
-import org.example.meetingbe.model.Payment;
+import org.example.meetingbe.model.*;
 import org.example.meetingbe.dto.LoginForm;
 import org.example.meetingbe.dto.Register;
 import org.example.meetingbe.dto.UserDto;
-import org.example.meetingbe.model.Role;
-import org.example.meetingbe.model.User;
 import org.example.meetingbe.repository.IRoleRepo;
 import org.example.meetingbe.repository.IUserRepo;
 import org.example.meetingbe.response.JwtResponse;
@@ -22,6 +20,10 @@ import org.example.meetingbe.security.userpricipal.UserPrinciple;
 import org.example.meetingbe.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -212,6 +214,18 @@ public class UserController {
     @GetMapping("/getByYear")
     public List<User> getByYear(@RequestParam(name = "year") int year) {
         return userService.getAllByYear(year);
+    }
+    @GetMapping("/getPageUser")
+    public ResponseEntity<Page<User>> getPageUser(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "create_at,asc") String[] sort
+    ) {
+        Sort.Direction direction = Sort.Direction.fromString(sort[1]);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort[0]));
+
+        Page<User> users = userService.findBy(pageable);
+        return ResponseEntity.ok(users);
     }
 
     }

@@ -3,6 +3,7 @@ package org.example.meetingbe.service.user;
 import jakarta.mail.MessagingException;
 import org.example.meetingbe.dto.MonthlyUserCountDTO;
 import org.example.meetingbe.dto.Register;
+import org.example.meetingbe.model.Contact;
 import org.example.meetingbe.model.Role;
 import org.example.meetingbe.model.User;
 import org.example.meetingbe.repository.IRoleRepo;
@@ -12,6 +13,8 @@ import org.example.meetingbe.model.User;
 import org.example.meetingbe.repository.IUserRepo;
 import org.example.meetingbe.service.mailSender.MailRegister;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -80,6 +83,12 @@ public class UserService implements IUserService {
     @Override
     public List<User> getAllUsers() {
         return userRepo.findAll();
+    }
+
+    @Override
+    public Page<User> findBy(Pageable pageable) {
+        Page<User> users = userRepo.findBy(pageable);
+        return users;
     }
 
 
