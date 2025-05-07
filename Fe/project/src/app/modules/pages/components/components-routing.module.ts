@@ -26,7 +26,7 @@ const routes: Routes = [
     children: [
       {path: 'home-main', component: HomeMainComponent, canActivate: [AuthGuardService], data:{roles: ['ADMIN', 'USER'] } },
       {path: 'contact-management', component: ContactManagementComponent, canActivate: [AuthGuardService], data:{roles: ['ADMIN'] } },
-      {path: 'statistical-management', component: StatisticalManagementComponent, canActivate: [AuthGuardService], data:{roles: ['ADMIN'] } },
+      {path: 'statistical-management', component: StatisticalManagementComponent, canActivate: [AuthGuardService], data:{roles: ['ADMIN', 'USER'] } },
       {path: 'users-management', component: UsersManagementComponent, canActivate: [AuthGuardService], data:{roles: ['ADMIN'] } },
       {path: 'chatting', component: ChattingComponent, canActivate: [AuthGuardService], data:{roles: ['ADMIN', 'USER'] } },
       {path: 'creating-room', component: CreatingRoomComponent, canActivate: [AuthGuardService], data:{roles: ['ADMIN', 'USER'] } },
