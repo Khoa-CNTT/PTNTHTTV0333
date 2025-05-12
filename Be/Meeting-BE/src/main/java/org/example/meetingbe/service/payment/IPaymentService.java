@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IPaymentService {
     Double getTotalRevenue();
-    Long countSuccessfulPayments();
+    Long countSuccessfulPayments(int year);
     Double getRevenueBetween(LocalDateTime start, LocalDateTime end);
 
     Double getTotalSpentByUser(Long userId);

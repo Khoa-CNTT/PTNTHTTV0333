@@ -14,7 +14,7 @@ public class Contact {
     @Column(columnDefinition = "TEXT")
     private String content;
     @Column(columnDefinition = "DATE")
-    private LocalDate dateSend;
+    private LocalDate dateSend = LocalDate.now();
     @Column(columnDefinition = "BIT")
     @ColumnDefault("0")
     private Boolean status;

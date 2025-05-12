@@ -35,6 +35,7 @@ public interface IPaymentRepo extends JpaRepository<Payment, Long> {
 
     @Query("SELECT DISTINCT FUNCTION('YEAR', p.createAt) FROM Payment p ORDER BY FUNCTION('YEAR', p.createAt)")
     List<Integer> findAllYears();
-
+    @Query("SELECT COUNT(p) FROM Payment p WHERE FUNCTION('YEAR', p.createAt) = :year")
+    long countByYear(int year);
 
 }

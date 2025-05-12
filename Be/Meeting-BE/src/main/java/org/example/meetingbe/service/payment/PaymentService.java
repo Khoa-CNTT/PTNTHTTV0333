@@ -23,8 +23,8 @@ public class PaymentService implements IPaymentService {
     }
 
     @Override
-    public Long countSuccessfulPayments() {
-        Long count = paymentRepo.countSuccessfulPayments();
+    public Long countSuccessfulPayments(int year) {
+        Long count = paymentRepo.countByYear(year);
         return count != null ? count : 0L;
     }
 
@@ -36,14 +36,22 @@ public class PaymentService implements IPaymentService {
     public List<MonthlyTotalDTO> getRevenueByYear(int year) {
         List<Object[]> resultList = paymentRepo.getMonthlyTotalsByYear(year);
         List<MonthlyTotalDTO> monthlyTotals = new ArrayList<>();
+
+        double[] totals = new double[13]; // index 1–12, mặc định 0.0
+
         for (Object[] row : resultList) {
             Integer month = (Integer) row[0];
             Double total = (Double) row[1];
-            MonthlyTotalDTO dto = new MonthlyTotalDTO(month, total);
-            monthlyTotals.add(dto);
+            totals[month] = total;
         }
+
+        for (int i = 1; i <= 12; i++) {
+            monthlyTotals.add(new MonthlyTotalDTO(i, totals[i]));
+        }
+
         return monthlyTotals;
     }
+
 
     @Override
     public List<Integer> getAllYears() {

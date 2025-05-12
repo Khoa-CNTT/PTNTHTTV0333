@@ -3,6 +3,7 @@ package org.example.meetingbe.service.user;
 import jakarta.mail.MessagingException;
 import org.example.meetingbe.dto.MonthlyUserCountDTO;
 import org.example.meetingbe.dto.Register;
+import org.example.meetingbe.model.Contact;
 import org.example.meetingbe.model.Role;
 import org.example.meetingbe.model.User;
 import org.example.meetingbe.repository.IRoleRepo;
@@ -12,6 +13,8 @@ import org.example.meetingbe.model.User;
 import org.example.meetingbe.repository.IUserRepo;
 import org.example.meetingbe.service.mailSender.MailRegister;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -64,14 +67,14 @@ public class UserService implements IUserService {
         if (userRepo.existsById(userId)) {
             return userRepo.save(dtoToObject(updatedUser));
         } else {
-            throw new EntityNotFoundException("Product with id " + userId + " not found");
+            throw new EntityNotFoundException("User with id " + userId + " not found");
         }
     }
 
     @Override
     public boolean deleteUser(Long userId) {
         if (userRepo.existsById(userId)){
-            userRepo.delete(userRepo.findById(userId).get());
+            userRepo.updateStatusUser(userRepo.findById(userId).get().getId());
             return true;
         }
         return false;
@@ -82,15 +85,23 @@ public class UserService implements IUserService {
         return userRepo.findAll();
     }
 
+    @Override
+    public Page<User> findBy(Pageable pageable) {
+        Page<User> users = userRepo.findBy(pageable);
+        return users;
+    }
+
 
     @Override
-    public long countTotalUsers() {
-        return userRepo.count();
+    public long countTotalUsers(int year) {
+        Long count =userRepo.countByYear(year);
+        return count != null ? count : 0L;
     }
 
     @Override
     public long countVipUsers() {
-        return userRepo.countByIsVipTrue();
+        Long count = userRepo.countByIsVipTrue();
+        return count != null ? count : 0L;
     }
 
     @Override
