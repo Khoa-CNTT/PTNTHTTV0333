@@ -16,7 +16,9 @@ export class StatisticalManagementComponent implements OnInit, AfterViewInit {
   yearList: number[] = [];
   selectedYear: number = new Date().getFullYear();
   months: number[] = Array.from({ length: 12 }, (_, i) => i + 1);
-  private chart: Chart | null = null;
+  private lineChart: Chart | null = null;
+  private barChart: Chart | null = null;
+
 
   constructor(
     private paymentService: PaymentService,
@@ -76,7 +78,7 @@ export class StatisticalManagementComponent implements OnInit, AfterViewInit {
     const labels = this.months.map(month => `Tháng ${month}`);
     const realData = this.chartLineData.map(item => item.total);
 
-    this.chart = new Chart('LinechartTotal', {
+    this.lineChart = new Chart('LinechartTotal', {
       type: 'line',
       data: {
         labels,
@@ -95,7 +97,7 @@ export class StatisticalManagementComponent implements OnInit, AfterViewInit {
         plugins: {
           title: {
             display: true,
-            text: `Biểu đồ doanh thu 2025`,
+            text: `Biểu đồ doanh thu ${this.selectedYear}`,
             font: { size: 20 }
           }
         },
@@ -106,17 +108,17 @@ export class StatisticalManagementComponent implements OnInit, AfterViewInit {
     });
   }
 
+
   private renderBarChart(): void {
     const labels = this.months.map(month => `Tháng ${month}`);
-    console.log('chartBarData', this.chartBarData);
     const realDataBar = this.chartBarData.map(items => items.count);
 
-    this.chart = new Chart('barChart', {
+    this.barChart = new Chart('barChart', {
       type: 'bar',
       data: {
         labels,
         datasets: [{
-          label: 'My First Dataset',
+          label: 'Số người đăng ký',
           data: realDataBar,
           backgroundColor: '#c2363f',
           borderColor: 'rgba(255, 99, 132, 1)',
@@ -129,7 +131,7 @@ export class StatisticalManagementComponent implements OnInit, AfterViewInit {
         plugins: {
           title: {
             display: true,
-            text: `Biểu đồ số lượng người đăng ký 2025`,
+            text: `Biểu đồ số lượng người đăng ký ${this.selectedYear}`,
             font: { size: 20 }
           }
         },
@@ -140,10 +142,16 @@ export class StatisticalManagementComponent implements OnInit, AfterViewInit {
     });
   }
 
+
   private destroyChart(): void {
-    if (this.chart) {
-      this.chart.destroy();
-      this.chart = null;
+    if (this.lineChart) {
+      this.lineChart.destroy();
+      this.lineChart = null;
+    }
+    if (this.barChart) {
+      this.barChart.destroy();
+      this.barChart = null;
     }
   }
+
 }

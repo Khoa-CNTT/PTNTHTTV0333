@@ -1,184 +1,109 @@
 .container {
-    max-width: 900px;
-    margin: auto;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    color: #333;
+  max-width: 1000px;
+  margin: auto;
+  padding: 30px 20px;
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
 }
 
 .stats-box {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    margin-bottom: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 40px;
 }
 
 .stat-item {
-    background-color: #fcebec;
-    border-left: 6px solid #c2363f;
-    padding: 15px 20px;
-    border-radius: 6px;
-    width: 48%;
-    text-align: center;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.stat-item h4 {
-    color: #c2363f;
-    margin-bottom: 10px;
-    font-size: 16px;
-}
-
-.stat-item p {
-    font-size: 28px;
-    font-weight: bold;
-    color: #333;
-    margin: 0;
-}
-
-.year-selector {
-    text-align: left;
-    margin-bottom: 20px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    padding: 10px 0;
-    background-color: white;
-}
-
-.year-selector label {
-    font-weight: bold;
-    color: #c2363f;
-    margin-right: 8px;
-}
-
-.year-selector select {
-    padding: 6px 12px;
-    border: 1px solid #c2363f;
-    border-radius: 4px;
-    font-size: 14px;
-    color: #333;
-}
-
-.chart-container {
-    margin-bottom: 40px;
-}
-
-.taller-chart canvas {
-    height: 500px !important;
-}
-
-.year-selector select:hover {
-    border-color: #c2363f;
-    background-color: #f9f9f9;
-    cursor: pointer;
+  flex: 1 1 48%;
+  background: linear-gradient(135deg, #ffefef, #ffe4e6);
+  border-left: 6px solid #e63946;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: 0.3s ease-in-out;
 }
 
 .stat-item:hover {
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-@media (max-width: 768px) {
-    .stats-box {
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .stat-item {
-        width: 100%;
-    }
-}
-
-.container {
-    max-width: 900px;
-    margin: auto;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    color: #333;
-}
-
-.stats-box {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    margin-bottom: 30px;
-}
-
-.stat-item {
-    background-color: #fcebec;
-    border-left: 6px solid #d2363f;
-    padding: 15px 20px;
-    border-radius: 6px;
-    width: 48%;
-    /* Điều chỉnh lại width để vừa với màn hình */
-    text-align: center;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .stat-item h4 {
-    color: #d2363f;
-    margin-bottom: 10px;
-    font-size: 16px;
+  color: #e63946;
+  margin-bottom: 12px;
+  font-size: 18px;
+  font-weight: 600;
 }
 
 .stat-item p {
-    font-size: 28px;
-    font-weight: bold;
-    color: #333;
-    margin: 0;
+  font-size: 32px;
+  font-weight: bold;
+  color: #2b2d42;
+  margin: 0;
 }
 
 .year-selector {
-    text-align: left;
-    margin-bottom: 20px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    padding: 10px 0;
-    background-color: white;
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: 12px 0;
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
 }
 
 .year-selector label {
-    font-weight: bold;
-    color: #d2363f;
-    margin-right: 8px;
+  font-weight: bold;
+  color: #e63946;
+  margin-right: 10px;
 }
 
 .year-selector select {
-    padding: 6px 12px;
-    border: 1px solid #d2363f;
-    border-radius: 4px;
-    font-size: 14px;
-    color: #333;
-}
-
-.chart-container {
-    margin-bottom: 40px;
-}
-
-.taller-chart canvas {
-    height: 500px !important;
+  padding: 8px 14px;
+  border: 1px solid #e63946;
+  border-radius: 6px;
+  font-size: 15px;
+  color: #333;
+  transition: 0.3s;
 }
 
 .year-selector select:hover {
-    border-color: #d2363f;
-    background-color: #f9f9f9;
-    cursor: pointer;
+  border-color: #d62828;
+  background-color: #fff5f5;
+  cursor: pointer;
 }
 
-.stat-item:hover {
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.chart-container {
+  margin-bottom: 50px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.taller-chart canvas {
+  height: 480px !important;
 }
 
 @media (max-width: 768px) {
-    .stats-box {
-        flex-direction: column;
-        gap: 20px;
-    }
+  .stats-box {
+    flex-direction: column;
+  }
 
-    .stat-item {
-        width: 100%;
-    }
+  .stat-item {
+    width: 100%;
+  }
+
+  .year-selector {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .year-selector select {
+    margin-top: 10px;
+  }
 }

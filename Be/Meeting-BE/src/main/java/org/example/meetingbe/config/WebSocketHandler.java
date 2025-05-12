@@ -2,6 +2,8 @@ package org.example.meetingbe.config;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -10,10 +12,9 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Logger;
 
 public class WebSocketHandler extends TextWebSocketHandler {
-    private static final Logger logger = Logger.getLogger(WebSocketHandler.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(WebSocketHandler.class);
     private final Map<String, Map<String, WebSocketSession>> roomSessions = new ConcurrentHashMap<>();
     private final Map<String, String> sessionToParticipantId = new ConcurrentHashMap<>();
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -28,14 +29,14 @@ public class WebSocketHandler extends TextWebSocketHandler {
         try {
             String payload = message.getPayload();
             if (payload == null || payload.trim().isEmpty()) {
-                logger.warning("Received empty payload from session: " + session.getId());
+                logger.warn("Received empty payload from session: " + session.getId());
                 return;
             }
 
             try {
                 objectMapper.readTree(payload);
             } catch (Exception e) {
-                logger.severe("Invalid JSON payload: " + payload + ", error: " + e.getMessage());
+                logger.error("Invalid JSON payload: " + payload + ", error: " + e.getMessage());
                 return;
             }
 
@@ -46,7 +47,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
             String type = (String) signal.get("type");
 
             if (roomId == null || senderId == null || type == null) {
-                logger.warning("Missing required fields in signal: " + payload);
+                logger.warn("Missing required fields in signal: " + payload);
                 return;
             }
 
@@ -56,7 +57,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                 roomSessions.computeIfAbsent(roomId, k -> new ConcurrentHashMap<>()).put(senderId, session);
                 sessionToParticipantId.put(session.getId(), senderId);
             } else {
-                logger.warning("Session not open for senderId: " + senderId);
+                logger.warn("Session not open for senderId: " + senderId);
                 return;
             }
 
@@ -73,12 +74,24 @@ public class WebSocketHandler extends TextWebSocketHandler {
                     }
                 }
             } else if ("participant-left".equals(type)) {
-                // Chuyển tiếp participant-left đến các client khác
                 Map<String, WebSocketSession> sessionsInRoom = roomSessions.getOrDefault(roomId, new ConcurrentHashMap<>());
                 for (WebSocketSession s : sessionsInRoom.values()) {
                     if (s.isOpen() && !s.getId().equals(session.getId())) {
                         s.sendMessage(new TextMessage(payload));
                         logger.info("Broadcast participant-left to: " + sessionToParticipantId.get(s.getId()));
+                    }
+                }
+            } else if ("chat-message".equals(type)) {
+                String chatMessage = (String) signal.get("message");
+                if (chatMessage == null || chatMessage.trim().isEmpty()) {
+                    logger.warn("Empty chat message from: " + senderId);
+                    return;
+                }
+                Map<String, WebSocketSession> sessionsInRoom = roomSessions.getOrDefault(roomId, new ConcurrentHashMap<>());
+                for (WebSocketSession s : sessionsInRoom.values()) {
+                    if (s.isOpen()) {
+                        s.sendMessage(new TextMessage(payload));
+                        logger.info("Broadcast chat-message to: " + sessionToParticipantId.get(s.getId()));
                     }
                 }
             } else if (targetParticipantId != null) {
@@ -87,21 +100,21 @@ public class WebSocketHandler extends TextWebSocketHandler {
                     if ("offer".equals(type) || "answer".equals(type)) {
                         Object sdpObj = signal.get("sdp");
                         if (!(sdpObj instanceof Map)) {
-                            logger.warning("Invalid SDP object in signal: " + payload);
+                            logger.warn("Invalid SDP object in signal: " + payload);
                             return;
                         }
                         Map<String, Object> sdpMap = (Map<String, Object>) sdpObj;
                         String sdp = (String) sdpMap.get("sdp");
                         String sdpType = (String) sdpMap.get("type");
                         if (sdp == null || sdpType == null || !sdp.startsWith("v=")) {
-                            logger.warning("Invalid SDP in signal: " + payload);
+                            logger.warn("Invalid SDP in signal: " + payload);
                             return;
                         }
                     }
                     if ("ice-candidate".equals(type)) {
                         Object candidateObj = signal.get("candidate");
                         if (!(candidateObj instanceof Map)) {
-                            logger.warning("Invalid candidate object in signal: " + payload);
+                            logger.warn("Invalid candidate object in signal: " + payload);
                             return;
                         }
                         Map<String, Object> candidateMap = (Map<String, Object>) candidateObj;
@@ -114,11 +127,11 @@ public class WebSocketHandler extends TextWebSocketHandler {
                     targetSession.sendMessage(new TextMessage(payload));
                     logger.info("Sent message to target: " + targetParticipantId);
                 } else {
-                    logger.warning("Target session not found or closed: " + targetParticipantId + " in room: " + roomId);
+                    logger.warn("Target session not found or closed: " + targetParticipantId + " in room: " + roomId);
                 }
             }
         } catch (Exception e) {
-            logger.severe("Error handling message: " + e.getMessage());
+            logger.error("Error handling message: " + e.getMessage(), e);
         }
     }
 
@@ -126,7 +139,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         String participantId = sessionToParticipantId.get(session.getId());
         if (participantId != null) {
-            // Tìm roomId chứa participantId
             String foundRoomId = null;
             for (Map.Entry<String, Map<String, WebSocketSession>> entry : roomSessions.entrySet()) {
                 if (entry.getValue().containsKey(participantId)) {
@@ -135,13 +147,11 @@ public class WebSocketHandler extends TextWebSocketHandler {
                 }
             }
 
-            // Xóa session khỏi roomSessions và sessionToParticipantId
             roomSessions.values().forEach(sessions -> sessions.remove(participantId));
             sessionToParticipantId.remove(session.getId());
 
-            // Gửi tin nhắn participant-left đến các client còn lại trong phòng
             if (foundRoomId != null) {
-                final String roomId = foundRoomId; // Biến final để sử dụng trong anonymous class
+                final String roomId = foundRoomId;
                 Map<String, WebSocketSession> sessionsInRoom = roomSessions.getOrDefault(roomId, new ConcurrentHashMap<>());
                 String payload = objectMapper.writeValueAsString(new HashMap<String, Object>() {{
                     put("roomId", roomId);
@@ -163,7 +173,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
         String participantId = sessionToParticipantId.get(session.getId());
-        logger.severe("Transport error: sessionId=" + session.getId() + ", participantId=" + participantId + ", error=" + exception.getMessage());
+        logger.error("Transport error: sessionId=" + session.getId() + ", participantId=" + participantId + ", error=" + exception.getMessage(), exception);
         if (participantId != null) {
             roomSessions.values().forEach(sessions -> sessions.remove(participantId));
             sessionToParticipantId.remove(session.getId());
