@@ -12,7 +12,7 @@ public class ChatMessage {
     @Column(columnDefinition = "TEXT")
     private String message;
     @Column(columnDefinition = "DATETIME")
-    private LocalDateTime sendAt;
+    private LocalDateTime sendAt = LocalDateTime.now();
     @ManyToOne
     @JoinColumn(name = "meeting_id")
     private Meeting meeting;

@@ -11,5 +11,7 @@ public interface IContactService {
     List<Contact> getContatc();
     Contact addNewContact(ContactDto contact);
     Page<Contact> findBy(Pageable pageable);
+    Page<Contact> getAllByStatusTrue(Pageable pageable);
+    Page<Contact> getAllByStatusFalse(Pageable pageable);
     Contact updateContact(ContactDto updateContact) ;
 }

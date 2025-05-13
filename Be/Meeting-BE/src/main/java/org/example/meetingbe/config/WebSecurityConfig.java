@@ -52,7 +52,7 @@ public class WebSecurityConfig {
                 .exceptionHandling().authenticationEntryPoint(jwtEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests().requestMatchers("api/user/login", "api/user/register", "api/user/google","api/user/count","api/page","api/updateContact","api/payment/revenue/getByYear").permitAll()
-                .anyRequest().authenticated();
+                ;
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();

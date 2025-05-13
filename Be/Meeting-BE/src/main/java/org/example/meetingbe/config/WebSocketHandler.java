@@ -45,6 +45,25 @@ public class WebSocketHandler extends TextWebSocketHandler {
             String targetParticipantId = (String) signal.get("targetParticipantId");
             String type = (String) signal.get("type");
 
+            if ("chat".equals(type)) {
+                String chatMessage = (String) signal.get("message");
+                String sendAt = (String) signal.get("sendAt");
+                
+
+                // Broadcast message to all participants in the room
+                roomSessions.getOrDefault(roomId, new ConcurrentHashMap<>()).forEach((participantId, participantSession) -> {
+                    if (participantSession.isOpen() && !participantSession.getId().equals(session.getId())) {
+                        try {
+                            participantSession.sendMessage(new TextMessage(payload));
+                            logger.info("Sent chat message to: " + participantId);
+                        } catch (Exception e) {
+                            logger.severe("Error sending chat message: " + e.getMessage());
+                        }
+                    }
+                });
+            }
+
+
             if (roomId == null || senderId == null || type == null) {
                 logger.warning("Missing required fields in signal: " + payload);
                 return;
@@ -155,6 +174,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                     }
                 }
             }
+
 
             logger.info("Connection closed: sessionId=" + session.getId() + ", participantId=" + participantId + ", status=" + status);
         }
