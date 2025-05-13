@@ -3,6 +3,7 @@ package org.example.meetingbe.service.user;
 import jakarta.mail.MessagingException;
 import org.example.meetingbe.dto.MonthlyUserCountDTO;
 import org.example.meetingbe.dto.Register;
+import org.example.meetingbe.dto.UserNameDTO;
 import org.example.meetingbe.model.Contact;
 import org.example.meetingbe.model.Role;
 import org.example.meetingbe.model.User;
@@ -37,7 +38,7 @@ public class UserService implements IUserService {
     @Override
     public void register(Register register) throws MessagingException {
         Set<Role> role = roleRepo.findByRoleName("USER");
-        User user = new User(register.getEmail(), register.getFirstName(), passwordEncoder.encode(register.getPassword()), register.getLastName(),register.getUserName(), role, "local");
+        User user = new User("local", false, register.getUserName(), passwordEncoder.encode(register.getPassword()),register.getEmail(), role);
         userRepo.save(user);
         mailRegister.sendEmailRegister(register.getEmail());
     }
@@ -138,6 +139,20 @@ public class UserService implements IUserService {
         }
 
         return monthlyCounts;
+    }
+
+    @Override
+    public UserNameDTO getByUsername(String username) {
+        User user = userRepo.findByUserName(username);
+        UserNameDTO userDto = new UserNameDTO();
+        userDto.setId(user.getId());
+        userDto.setEmail(user.getEmail());
+        userDto.setFirstName(user.getFirstName());
+        userDto.setLastName(user.getLastName());
+        userDto.setAvatar(user.getAvatar());
+        userDto.setVip(user.getVip());
+        userDto.setCreateAt(user.getCreateAt());
+        return userDto;
     }
 
     public User dtoToObject(UserDto dto){

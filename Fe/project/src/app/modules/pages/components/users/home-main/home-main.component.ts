@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { JwtService } from 'src/app/services/jwt.service';
 import { MeetingService } from 'src/app/services/meeting.service';
 
 @Component({
@@ -15,7 +16,12 @@ export class HomeMainComponent {
     private meetingService: MeetingService,
     private router: Router,
     private toastr: ToastrService,
+    private jwtService: JwtService
   ) { }
+
+  ngOnInit() {
+    this.Load();
+  }
 
   createRoom() {
     this.meetingService.createRoom().subscribe((meeting) => {
@@ -33,6 +39,10 @@ export class HomeMainComponent {
     }
   }
 
-
+  Load(){
+    if(this.jwtService.verifyToken()){
+      this.router.navigateByUrl("/pages/components/home-main");
+    }
+  }
 
 }
