@@ -1,1 +1,102 @@
-<p>users-management works!</p>
+<app-navigation></app-navigation>
+
+<div class="post-container">
+
+
+    <div class="post-wrapper">
+        <button class="back-btn" routerLink="/pages/components/home-main">
+            <i class="fas fa-arrow-left"></i> Quay lại
+        </button>
+        <h3 class="post-title">QUẢN LÝ NGƯỜI DÙNG</h3>
+
+        <!-- Sort Section -->
+        <div class="post-filter">
+            <select class="post-sort-select">
+                <option value="all">Tất cả</option>
+                <option value="approved">Đã duyệt</option>
+                <option value="pending">Chưa duyệt</option>
+            </select>
+        </div>
+
+        <!-- Approval Table -->
+        <table class="post-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Họ và tên</th>
+                    <th>Email</th>
+                    <th>Ngày tạo</th>
+                    <th>Thành viên</th>
+                    <th>Trạng thái</th>
+                    <th>Chức năng</th>
+                </tr>
+            </thead>
+            <!-- Add tbody here -->
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Nguyễn Văn A</td>
+                    <!-- <td>nguyenvana@gmail.com</td> -->
+                    <td>2023-10-01</td>
+                    <td>Thành viên thường</td>
+                    <td style="color: green;">Đang hoạt động</td>
+                    <td>
+                        <button class="back-btn" data-bs-toggle="modal" data-bs-target="#duyet">Xử lý</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Nguyễn Văn A</td>
+                    <!-- <td>nguyenvana@gmail.com</td> -->
+                    <td>2023-10-01</td>
+                    <td>Thành viên thường</td>
+                    <td style="color: green;">Đang hoạt động</td>
+                    <td>
+                        <button class="back-btn" data-bs-toggle="modal" data-bs-target="#duyet">Xử lý</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Nguyễn Văn A</td>
+                    <!-- <td>nguyenvana@gmail.com</td> -->
+                    <td>2023-10-01</td>
+                    <td>Thành viên thường</td>
+                    <td style="color: green;">Đang hoạt động</td>
+                    <td>
+                        <button class="back-btn" data-bs-toggle="modal" data-bs-target="#duyet">Xử lý</button>
+                    </td>
+                </tr>
+                
+                <!-- Add more rows as needed -->
+        </table>
+
+        <div class="pagination">
+            <button class="pagination-btn">Trước</button>
+            <div>
+                <button class="pagination-btn">1</button>
+                <button class="pagination-btn">2</button>
+                <button class="pagination-btn">3</button>
+            </div>
+            <button class="pagination-btn">Tiếp</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Duyet -->
+<div class="modal fade" id="duyet" tabindex="-1" aria-labelledby="duyetLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-4 modal-title-text" id="duyetLabel">DUYỆT BÀI</h1>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <p>Bạn có muốn duyệt bài viết này không?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn-submit" data-bs-dismiss="modal">Xác nhận</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

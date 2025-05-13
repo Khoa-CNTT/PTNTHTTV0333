@@ -1,1 +1,104 @@
-<p>contact-management works!</p>
+<app-navigation></app-navigation>
+
+<div class="post-container">
+
+
+  <div class="post-wrapper">
+    <button class="back-btn" routerLink="/pages/components/home-main">
+      <i class="fas fa-arrow-left"></i> Quay lại
+    </button>
+    <h3 class="post-title">QUẢN LÝ LIÊN HỆ</h3>
+
+    <!-- Sort Section -->
+    <div class="search-section">
+      <select class="sort-select" class="sort-select" (change)="onFilterChange($event.target.value)">
+        <option value="all">Tất cả</option>
+        <option value="approved">Đã xử lý</option>
+        <option value="pending">Chưa xử lý</option>
+      </select>
+    </div>
+
+    <!-- Approval Table -->
+    <table class="post-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nội dung</th>
+          <th>Ngày gửi</th>
+          <th>Trạng thái</th>
+          <th>Chức năng</th>
+        </tr>
+      </thead>
+      <!-- Add tbody here -->
+      <tbody>
+        <tr *ngFor="let item of contacts; index as i">
+          <td>{{i+1}}</td>
+          <td class="title-cell">{{item.content}}</td>
+          <td>{{item.dateSend | date: 'short'}}</td>
+          <td [ngStyle]="{'color': FormatStatusColor(item.status)}">
+            <strong>{{FormatStatus(item.status)}}</strong>
+          </td>
+          <td class="btn-cell">
+            <button class="btnPost" data-bs-toggle="modal" data-bs-target="#xem" (click)="getIdBlog(item)">Xem</button>
+            <button [disabled]="item.status == true" (click)="getIdBlog(item)" class="btnPost" type="button"
+              data-bs-toggle="modal" data-bs-target="#duyet">Duyệt</button>
+          </td>
+        </tr>
+      </tbody>
+      <tr *ngIf="noRecord === 0">
+        <td colspan="19">
+          <h5 style="padding: 20px 10px;" class="text-center validate-msg-color">Không có bài viết nào</h5>
+        </td>
+      </tr>
+    </table>
+    <div class="pagination" *ngIf="pages">
+      <button class="pagination-btn" (click)="previousPage()" [disabled]="currentPage === 0">Trước</button>
+      <div *ngFor="let page of pageRange">
+        <button class="pagination-btn" [class.active]="page === currentPage" (click)="goToPage(page)">{{ page +
+          1 }}</button>
+      </div>
+      <button class="pagination-btn" (click)="nextPage()" [disabled]="currentPage === totalPages - 1">Tiếp</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Duyet -->
+<div class="modal fade" id="duyet" tabindex="-1" aria-labelledby="duyetLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-4 modal-title-text" id="duyetLabel">DUYỆT BÀI</h1>
+      </div>
+      <form>
+        <div class="modal-body">
+          <p>Bạn có muốn duyệt bài viết này không?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn-submit" data-bs-dismiss="modal">Xác nhận</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="xem" tabindex="-1" aria-labelledby="xemLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered st_modal">
+        <div class="modal-content st_modal_content">
+            <form [formGroup]="contactUpdateForm">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-4" id="xemLabel">
+                        <strong>{{contactUpdateForm.value.title}}</strong>
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    
+                    <div class="wrap_content-post">
+                        <p>
+                            {{contactUpdateForm.value.content}}
+                        </p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

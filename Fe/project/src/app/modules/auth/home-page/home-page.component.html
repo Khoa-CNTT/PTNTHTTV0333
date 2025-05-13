@@ -1,1 +1,83 @@
-<app-login></app-login>
+<header>
+    <div class="logo">
+        <i class="fas fa-video text-red"></i>
+        <span class="text-red"><b>DTU</b> MEET</span>
+    </div>
+
+    <div class="datetime text-red">
+        {{ currentTime }}
+    </div>
+
+    <div class="header-icons text-red">
+        <i class="fas fa-envelope icon" title="Contact Us" data-bs-toggle="modal" data-bs-target="#exampleModal"></i>
+
+        <div class="user-menu">
+            <i class="fas fa-user-circle icon" title="Profile" (click)="toggleDropdown()"></i>
+            <div class="sub-menu" [class.show]="dropdownVisible">
+                <div><a routerLink="/auth/login">Đăng Nhập</a></div>
+                <div><a routerLink="/auth/registration">Đăng Ký</a></div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="main-content">
+        <div class="main-top-text">
+            <h1>Cuộc họp video chất lượng cao. Miễn phí cho mọi người!</h1>
+            <p>Chúng tôi tái thiết kế dịch vụ họp bảo mật để mọi người đều có thể sử dụng miễn phí!</p>
+        </div>
+
+        <div class="main-image">
+            <img src="assets/imgs/undraw_meeting_dunc.png"
+                alt="Illustration of a video call with multiple participants" />
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="options-container">
+            <button class="option-card" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <div class="option-header">
+                    <i class="fas fa-plus"></i>
+                    <span class="font-bold">Tạo cuộc họp mới</span>
+                </div>
+                <p>Bắt đầu cuộc họp ngay lập tức</p>
+            </button>
+            <button class="option-card" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <div class="option-header">
+                    <i class="fas fa-users"></i>
+                    <span class="font-bold">Tham gia cuộc họp</span>
+                </div>
+                <p>Thông qua mã hoặc liên kết</p>
+            </button>
+            <button class="option-card" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <div class="option-header">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span class="font-bold">Lên kế hoạch trước</span>
+                </div>
+                <p>Lên lịch cuộc họp sau</p>
+            </button>
+        </div>
+
+        <div class="main-image">
+            <img src="assets/imgs/undraw_conference-call_ccsp.png"
+                alt="Illustration of people having a video meeting" />
+        </div>
+
+    </div>
+</main>
+
+
+<!-- Modal Post blog-->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content ">
+            <div class="modal-body">
+                <b>
+                    <h4 style="text-align: center">CẦN ĐĂNG NHẬP ĐỂ THỰC HIỆN</h4>
+                </b>
+            </div>
+        </div>
+    </div>
+</div>
+

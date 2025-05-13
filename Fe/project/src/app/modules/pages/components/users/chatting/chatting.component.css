@@ -1,0 +1,381 @@
+/* Global styles */
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-weight: 400;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.58;
+    color: #333;
+    background-color: #f4f4f4;
+    height: 100%;
+}
+
+.clearfix:after {
+    display: block;
+    content: "";
+    clear: both;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Style for form control elements */
+.form-control {
+    width: 100%;
+    min-height: 38px;
+    font-size: 15px;
+    border: 1px solid #c8c8c8;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+input {
+    padding-left: 10px;
+    outline: none;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 1.7em;
+}
+
+a {
+    color: #6db33f;
+}
+
+/* Button styles */
+button {
+    box-shadow: none;
+    border: 1px solid transparent;
+    font-size: 14px;
+    outline: none;
+    line-height: 100%;
+    white-space: nowrap;
+    vertical-align: middle;
+    padding: 0.6rem 1rem;
+    border-radius: 2px;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    min-height: 38px;
+}
+
+/* Default button style */
+button.default {
+    background-color: #e8e8e8;
+    color: #333;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12);
+}
+
+/* Primary button style */
+button.primary {
+    background-color: #6db33f;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12);
+    color: #fff;
+}
+
+/* Accent button style */
+button.accent {
+    background-color: #6db33f;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12);
+    color: #fff;
+}
+
+/* Username page styling */
+#username-page {
+    text-align: center;
+}
+
+/* Username page container styling */
+.username-page-container {
+    background: #fff;
+    box-shadow: 0 1px 11px rgba(0, 0, 0, 0.27);
+    border-radius: 2px;
+    width: 100%;
+    max-width: 500px;
+    display: inline-block;
+    margin-top: 42px;
+    vertical-align: middle;
+    position: relative;
+    padding: 35px 55px 35px;
+    min-height: 250px;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    margin-top: -160px;
+}
+
+/* Username submit button */
+.username-page-container .username-submit {
+    margin-top: 10px;
+}
+
+/* Chatroom styling */
+#chatroom {
+    position: relative;
+    height: 100%;
+}
+
+/* Chat container styling */
+.chat-container {
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #fff;
+    box-shadow: 0 1px 11px rgba(0, 0, 0, 0.27);
+    margin-top: 30px;
+    height: calc(100% - 60px);
+    max-height: 600px;
+    position: relative;
+}
+
+/* Chatroom messages */
+#chatroom ul {
+    list-style-type: none;
+    background-color: #FFF;
+    margin: 0;
+    overflow: auto;
+    overflow-y: scroll;
+    padding: 0 20px 0px 20px;
+    height: calc(100% - 150px);
+}
+
+/* Typing area styling */
+#chatroom #typingArea {
+    padding: 20px;
+}
+
+/* Chat messages styling */
+#chatroom ul li {
+    line-height: 1.5rem;
+    padding: 10px 20px;
+    margin: 0;
+    border-bottom: 1px solid #f4f4f4;
+}
+
+/* Message content */
+#chatroom ul li p {
+    margin: 0;
+}
+
+/* Event message styling (join/leave notifications) */
+#chatroom .event-message {
+    width: 100%;
+    text-align: center;
+    clear: both;
+}
+
+/* Event message paragraph styling */
+#chatroom .event-message p {
+    color: #777;
+    font-size: 14px;
+    word-wrap: break-word;
+}
+
+/* Chat message styling */
+#chatroom .chat-message {
+    display: flex;  /* Use flexbox for layout */
+    align-items: center;  /* Vertically align avatar and text */
+    padding: 10px 0;  /* Add padding for spacing */
+    border-bottom: 1px solid #f4f4f4;  /* Separate each message with a border */
+}
+
+/* Avatar styling */
+#chatroom .chat-message i {
+    width: 42px;
+    height: 42px;
+    display: inline-flex;  /* Use flexbox for avatar text alignment */
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: #fff;
+    text-align: center;
+    border-radius: 50%;
+    font-style: normal;
+    margin-right: 10px;  /* Add space between avatar and username */
+}
+
+/* Username styling */
+#chatroom .chat-message span {
+    font-weight: 600;
+    color: #333;
+    margin-right: 10px;  /* Add some space between username and the message text */
+}
+
+/* Message content */
+#chatroom .chat-message p {
+    margin: 0;
+    color: #43464b;
+    word-wrap: break-word;  /* Ensure long messages wrap correctly */
+    flex: 1;  /* Make the message text take the remaining space */
+}
+
+/* Input field styling for typing area */
+#typingArea .input-group input {
+    float: left;
+    width: calc(100% - 85px);
+}
+
+/* Button styling for typing area */
+#typingArea .input-group button {
+    float: left;
+    width: 80px;
+    height: 38px;
+    margin-left: 5px;
+}
+
+/* Chat header styling */
+.chat-header {
+    text-align: center;
+    padding: 15px;
+    border-bottom: 1px solid #ececec;
+}
+
+.chat-header h2 {
+    margin: 0;
+    font-weight: 500;
+}
+
+/* Connection status */
+.connecting {
+    padding-top: 5px;
+    text-align: center;
+    color: #777;
+    position: absolute;
+    top: 65px;
+    width: 100%;
+}
+
+/* Media query for smaller screens */
+@media screen and (max-width: 730px) {
+    .chat-container {
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-top: 10px;
+    }
+}
+
+/* Media query for mobile screens */
+@media screen and (max-width: 480px) {
+    .chat-container {
+        height: calc(100% - 30px);
+    }
+
+    .username-page-container {
+        width: auto;
+        margin-left: 15px;
+        margin-right: 15px;
+        padding: 25px;
+    }
+
+    #chatroom ul {
+        height: calc(100% - 120px);
+    }
+
+    /* Sticky typing area for mobile */
+    #typingArea {
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-top: 1px solid #ececec;
+        box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        bottom: 0;
+        width: 100%;
+        z-index: 10;
+    }
+
+    #typingArea .form-group {
+        width: 100%;
+        margin: 0;
+        display: flex;
+        align-items: center;
+    }
+
+    #typingArea .input-group {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        background-color: #fff;
+        border-radius: 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
+
+    #typingArea .form-control {
+        flex: 1;
+        border: none;
+        outline: none;
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 20px;
+        background-color: #f4f4f4;
+        margin-right: 10px;
+        transition: background-color 0.3s;
+    }
+
+    /* Styling for the blue "Send" button */
+    #typingArea .primary {
+        background-color: #007bff !important;  /* Blue background color */
+        color: white !important;  /* White text color */
+        font-family: 'Arial', sans-serif !important;  /* Font family */
+        font-weight: bold !important;  /* Bold text */
+        border: none;
+        border-radius: 20px;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease-in-out, color 0.3s;
+    }
+
+    #typingArea .primary:hover {
+        background-color: #0056b3 !important;  /* Darker blue on hover */
+        color: #f1f1f1 !important;
+    }
+
+    #typingArea .primary:active {
+        background-color: #003f7f !important;  /* Even darker blue when clicked */
+        color: #e0e0e0 !important;
+    }
+
+    #typingArea .primary:focus {
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5) !important;  /* Blue glow effect when focused */
+    }
+
+    .chat-header {
+        padding: 10px;
+    }
+
+    .connecting {
+        top: 60px;
+    }
+
+    .chat-header h2 {
+        font-size: 1.1em;
+    }
+}

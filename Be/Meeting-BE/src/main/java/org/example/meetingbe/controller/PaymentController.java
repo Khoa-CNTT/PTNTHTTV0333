@@ -1,5 +1,6 @@
 package org.example.meetingbe.controller;
 
+import org.example.meetingbe.dto.MonthlyTotalDTO;
 import org.example.meetingbe.model.Payment;
 import org.example.meetingbe.repository.IPaymentRepo;
 import org.example.meetingbe.service.payment.IPaymentService;
@@ -22,8 +23,8 @@ public class PaymentController {
         return paymentService.getTotalRevenue();
     }
         @GetMapping("/countSuccessful")//Dem so giao dich thanh cong
-    public int countSuccessfulPayments(){
-        return paymentService.countSuccessfulPayments().intValue();
+    public int countSuccessfulPayments(@RequestParam("Year") int year){
+        return paymentService.countSuccessfulPayments(year).intValue();
     }
     @GetMapping("/revenue/between")//Tong doanh thu tu ngay start - end
     public Double getRevenueBetween(
@@ -31,13 +32,18 @@ public class PaymentController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
         return paymentService.getRevenueBetween(start, end);
     }
-    @GetMapping("/revenue/year/{year}")
-    public List<Payment> getRevenueByYear(@PathVariable int year) {
+    @GetMapping("/revenue/getByYear")
+    public List<MonthlyTotalDTO> getRevenueByYear(@RequestParam(name = "year") int year) {
         return paymentService.getRevenueByYear(year);
     }
 
     @GetMapping("/total-spent")//tong chi tieu cua 1 user
     public Double getTotalSpentByUser(@RequestParam Long userId) {
         return paymentService.getTotalSpentByUser(userId);
+    }
+
+    @GetMapping("/years")
+    public List<Integer> getRegistrationYears() {
+        return paymentService.getAllYears();
     }
 }

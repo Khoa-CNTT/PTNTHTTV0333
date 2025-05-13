@@ -1,1 +1,27 @@
-<p>contact works!</p>
+<app-navigation></app-navigation>
+
+<div class="wrap-container">
+  <div class="contact-container">
+    <div class="form-section">
+      <button class="back-btn" routerLink="/pages/components/home-main">
+        <i class="fas fa-arrow-left"></i> Quay lại
+      </button>
+      <div class="form-header">
+        <h1>Liên hệ với chúng tôi</h1>
+        <p>Hãy để lại nội dung, chúng tôi sẽ phản hồi sớm nhất có thể!</p>
+      </div>
+      <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="content">Nội dung</label>
+          <textarea id="content" formControlName="content" class="form-control" rows="5"
+            placeholder="Nhập nội dung liên hệ..."></textarea>
+        </div>
+        <button class="submit-btn" type="submit" [disabled]="contactForm.invalid">Gửi liên hệ</button>
+      </form>
+    </div>
+
+    <div class="image-section">
+      <img src="assets/imgs/image.png" alt="Minh họa người mở cửa" />
+    </div>
+  </div>
+</div>

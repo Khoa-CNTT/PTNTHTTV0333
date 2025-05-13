@@ -1,0 +1,36 @@
+<header>
+  <div class="logo">
+    <i class="fas fa-video text-red"></i>
+    <span class="text-red"><b>DTU</b> MEET</span>
+  </div>
+
+  <div class="datetime text-red">
+    {{ currentTime }}
+  </div>
+
+  <div class="header-icons text-red">
+    <i class="fas fa-envelope icon" title="Contact Us" routerLink="/pages/components/contact"></i>
+  
+    <!-- Admin dropdown -->
+    <div class="admin-menu">
+      <i class="fas fa-cogs icon" title="Quản lý tài khoản" (click)="toggleAdminDropdown()"></i>
+      <div class="admin-sub-menu" [class.show]="adminDropdownVisible">
+        <div><a routerLink="/pages/components/users-management"> Quản lý người dùng</a></div>
+        <div><a routerLink="/pages/components/statistical-management"> Quản lý thống kê</a></div>
+        <div><a routerLink="/pages/components/contact-management"> Quản lý liên hệ</a></div>
+      </div>
+    </div>
+  
+    <!-- User dropdown -->
+    <div class="user-menu">
+      <i class="fas fa-user-circle icon" title="Profile" (click)="toggleDropdown()"></i>
+      <div class="sub-menu" [class.show]="dropdownVisible">
+        <div><a routerLink="/pages/components/user-info">Thông tin cá nhân</a></div>
+        <div><a routerLink="/pages/components/user-info">Lịch sử cuộc họp</a></div>
+        <div><a routerLink="/pages/components/payment">Đăng ký thành viên Vip</a></div>
+        <div><a (click)="logout()">Đăng xuất</a></div>
+      </div>
+    </div>
+  </div>
+  
+</header>

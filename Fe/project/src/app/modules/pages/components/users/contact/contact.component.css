@@ -1,0 +1,126 @@
+.wrap-container {
+    display: flex;
+    justify-content: center;
+    padding: 60px 16px;
+}
+
+.contact-container {
+    display: flex;
+    flex-direction: row;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    max-width: 1200px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.form-section {
+    flex: 1;
+    padding: 48px 32px;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background-color: transparent;
+    color: #c2363f;
+    border: 2px solid #c2363f;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 24px;
+}
+
+.back-btn:hover {
+    background-color: #c2363f;
+    color: white;
+}
+
+
+.form-header h1 {
+    color: #c2363f;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.form-header p {
+    color: #6b7280;
+    font-size: 15px;
+    margin-bottom: 32px;
+}
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #374151;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 16px;
+    resize: vertical;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #c2363f;
+    outline: none;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 14px;
+    background-color: #c2363f;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #a72c35;
+    transform: scale(1.02);
+}
+
+.image-section {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+.image-section img {
+    max-width: 100%;
+    max-height: 400px;
+    object-fit: contain;
+}
+
+@media (max-width: 992px) {
+    .contact-container {
+        flex-direction: column-reverse;
+    }
+
+    .image-section {
+        padding: 20px;
+    }
+
+    .form-section {
+        padding: 32px 20px;
+    }
+}
