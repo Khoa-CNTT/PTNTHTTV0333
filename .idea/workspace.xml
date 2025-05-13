@@ -6,14 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="ca89b201-fc21-4221-8a94-ef6bb5563224" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Be/Meeting-BE/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Be/Meeting-BE/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/config/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/config/WebSecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/config/WebSocketHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/config/WebSocketHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/controller/ContactController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/controller/ContactController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/model/ChatMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/model/ChatMessage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/repository/IContactRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/repository/IContactRepo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/service/contact/ContactService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/service/contact/ContactService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/service/contact/IContactService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/service/contact/IContactService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/controller/ParticipantsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/controller/ParticipantsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/model/Participants.java" beforeDir="false" afterPath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/model/Participants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/repository/IParticipantsRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/repository/IParticipantsRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/service/meeting/MeetingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/service/meeting/MeetingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/service/participants/IParticipantsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/service/participants/IParticipantsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/service/participants/ParticipantsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/service/participants/ParticipantsService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
