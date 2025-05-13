@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Contact } from 'src/app/models/Contact';
 import { ContactService } from 'src/app/services/contact.service';
 
@@ -27,6 +27,14 @@ export class ContactManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.applyFilter(this.currentPage)
+
+    this.contactUpdateForm = new FormGroup({
+      id: new FormControl(''),
+      content: new FormControl(''),
+      dateSend: new FormControl(''),
+      status: new FormControl(''),
+      user: new FormControl(''),
+    })
   }
 
   applyFilter(page: number): void {
@@ -111,12 +119,10 @@ export class ContactManagementComponent implements OnInit {
     this.contactUpdate = item
     this.contactUpdateForm.patchValue({
       id: this.contactUpdate.id,
-      title: this.contactUpdate.title,
-      beginDate: this.contactUpdate.beginDate,
       content: this.contactUpdate.content,
+      dateSend: this.contactUpdate.dateSend,
       status: true,
       user: this.contactUpdate.user,
-      category: this.contactUpdate.category,
     })
   }
 

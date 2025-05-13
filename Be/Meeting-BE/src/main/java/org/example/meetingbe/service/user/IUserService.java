@@ -4,6 +4,7 @@ import jakarta.mail.MessagingException;
 import org.example.meetingbe.dto.MonthlyUserCountDTO;
 import org.example.meetingbe.dto.Register;
 import org.example.meetingbe.dto.UserDto;
+import org.example.meetingbe.dto.UserNameDTO;
 import org.example.meetingbe.model.Contact;
 import org.example.meetingbe.model.User;
 import org.springframework.data.domain.Page;
@@ -33,5 +34,5 @@ public interface IUserService {
     List<Integer> getAllYears();
     List<User> getAllByYear(int year);
     List<MonthlyUserCountDTO> getUserRegistrationsByYear(int year);
-
+    UserNameDTO getByUsername(String username);
 }

@@ -1,4 +1,5 @@
 import { Component, ElementRef, HostListener, Inject, OnInit, Renderer2 } from '@angular/core';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-navigation',
@@ -10,7 +11,9 @@ export class NavigationComponent implements OnInit {
   private intervalId: any;
   dropdownVisible = false;
   adminDropdownVisible = false;
+  constructor(private userService: UserService){
 
+  }
   ngOnInit() {
     this.updateTime();
     this.intervalId = setInterval(() => this.updateTime(), 60000);
@@ -44,6 +47,10 @@ export class NavigationComponent implements OnInit {
   toggleAdminDropdown(): void {
     this.adminDropdownVisible = !this.adminDropdownVisible;
     this.dropdownVisible = false; // ẩn dropdown user khi mở admin
+  }
+
+  logout(){
+    this.userService.logout();
   }
   
 

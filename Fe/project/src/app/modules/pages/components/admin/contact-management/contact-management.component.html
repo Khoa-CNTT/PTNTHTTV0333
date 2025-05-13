@@ -80,3 +80,25 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="xem" tabindex="-1" aria-labelledby="xemLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered st_modal">
+        <div class="modal-content st_modal_content">
+            <form [formGroup]="contactUpdateForm">
+                <div class="modal-header">
+                    <h5 class="modal-title fs-4" id="xemLabel">
+                        <strong>{{contactUpdateForm.value.title}}</strong>
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    
+                    <div class="wrap_content-post">
+                        <p>
+                            {{contactUpdateForm.value.content}}
+                        </p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -115,6 +115,15 @@ public class User {
         this.address = address;
     }
 
+    public User(String provider, Boolean isVip, String userName, String password, String email, Set<Role> roles) {
+        this.provider = provider;
+        this.isVip = isVip;
+        this.userName = userName;
+        this.password = password;
+        this.email = email;
+        this.roles = roles;
+    }
+
     public Boolean getStatus() {
         return status;
     }

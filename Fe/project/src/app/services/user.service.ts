@@ -42,6 +42,6 @@ export class UserService {
     this.jwtService.removeName();
     this.jwtService.removeRoles();
     this.jwtService.removeToken();
-    this.router.navigateByUrl("/login");
+    this.router.navigateByUrl("/auth/login");
   }
 }

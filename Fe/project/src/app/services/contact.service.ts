@@ -25,5 +25,9 @@ export class ContactService {
   updateContact(contact: Contact): Observable<Contact> {
     return this.http.put<Contact>(`${this.API_CONTACT}`, contact);
   }
+
+  findByIdContact(id: any): Observable<Contact> {
+    return this.http.get<Contact>(this.API_CONTACT + '/getContactById/' + id);
+  }
 }
 
