@@ -1,3 +1,15 @@
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+}
+
+
+.text-red {
+    color: #c2363f;
+}
+
 .meet-container {
     display: flex;
     flex-direction: column;
@@ -45,7 +57,7 @@
 .copy-btn {
     padding: 8px 12px;
     border: none;
-    background-color: #1a73e8;
+    background-color: #c2363f;
     color: #fff;
     border-radius: 4px;
     cursor: pointer;

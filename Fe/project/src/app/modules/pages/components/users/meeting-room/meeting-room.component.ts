@@ -1,21 +1,15 @@
-import { observable } from './../../../../../../../node_modules/rxjs/src/internal/symbol/observable';
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 import { MeetingService } from 'src/app/services/meeting.service';
+import * as RecordRTC from 'recordrtc';
 
 declare global {
   interface MediaDevices {
     getDisplayMedia(constraints: MediaStreamConstraints): Promise<MediaStream>;
   }
-
-  interface Window {
-    MediaRecorder: typeof MediaRecorder;
-  }
-
 }
+
 @Component({
   selector: 'app-meeting-room',
   templateUrl: './meeting-room.component.html',
@@ -29,7 +23,7 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
   isScreenSharing: boolean = false;
   isChatOpen: boolean = false;
   hasNewMessages: boolean = false;
-  isRecording: boolean = false; // Biến theo dõi trạng thái ghi màn hình
+  isRecording: boolean = false;
   localStream: MediaStream | null = null;
   screenStream: MediaStream | null = null;
   peers: { id: string; videoEnabled: boolean; micEnabled: boolean }[] = [];
@@ -43,8 +37,7 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
   private maxReconnectAttempts = 5;
   errorMessage: string | null = null;
   private disconnectedPeers: Set<string> = new Set();
-  public mediaRecorder: MediaRecorder | null = null; // MediaRecorder để ghi màn hình
-  private recordedChunks: Blob[] = []; // Lưu trữ các đoạn video
+  private recorder: RecordRTC | null = null;
   @ViewChild('chatMessages') chatMessagesContainer!: ElementRef;
 
   constructor(
@@ -128,7 +121,7 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
       try {
         this.screenStream = await navigator.mediaDevices.getDisplayMedia({
           video: true,
-          audio: false,
+          audio: true, // Attempt to capture system audio
         });
         this.isScreenSharing = true;
         console.log('Screen stream initialized with tracks:', this.screenStream.getTracks());
@@ -211,55 +204,72 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
   }
 
   startRecording() {
-    if (!this.screenStream) {
-      this.errorMessage = 'Không có màn hình để ghi. Vui lòng chia sẻ màn hình trước.';
-      this.cdr.detectChanges();
-      return;
-    }
-
-    // Kiểm tra trình duyệt có hỗ trợ MediaRecorder không
-    if (typeof window.MediaRecorder === 'undefined') {
-      this.errorMessage = 'Trình duyệt không hỗ trợ ghi màn hình. Vui lòng sử dụng trình duyệt hiện đại như Chrome hoặc Firefox.';
+    if (!this.localStream && !this.screenStream) {
+      this.errorMessage = 'Không có luồng video hoặc âm thanh để ghi. Vui lòng bật camera/microphone hoặc chia sẻ màn hình.';
       this.cdr.detectChanges();
       return;
     }
 
     try {
-      this.recordedChunks = [];
-      this.mediaRecorder = new window.MediaRecorder(this.screenStream, { mimeType: 'video/webm' });
-      this.mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          this.recordedChunks.push(event.data);
-        }
-      };
-      this.mediaRecorder.onstop = () => {
-        const blob = new Blob(this.recordedChunks, { type: 'video/webm' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `screen-recording-${new Date().toISOString()}.webm`;
-        a.click();
-        URL.revokeObjectURL(url);
-        this.recordedChunks = [];
-        console.log('Recording saved and downloaded');
-      };
-      this.mediaRecorder.start();
+      let stream: MediaStream;
+      let audioStream: MediaStream | null = null;
+
+      // Always include localStream for audio (microphone)
+      if (this.localStream) {
+        audioStream = new MediaStream(this.localStream.getAudioTracks());
+      }
+
+      if (this.isScreenSharing && this.screenStream) {
+        // Combine screenStream (video and possibly audio) with localStream audio
+        stream = new MediaStream([
+          ...this.screenStream.getVideoTracks(),
+          ...(audioStream ? audioStream.getAudioTracks() : this.screenStream.getAudioTracks())
+        ]);
+      } else if (this.localStream) {
+        // Record only localStream (camera + microphone)
+        stream = new MediaStream([
+          ...this.localStream.getVideoTracks(),
+          ...this.localStream.getAudioTracks()
+        ]);
+      } else {
+        throw new Error('No valid stream available for recording');
+      }
+
+      this.recorder = new RecordRTC(stream, {
+        type: 'video',
+        mimeType: 'video/webm;codecs=vp8,opus',
+        disableLogs: false,
+        timeSlice: 1000,
+        videoBitsPerSecond: 128000,
+        audioBitsPerSecond: 128000,
+      });
+
+      this.recorder.startRecording();
       this.isRecording = true;
-      console.log('Started screen recording');
+      console.log('Started recording with RecordRTC, stream tracks:', stream.getTracks());
       this.cdr.detectChanges();
     } catch (err) {
       console.error('Error starting recording:', err);
-      this.errorMessage = 'Không thể bắt đầu ghi màn hình. Vui lòng thử lại.';
+      this.errorMessage = 'Không thể bắt đầu ghi. Vui lòng kiểm tra quyền truy cập và thử lại.';
       this.cdr.detectChanges();
     }
   }
 
   stopRecording() {
-    if (this.mediaRecorder && this.isRecording) {
-      this.mediaRecorder.stop();
-      this.mediaRecorder = null;
+    if (this.recorder && this.isRecording) {
+      this.recorder.stopRecording(() => {
+        const blob = this.recorder!.getBlob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `recording-${new Date().toISOString()}.webm`;
+        a.click();
+        URL.revokeObjectURL(url);
+        this.recorder = null;
+        console.log('Recording saved and downloaded');
+      });
       this.isRecording = false;
-      console.log('Stopped screen recording');
+      console.log('Stopped recording');
       this.cdr.detectChanges();
     }
   }
@@ -592,7 +602,7 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
     }
 
     if (this.screenStream) {
-      this.screenStream.getVideoTracks().forEach((track) => {
+      this.screenStream.getTracks().forEach((track) => {
         peerConnection.addTrack(track, this.screenStream!);
         console.log('Added screen track to peer:', peerId, track);
       });

@@ -25,7 +25,7 @@ const routes: Routes = [
     path: '', component: ComponentsComponent,
     children: [
       { path: 'home-main', component: HomeMainComponent, canActivate: [AuthGuardService], data: { roles: ['ADMIN', 'USER'] } },
-      { path: 'contact-management', component: ContactManagementComponent, canActivate: [AuthGuardService], data: { roles: ['ADMIN'] } },
+      { path: 'contact-management', component: ContactManagementComponent, canActivate: [AuthGuardService], data: { roles: ['ADMIN', 'USER'] } },
       { path: 'statistical-management', component: StatisticalManagementComponent, canActivate: [AuthGuardService], data: { roles: ['ADMIN', 'USER'] } },
       { path: 'contact', component: ContactComponent, canActivate: [AuthGuardService], data: { roles: ['ADMIN', 'USER'] } },
       { path: 'users-management', component: UsersManagementComponent, canActivate: [AuthGuardService], data: { roles: ['ADMIN', 'USER'] } },

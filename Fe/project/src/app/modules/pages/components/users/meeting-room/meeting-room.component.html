@@ -1,12 +1,16 @@
 <div class="meet-container">
   <!-- Header -->
   <div class="meet-header">
+    <div class="logo">
+    <i class="fas fa-video text-red"></i>
+    <span class="text-red"><b>DTU</b> MEET</span>
+  </div>
     <div class="room-info">
       <span class="room-id">Phòng: {{ roomId }}</span>
       <div class="room-link">
         <input type="text" [value]="roomLink" readonly>
         <button class="copy-btn" (click)="copyLink()" title="Sao chép liên kết">
-          <i class="fas fa-copy"></i>
+          <i  class="fas fa-copy"></i>
         </button>
       </div>
     </div>
@@ -87,7 +91,7 @@
       <i class="fas fa-desktop"></i>
     </button>
     <button class="control-btn" [ngClass]="{'active': isRecording}" (click)="toggleRecording()"
-      [disabled]="isScreenSharing" title="{{ isRecording ? 'Dừng ghi màn hình' : 'Ghi màn hình' }}">
+      title="{{ isRecording ? 'Dừng ghi' : 'Bắt đầu ghi' }}">
       <i class="fas fa-record-vinyl"></i>
       <span class="recording-indicator" *ngIf="isRecording"></span>
     </button>

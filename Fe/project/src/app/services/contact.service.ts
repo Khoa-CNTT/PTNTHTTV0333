@@ -16,11 +16,10 @@ export class ContactService {
   addNewContact(contact: Contact): Observable<Contact> {
     return this.http.post<Contact>(`${this.API_CONTACT}/addNewContact`, contact);
   }
-  getPageContact(page: number, size: number): Observable<any> {
-    let params = new HttpParams()
-      .set('page', page.toString())  // Thêm tham số 'page'
-      .set('size', size.toString()); // Thêm tham số 'size'
-    return this.http.get<any>(`${this.API_CONTACT}`, { params });
+
+  getAllContact(page: number, pageSize: number): Observable<Contact[]> {
+    const blogApprove = `${this.API_CONTACT}/getPageContact?page=${page}&size=${pageSize}`;
+    return this.http.get<Contact[]>(blogApprove)
   }
 
   updateContact(contact: Contact): Observable<Contact> {

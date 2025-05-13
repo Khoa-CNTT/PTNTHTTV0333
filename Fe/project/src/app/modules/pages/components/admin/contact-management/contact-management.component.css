@@ -100,9 +100,9 @@
 }
 
 .pagination-btn.active {
-    background-color: #F48023;
+    background-color: #c2363f;
     color: white;
-    border-color: #F48023;
+    border-color: #c2363f;
 }
 
 .pagination-btn:hover:not(.active):not([disabled]) {
