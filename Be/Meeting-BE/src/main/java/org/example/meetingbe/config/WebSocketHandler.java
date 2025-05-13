@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class WebSocketHandler extends TextWebSocketHandler {
-    private static final Logger logger = LoggerFactory.getLogger(WebSocketHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(WebSocketHandler.class.getName());
     private final Map<String, Map<String, WebSocketSession>> roomSessions = new ConcurrentHashMap<>();
     private final Map<String, String> sessionToParticipantId = new ConcurrentHashMap<>();
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -58,7 +58,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                             participantSession.sendMessage(new TextMessage(payload));
                             logger.info("Sent chat message to: " + participantId);
                         } catch (Exception e) {
-                            logger.severe("Error sending chat message: " + e.getMessage());
+                            logger.error("Error sending chat message: " + e.getMessage());
                         }
                     }
                 });

@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IParticipantsRepo extends JpaRepository<Participants, Long> {
     Participants findByUserIdAndMeetingId(Long userId, Long meetingId);
-    Page<Participants> getAll(Pageable pageable);
+    Page<Participants> findBy(Pageable pageable);
 
 }

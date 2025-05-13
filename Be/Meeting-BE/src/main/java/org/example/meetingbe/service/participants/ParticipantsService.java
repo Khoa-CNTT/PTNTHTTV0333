@@ -25,7 +25,7 @@ public class ParticipantsService implements IParticipantsService {
 
     @Override
     public Page<Participants> getAll(Pageable pageable) {
-        Page<Participants> participants = participantsRepo.getAll(pageable);
+        Page<Participants> participants = participantsRepo.findBy(pageable);
         return participants;
     }
 }
