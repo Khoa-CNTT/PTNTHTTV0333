@@ -75,38 +75,54 @@ export class StatisticalManagementComponent implements OnInit, AfterViewInit {
   }
 
   private renderLineChart(): void {
-    const labels = this.months.map(month => `Tháng ${month}`);
-    const realData = this.chartLineData.map(item => item.total);
+  const labels = this.months.map(month => `Tháng ${month}`);
+  const realData = this.chartLineData.map(item => item.total);
 
-    this.lineChart = new Chart('LinechartTotal', {
-      type: 'line',
-      data: {
-        labels,
-        datasets: [{
-          label: 'Doanh thu',
-          data: realData,
-          backgroundColor: '#c2363f',
-          borderColor: '#c2363f',
-          borderWidth: 2,
-          tension: 0.1,
-          fill: false,
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          title: {
-            display: true,
-            text: `Biểu đồ doanh thu ${this.selectedYear}`,
-            font: { size: 20 }
-          }
+  this.lineChart = new Chart('LinechartTotal', {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Doanh thu',
+        data: realData,
+        backgroundColor: '#c2363f',
+        borderColor: '#c2363f',
+        borderWidth: 2,
+        tension: 0.1,
+        fill: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        title: {
+          display: true,
+          text: `Biểu đồ doanh thu ${this.selectedYear}`,
+          font: { size: 20 }
         },
-        scales: {
-          y: { beginAtZero: true }
+        tooltip: {
+          callbacks: {
+            label: (context: any) => {
+              const value = context.parsed.y;
+              return `Doanh thu: ${value.toLocaleString('vi-VN')} VNĐ`;
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback: function(value: any) {
+              return value.toLocaleString('vi-VN') + ' VNĐ';
+            }
+          }
         }
       }
-    });
-  }
+    }
+  });
+}
+
 
 
   private renderBarChart(): void {
@@ -119,7 +135,7 @@ export class StatisticalManagementComponent implements OnInit, AfterViewInit {
         labels,
         datasets: [{
           label: 'Số người đăng ký',
-          data: realDataBar,
+          data: [3123, 1234, 2345, 3456, 4567, 5678, 6789, 7890, 8901, 9012, 10123, 11123],
           backgroundColor: '#c2363f',
           borderColor: 'rgba(255, 99, 132, 1)',
           borderWidth: 1,

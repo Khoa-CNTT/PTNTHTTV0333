@@ -1,5 +1,5 @@
 .container {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: auto;
   padding: 30px 20px;
   font-family: 'Segoe UI', sans-serif;
@@ -17,9 +17,7 @@
 .stat-item {
   flex: 1 1 48%;
   background: linear-gradient(135deg, #ffefef, #ffe4e6);
-  border-left: 6px solid #e63946;
   padding: 20px;
-  border-radius: 10px;
   text-align: center;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   transition: 0.3s ease-in-out;
@@ -106,4 +104,26 @@
   .year-selector select {
     margin-top: 10px;
   }
+}
+
+
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background-color: transparent;
+    color: #c2363f;
+    border: 2px solid #c2363f;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 24px;
+}
+
+.back-btn:hover {
+    background-color: #c2363f;
+    color: white;
 }

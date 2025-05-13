@@ -1,29 +1,32 @@
 <app-navigation></app-navigation>
 
 <div class="container">
-  <div class="stats-box">
-    <div class="stat-item">
-      <h4>Tổng cuộc họp hôm nay</h4>
-      <p>1222</p>
+    <button class="back-btn" routerLink="/pages/components/home-main">
+        <i class="fas fa-arrow-left"></i> Quay lại
+    </button>
+    <div class="stats-box">
+        <div class="stat-item">
+            <h4>Tổng người đăng kí trong năm</h4>
+            <p>12222312</p>
+        </div>
+        <div class="stat-item">
+            <h4>Tổng doanh thu trong năm</h4>
+            <p>1.111.111.111 VNĐ</p>
+        </div>
     </div>
-    <div class="stat-item">
-      <h4>Tổng cuộc họp đã diễn ra</h4>
-      <p>111</p>
+
+    <div class="year-selector">
+        <label for="year">Chọn năm:</label>
+        <select id="year" [(ngModel)]="selectedYear">
+            <option *ngFor="let year of yearList" [value]="year">{{ year }}</option>
+        </select>
     </div>
-  </div>
 
-  <div class="year-selector">
-    <label for="year">Chọn năm:</label>
-    <select id="year" [(ngModel)]="selectedYear">
-      <option *ngFor="let year of yearList" [value]="year">{{ year }}</option>
-    </select>
-  </div>
+    <div class="chart-container">
+        <canvas id="LinechartTotal"></canvas>
+    </div>
 
-  <div class="chart-container">
-    <canvas id="LinechartTotal"></canvas>
-  </div>
-
-  <div class="chart-container taller-chart">
-    <canvas id="barChart"></canvas>
-  </div>
+    <div class="chart-container taller-chart">
+        <canvas id="barChart"></canvas>
+    </div>
 </div>
