@@ -64,11 +64,11 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User updateUser(Long userId, UserDto updatedUser) {
-        if (userRepo.existsById(userId)) {
+    public User updateUser(Long id, UserDto updatedUser) {
+        if (userRepo.existsById(id)) {
             return userRepo.save(dtoToObject(updatedUser));
         } else {
-            throw new EntityNotFoundException("User with id " + userId + " not found");
+            throw new EntityNotFoundException("User with id " + id + " not found");
         }
     }
 

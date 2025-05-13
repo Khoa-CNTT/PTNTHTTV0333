@@ -4,6 +4,8 @@ import { Contact } from 'src/app/models/Contact';
 import { FormGroup, Validators } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
 import { ContactService } from 'src/app/services/contact.service';
+import { JwtService } from 'src/app/services/jwt.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-contact',
@@ -11,28 +13,14 @@ import { ContactService } from 'src/app/services/contact.service';
   styleUrls: ['./contact.component.css']
 })
 export class ContactComponent implements OnInit {
-  userfake = {
-    "id": 3,
-    "email": "charlie@example.com",
-    "password": "hashedpwd3",
-    "firstName": "Charlie",
-    "lastName": "Johnson",
-    "userName": "charliej",
-    "avatar": null,
-    "createAt": "2025-04-15T16:22:26",
-    "roles": [
-      {
-        "id": 1,
-        "roleName": "user"
-      }
-    ],
-    "vip": false
-  }
 
   contact: Contact[] = [];
   contactForm!: FormGroup;
+  user = null
 
   constructor(
+    private jwtService: JwtService,
+    private toast: ToastrService,
     private fb: FormBuilder,
     private contactService: ContactService
   ) { }
@@ -42,11 +30,12 @@ export class ContactComponent implements OnInit {
   }
 
   initForm() {
+    this.user = this.jwtService.getName();
     this.contactForm = this.fb.group({
       content: ['', Validators.required],
       dateSend: [''],
       status: [false],
-      userId: [this.userfake]
+      userId: [this.user]
     });
   }
 
@@ -57,11 +46,11 @@ export class ContactComponent implements OnInit {
       const formValue = this.contactForm.value;
       console.log(formValue)
       this.contactService.addNewContact(formValue).subscribe(() => {
-        alert('Thêm contact thành công');
+        this.toast.success('Cảm ơn bạn đã liên hệ với chúng tôi');
         this.contactForm.reset();
       }, error => {
         console.error('Thêm contact lỗi', error);
-        alert('Thêm contact lỗi');
+        this.toast.error('Hiện đang lỗi');
       });
     }
   }

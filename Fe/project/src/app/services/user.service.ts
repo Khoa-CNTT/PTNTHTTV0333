@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { JwtResponse } from '../models/JwtResponse';
 import { LoginForm } from '../models/LoginForm';
+import { Contact } from '../models/Contact';
 
 @Injectable({
   providedIn: 'root'
@@ -44,4 +45,15 @@ export class UserService {
     this.jwtService.removeToken();
     this.router.navigateByUrl("/auth/login");
   }
+
+  getByUserName(): Observable<any>{
+    let name = this.jwtService.getName();
+    return this.httpClient.get(this.API_URL + 'getByUserName/' + name);
+  }
+
+  editUser(userForm): Observable<Contact> {
+    let name = this.jwtService.getName();
+    return this.httpClient.put<Contact>(this.API_URL + 'updateProfile/' + name, userForm);
+  }
+
 }

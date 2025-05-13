@@ -2,15 +2,18 @@
   <!-- Header -->
   <div class="meet-header">
     <div class="logo">
-    <i class="fas fa-video text-red"></i>
-    <span class="text-red"><b>DTU</b> MEET</span>
-  </div>
+      <i class="fas fa-video text-red"></i>
+      <span class="text-red"><b>DTU</b> MEET</span>
+    </div>
+    <div class="datetime text-red">
+      {{ currentTime }}
+    </div>
     <div class="room-info">
       <span class="room-id">Phòng: {{ roomId }}</span>
       <div class="room-link">
         <input type="text" [value]="roomLink" readonly>
         <button class="copy-btn" (click)="copyLink()" title="Sao chép liên kết">
-          <i  class="fas fa-copy"></i>
+          <i class="fas fa-copy"></i>
         </button>
       </div>
     </div>
@@ -46,7 +49,7 @@
           <i class="fas fa-video-slash" *ngIf="!peer.videoEnabled"></i>
           <i class="fas fa-microphone-slash" *ngIf="!peer.micEnabled"></i>
         </div>
-        <div class="video-label">Người tham gia {{ peer.id }}</div>
+        <div class="video-label">{{ peer.id }}</div>
       </div>
     </div>
 
@@ -61,8 +64,8 @@
       <div class="chat-messages" #chatMessages>
         <div *ngFor="let message of chatMessagesList" class="chat-message"
           [ngClass]="{'mine': message.senderId === participantId}">
-          <div class="message-sender">{{ message.senderId === participantId ? 'Bạn' : 'Người tham gia ' +
-            message.senderId }}</div>
+          <div class="message-sender"><b>{{ message.senderId === participantId ? 'Bạn:' :
+              message.senderId+':' }}</b></div>
           <div class="message-content">{{ message.message }}</div>
           <div class="message-timestamp">{{ message.timestamp | date:'HH:mm' }}</div>
         </div>

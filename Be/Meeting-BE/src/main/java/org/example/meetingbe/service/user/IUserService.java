@@ -23,7 +23,7 @@ public interface IUserService {
     Optional<User> findByEmail(String email);
 
     User getUserById(Long userId);
-    User updateUser(Long userId, UserDto updatedUser);
+    User updateUser(Long id, UserDto updatedUser);
     boolean deleteUser(Long userId);
     List<User> getAllUsers();
     Page<User> findBy(Pageable pageable);

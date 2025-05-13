@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { v4 as uuidv4 } from 'uuid';
 import { MeetingService } from 'src/app/services/meeting.service';
 import * as RecordRTC from 'recordrtc';
+import { JwtService } from 'src/app/services/jwt.service';
 
 declare global {
   interface MediaDevices {
@@ -16,6 +17,9 @@ declare global {
   styleUrls: ['./meeting-room.component.css']
 })
 export class MeetingRoomComponent implements OnInit, OnDestroy {
+  currentTime: string = '';
+  private intervalId: any;
+
   roomId: string = '';
   roomLink: string = '';
   videoEnabled: boolean = true;
@@ -30,7 +34,7 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
   ws: WebSocket | null = null;
   peerConnections: Map<string, RTCPeerConnection> = new Map();
   signalQueue: Map<string, Array<{ type: string; signal: any }>> = new Map();
-  participantId: string = uuidv4();
+  participantId: string;
   chatMessagesList: { senderId: string; message: string; timestamp: Date }[] = [];
   chatInput: string = '';
   private reconnectAttempts = 0;
@@ -41,6 +45,7 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
   @ViewChild('chatMessages') chatMessagesContainer!: ElementRef;
 
   constructor(
+    private jwtService: JwtService,
     private route: ActivatedRoute,
     private meetingService: MeetingService,
     private cdr: ChangeDetectorRef,
@@ -48,6 +53,10 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
   ) { }
 
   async ngOnInit() {
+    this.updateTime();
+    this.intervalId = setInterval(() => this.updateTime(), 60000);
+    this.participantId = this.jwtService.getName()
+
     this.roomId = this.route.snapshot.paramMap.get('id') || '';
     this.roomLink = `${window.location.origin}/pages/components/meeting-room/${this.roomId}`;
     console.log('Joining room:', this.roomId, 'with participantId:', this.participantId);
@@ -811,6 +820,8 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    clearInterval(this.intervalId);
+
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
       this.ws.send(
         JSON.stringify({
@@ -843,4 +854,12 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
   trackByPeerId(index: number, peer: { id: string }): string {
     return peer.id;
   }
+
+  updateTime() {
+    const now = new Date();
+    const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const date = now.toLocaleDateString('vi-VN', { weekday: 'short', day: '2-digit', month: '2-digit' });
+    this.currentTime = `${time} • ${date}`;
+  }
+
 }

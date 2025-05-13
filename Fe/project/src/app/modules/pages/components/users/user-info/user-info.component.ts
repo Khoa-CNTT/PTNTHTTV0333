@@ -6,6 +6,7 @@ import { UserService } from 'src/app/services/user.service';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { formatDate } from '@angular/common';
 import { User } from 'src/app/models/User';
+import { finalize } from 'rxjs/operators';
 
 
 @Component({
@@ -17,7 +18,7 @@ export class UserInfoComponent implements OnInit {
   userForm: FormGroup;
   selectedImage: any = null;
   private error: string;
-  urlImg: any = null;
+  avatar: any = null;
   isLoading = false;
   user: User;
 
@@ -35,28 +36,85 @@ export class UserInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const script = this.render.createElement('script');
-    script.src = '/assets/js/imgFireBase.js';
-    this.render.appendChild(document.body, script);
-    this.activatedRoute.paramMap.subscribe((data: ParamMap) => {
-      const id = data.get('id');
-
+    this.userService.getByUserName().subscribe(data => {
+      this.user = data;
+      this.userForm = this.formBuilder.group({
+        id: [this.user.id],
+        lastName: [this.user.lastName],
+        firstName: [this.user.firstName],
+        email: [this.user.email],
+        phone: [this.user.phone],
+        address: [this.user.address],
+        birthday: [this.user.birthday],
+        avatar: [this.user.avatar]
+      });
     });
-
-
   }
 
   edit() {
+    const updatedUser = this.userForm.value;
+    if (this.userForm.dirty && this.userForm.valid) {
+      if (this.selectedImage) {
+        const nameImg = this.getCurrentDateTime() + this.selectedImage.name;
+        const fileRef = this.storage.ref(nameImg);
+        this.isLoading = true;
+        this.storage.upload(nameImg, this.selectedImage).snapshotChanges().pipe(
+          finalize(() => {
+            fileRef.getDownloadURL().subscribe({
+              next: (url) => {
+                updatedUser.avatar = url;
+                this.updateUser(updatedUser);
+              },
+              error: (err) => {
+                this.toast.error('Tải ảnh thất bại.', 'Thông báo');
+                this.isLoading = false;
+              }
+            });
+          })
+        ).subscribe();
+      } else {
+        this.isLoading = true;
+        if (JSON.stringify(updatedUser) === JSON.stringify(this.user)) {
+          this.toast.warning('Dữ liệu không có thay đổi.', 'Thông báo');
+          this.isLoading = false;
+          return;
+        }
+        this.updateUser(updatedUser);
+      }
+    } else {
+      this.toast.warning('Vui lòng điền thông tin cần chỉnh sửa.', 'Thông báo');
+    }
+  }
 
+  private updateUser(updatedUser: any) {
+    this.userService.editUser(updatedUser).subscribe(
+      (data) => {
+        console.log("updateUser: " + data);
+
+        if (data != null) {
+          this.toast.error(this.error, 'Message');
+        } else {
+          this.toast.success('Chỉnh sửa thành công!', 'Message');
+          this.router.navigateByUrl('userList');
+        }
+        this.isLoading = false;
+      },
+      (error) => {
+        this.toast.error('Chỉnh sửa thất bại.', 'Message');
+        this.isLoading = false;
+      }
+    );
   }
 
   showPreview(event: any) {
     this.selectedImage = event.target.files[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(this.selectedImage);
-    reader.onload = (e: any) => {
-      this.urlImg = e.target.result;
-    };
+    if (this.selectedImage) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.avatar = e.target.result; // Cập nhật ảnh xem trước
+      };
+      reader.readAsDataURL(this.selectedImage);
+    }
   }
 
   getCurrentDateTime(): string {
@@ -64,5 +122,9 @@ export class UserInfoComponent implements OnInit {
   }
 
 
+  ngAfterViewInit(): void {
+    console.log(document.getElementById('fileInput')); // Kiểm tra xem fileInput có tồn tại không
+  }
 
 }
+

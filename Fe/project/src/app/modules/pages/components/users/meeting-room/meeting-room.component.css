@@ -6,6 +6,12 @@
 }
 
 
+.datetime {
+    transform: translateX(-50%);
+    font-size: 1.3rem;
+    font-weight: 500;
+}
+
 .text-red {
     color: #c2363f;
 }
@@ -62,10 +68,6 @@
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.2s;
-}
-
-.copy-btn:hover {
-    background-color: #1557b0;
 }
 
 .error-banner {
