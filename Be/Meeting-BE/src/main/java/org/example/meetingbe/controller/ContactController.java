@@ -42,10 +42,10 @@ public class ContactController {
         return ResponseEntity.ok(contacts);
     }
 
-    @PutMapping("/updateContact")
-    public ResponseEntity<String> updateContact(@RequestBody  ContactDto contactDto) {
+    @PutMapping("/updateContact/{id}")
+    public ResponseEntity<String> updateContact(@PathVariable("id") Long id,@RequestBody  ContactDto contactDto) {
         try {
-            icontactService.updateContact(contactDto);
+            icontactService.updateContact(id);
             return new ResponseEntity<>("updated successfully", HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(" not found", HttpStatus.NOT_FOUND);
