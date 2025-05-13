@@ -5,44 +5,57 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "chat_messages")
 public class ChatMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(columnDefinition = "TEXT")
+
+    @Column(name = "room_id", nullable = false)
+    private String roomId;
+
+    @Column(name = "sender_id", nullable = false)
+    private String senderId;
+
+    @Column(name = "message", nullable = false)
     private String message;
-    @Column(columnDefinition = "DATETIME")
-    private LocalDateTime sendAt = LocalDateTime.now();
-    @ManyToOne
-    @JoinColumn(name = "meeting_id")
-    private Meeting meeting;
-    @ManyToOne
-    @JoinColumn(name = "sender_id")
-    private User user;
-    private MessageType type;
-    public enum MessageType {
-        CHAT,
-        JOIN,
-        LEAVE
+
+    @Column(name = "timestamp", nullable = false)
+    private LocalDateTime timestamp;
+
+    // Constructors
+    public ChatMessage() {}
+
+    public ChatMessage(String roomId, String senderId, String message, LocalDateTime timestamp) {
+        this.roomId = roomId;
+        this.senderId = senderId;
+        this.message = message;
+        this.timestamp = timestamp;
     }
 
-    public MessageType getType() {
-        return type;
-    }
-
-    public void setType(MessageType type) {
-        this.type = type;
-    }
-
-    public ChatMessage() {
-    }
-
+    // Getters and Setters
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
+
+    public String getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
     }
 
     public String getMessage() {
@@ -53,27 +66,11 @@ public class ChatMessage {
         this.message = message;
     }
 
-    public LocalDateTime getSendAt() {
-        return sendAt;
+    public LocalDateTime getTimestamp() {
+        return timestamp;
     }
 
-    public void setSendAt(LocalDateTime sendAt) {
-        this.sendAt = sendAt;
-    }
-
-    public Meeting getMeeting() {
-        return meeting;
-    }
-
-    public void setMeeting(Meeting meeting) {
-        this.meeting = meeting;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 }

@@ -7,5 +7,8 @@ export interface User {
     userName?: string;
     isVip?: Boolean;
     avatar?: string;
+    phone?: string;
+    address?: string;
+    birthday?: string;
     createAt?: string;
 }

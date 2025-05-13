@@ -1,4 +1,6 @@
 import { Component, HostListener, OnInit, Renderer2 } from '@angular/core';
+import { Router } from '@angular/router';
+import { JwtService } from 'src/app/services/jwt.service';
 
 @Component({
   selector: 'app-home-page',
@@ -9,10 +11,13 @@ export class HomePageComponent implements OnInit {
 currentTime: string = '';
   private intervalId: any;
   dropdownVisible = false;
+  constructor(private jwtService: JwtService, private router: Router){
 
+  }
   ngOnInit() {
     this.updateTime();
     this.intervalId = setInterval(() => this.updateTime(), 60000);
+    this.Load();
   }
 
   updateTime() {
@@ -36,6 +41,12 @@ currentTime: string = '';
     const isInside = target.closest('.user-menu');
     if (!isInside) {
       this.dropdownVisible = false;
+    }
+  }
+
+  Load(){
+    if(this.jwtService.verifyToken()){
+      this.router.navigateByUrl("/pages/components/home-main");
     }
   }
 

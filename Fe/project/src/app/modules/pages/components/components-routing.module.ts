@@ -24,19 +24,20 @@ const routes: Routes = [
   {
     path: '', component: ComponentsComponent,
     children: [
-      {path: 'home-main', component: HomeMainComponent, canActivate: [AuthGuardService], data:{roles: ['ADMIN', 'USER'] } },
-      {path: 'contact-management', component: ContactManagementComponent, canActivate: [AuthGuardService], data:{roles: ['ADMIN'] } },
-      {path: 'statistical-management', component: StatisticalManagementComponent, canActivate: [AuthGuardService], data:{roles: ['ADMIN'] } },
-      {path: 'users-management', component: UsersManagementComponent, canActivate: [AuthGuardService], data:{roles: ['ADMIN'] } },
-      {path: 'chatting', component: ChattingComponent, canActivate: [AuthGuardService], data:{roles: ['ADMIN', 'USER'] } },
-      {path: 'creating-room', component: CreatingRoomComponent, canActivate: [AuthGuardService], data:{roles: ['ADMIN', 'USER'] } },
-      {path: 'meeting-history', component: MeetingHistoryComponent, canActivate: [AuthGuardService], data:{roles: ['ADMIN', 'USER'] } },
-      {path: 'meeting-room', component: MeetingRoomComponent, canActivate: [AuthGuardService], data:{roles: ['ADMIN', 'USER'] } },
-      {path: 'payment', component: PaymentComponent, canActivate: [AuthGuardService], data:{roles: ['ADMIN', 'USER'] } },
-      {path: 'recording', component: RecordingComponent, canActivate: [AuthGuardService], data:{roles: ['ADMIN', 'USER'] } },
-      {path: 'scheduling', component: SchedulingComponent, canActivate: [AuthGuardService], data:{roles: ['ADMIN', 'USER'] } },
-      {path: 'sumary-ai', component: SumaryAiComponent, canActivate: [AuthGuardService], data:{roles: ['ADMIN', 'USER'] } },
-      {path: 'user-info', component: UserInfoComponent, canActivate: [AuthGuardService], data:{roles: ['ADMIN', 'USER'] } }
+      { path: 'home-main', component: HomeMainComponent, canActivate: [AuthGuardService], data: { roles: ['ADMIN', 'USER'] } },
+      { path: 'contact-management', component: ContactManagementComponent, canActivate: [AuthGuardService], data: { roles: ['ADMIN', 'USER'] } },
+      { path: 'statistical-management', component: StatisticalManagementComponent, canActivate: [AuthGuardService], data: { roles: ['ADMIN', 'USER'] } },
+      { path: 'contact', component: ContactComponent, canActivate: [AuthGuardService], data: { roles: ['ADMIN', 'USER'] } },
+      { path: 'users-management', component: UsersManagementComponent, canActivate: [AuthGuardService], data: { roles: ['ADMIN', 'USER'] } },
+      { path: 'chatting', component: ChattingComponent, canActivate: [AuthGuardService], data: { roles: ['ADMIN', 'USER'] } },
+      { path: 'creating-room', component: CreatingRoomComponent, canActivate: [AuthGuardService], data: { roles: ['ADMIN', 'USER'] } },
+      { path: 'meeting-history', component: MeetingHistoryComponent, canActivate: [AuthGuardService], data: { roles: ['ADMIN', 'USER'] } },
+      { path: 'meeting-room/:id', component: MeetingRoomComponent, canActivate: [AuthGuardService], data: { roles: ['ADMIN', 'USER'] } },
+      { path: 'payment', component: PaymentComponent, canActivate: [AuthGuardService], data: { roles: ['ADMIN', 'USER'] } },
+      { path: 'recording', component: RecordingComponent, canActivate: [AuthGuardService], data: { roles: ['ADMIN', 'USER'] } },
+      { path: 'scheduling', component: SchedulingComponent, canActivate: [AuthGuardService], data: { roles: ['ADMIN', 'USER'] } },
+      { path: 'sumary-ai', component: SumaryAiComponent, canActivate: [AuthGuardService], data: { roles: ['ADMIN', 'USER'] } },
+      { path: 'user-info', component: UserInfoComponent, canActivate: [AuthGuardService], data: { roles: ['ADMIN', 'USER'] } }
     ]
   }
 ];

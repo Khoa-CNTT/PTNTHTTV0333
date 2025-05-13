@@ -228,4 +228,17 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+    @GetMapping("/getByUserName/{userName}")
+    public ResponseEntity<?> getProfile(@PathVariable("userName") String userName) {
+        if(userService.getByUsername(userName)==null){
+            return new ResponseEntity(new ResponseMessage("Find not found user"), HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(userService.getByUsername(userName));
     }
+
+    @PutMapping("/updateProfile/{id}")
+    public ResponseEntity<?> updateProfile(@PathVariable("id")Long id, @RequestBody UserDto userDto) {
+        userService.updateUser(id, userDto);
+        return new ResponseEntity<>(new ResponseMessage("Update success"), HttpStatus.OK);
+    }
+}

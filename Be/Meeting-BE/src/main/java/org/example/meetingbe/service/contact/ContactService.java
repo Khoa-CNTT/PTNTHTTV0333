@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ContactService implements IContactService {
@@ -61,6 +62,11 @@ public class ContactService implements IContactService {
            throw new EntityNotFoundException("Contact with id " + id + " not found");
        }
 
+    }
+
+    @Override
+    public Optional<Contact> getById(Long id) {
+        return icontactRepo.findById(id);
     }
 
     public Contact dtoToObject(ContactDto contactDTO){

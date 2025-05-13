@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.Load();
     this.loadGoogleScript();
   }
   loadGoogleScript(): void {
@@ -88,6 +88,12 @@ export class LoginComponent implements OnInit {
         console.error('Google login failed:', err);
       }
     });
+  }
+
+  Load(){
+    if(this.jwtService.verifyToken()){
+      this.router.navigateByUrl("/pages/components/home-main");
+    }
   }
 
 }

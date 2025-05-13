@@ -1,0 +1,115 @@
+.post-container {
+  width: 100%;
+  height: auto;
+  padding: 20px;
+}
+
+.post-wrapper {
+  max-width: 1000px;
+  margin: 0 auto 100px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+}
+
+.post-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: bold;
+  font-size: 24px;
+  color: #333;
+}
+
+.post-filter {
+  margin-bottom: 20px;
+  text-align: right;
+}
+
+.post-sort-select {
+  height: 40px;
+  padding: 0 10px;
+  border: 1px solid #e0d1cb;
+  border-radius: 5px;
+}
+
+.post-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.post-table th,
+.post-table td {
+  padding: 12px;
+  border: 1px solid #e0d1cb;
+  text-align: center;
+}
+
+.modal-title-text {
+  text-align: center;
+  font-weight: bold;
+  margin: 0 auto;
+}
+
+.btn-submit {
+  padding: 10px 20px;
+  border-radius: 5px;
+  background-color: #c2363f;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-submit:hover {
+  background-color: #a62c33;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background-color: transparent;
+    color: #c2363f;
+    border: 2px solid #c2363f;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 24px;
+}
+
+.back-btn:hover {
+    background-color: #c2363f;
+    color: white;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination-btn {
+    padding: 10px 15px;
+    margin: 0 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+
+.pagination-btn.active {
+    background-color: #c2363f;
+    color: white;
+    border-color: #c2363f;
+}
+
+.pagination-btn:hover:not(.active):not([disabled]) {
+    background-color: #eaeaea;
+}
+
+.pagination-btn[disabled] {
+    cursor: not-allowed;
+    opacity: 0.6;
+}

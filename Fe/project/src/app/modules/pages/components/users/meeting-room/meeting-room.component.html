@@ -1,12 +1,16 @@
 <div class="meet-container">
   <!-- Header -->
   <div class="meet-header">
+    <div class="logo">
+    <i class="fas fa-video text-red"></i>
+    <span class="text-red"><b>DTU</b> MEET</span>
+  </div>
     <div class="room-info">
       <span class="room-id">Phòng: {{ roomId }}</span>
       <div class="room-link">
         <input type="text" [value]="roomLink" readonly>
         <button class="copy-btn" (click)="copyLink()" title="Sao chép liên kết">
-          <i class="fas fa-copy"></i>
+          <i  class="fas fa-copy"></i>
         </button>
       </div>
     </div>
@@ -17,30 +21,58 @@
     {{ errorMessage }}
   </div>
 
-  <!-- Video Grid -->
-  <div class="video-grid">
-    <!-- Local Video (Camera) -->
-    <div class="video-container">
-      <video autoplay playsinline id="localVideo" muted></video>
-      <div class="video-overlay" *ngIf="!videoEnabled || !micEnabled">
-        <i class="fas fa-video-slash" *ngIf="!videoEnabled"></i>
-        <i class="fas fa-microphone-slash" *ngIf="!micEnabled"></i>
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Video Grid -->
+    <div class="video-grid">
+      <!-- Local Video (Camera) -->
+      <div class="video-container">
+        <video autoplay playsinline id="localVideo" muted></video>
+        <div class="video-overlay" *ngIf="!videoEnabled || !micEnabled">
+          <i class="fas fa-video-slash" *ngIf="!videoEnabled"></i>
+          <i class="fas fa-microphone-slash" *ngIf="!micEnabled"></i>
+        </div>
+        <div class="video-label">Bạn (Camera)</div>
       </div>
-      <div class="video-label">Bạn (Camera)</div>
-    </div>
-    <!-- Local Screen (if sharing) -->
-    <div class="video-container" *ngIf="isScreenSharing">
-      <video autoplay playsinline id="localScreen"></video>
-      <div class="video-label">Bạn (Màn hình)</div>
-    </div>
-    <!-- Peer Videos -->
-    <div class="video-container" *ngFor="let peer of peers; trackBy: trackByPeerId">
-      <video autoplay playsinline [id]="'peerVideo-' + peer.id"></video>
-      <div class="video-overlay" *ngIf="!peer.videoEnabled || !peer.micEnabled">
-        <i class="fas fa-video-slash" *ngIf="!peer.videoEnabled"></i>
-        <i class="fas fa-microphone-slash" *ngIf="!peer.micEnabled"></i>
+      <!-- Local Screen (if sharing) -->
+      <div class="video-container" *ngIf="isScreenSharing">
+        <video autoplay playsinline id="localScreen"></video>
+        <div class="video-label">Bạn (Màn hình)</div>
       </div>
-      <div class="video-label">Người tham gia {{ peer.id }}</div>
+      <!-- Peer Videos -->
+      <div class="video-container" *ngFor="let peer of peers; trackBy: trackByPeerId">
+        <video autoplay playsinline [id]="'peerVideo-' + peer.id"></video>
+        <div class="video-overlay" *ngIf="!peer.videoEnabled || !peer.micEnabled">
+          <i class="fas fa-video-slash" *ngIf="!peer.videoEnabled"></i>
+          <i class="fas fa-microphone-slash" *ngIf="!peer.micEnabled"></i>
+        </div>
+        <div class="video-label">Người tham gia {{ peer.id }}</div>
+      </div>
+    </div>
+
+    <!-- Chat Panel -->
+    <div class="chat-panel" [ngClass]="{'open': isChatOpen}">
+      <div class="chat-header">
+        <span>Chat</span>
+        <button class="toggle-chat-btn" (click)="toggleChat()">
+          <i class="fas" [ngClass]="isChatOpen ? 'fa-chevron-right' : 'fa-chevron-left'"></i>
+        </button>
+      </div>
+      <div class="chat-messages" #chatMessages>
+        <div *ngFor="let message of chatMessagesList" class="chat-message"
+          [ngClass]="{'mine': message.senderId === participantId}">
+          <div class="message-sender">{{ message.senderId === participantId ? 'Bạn' : 'Người tham gia ' +
+            message.senderId }}</div>
+          <div class="message-content">{{ message.message }}</div>
+          <div class="message-timestamp">{{ message.timestamp | date:'HH:mm' }}</div>
+        </div>
+      </div>
+      <div class="chat-input">
+        <input type="text" [(ngModel)]="chatInput" placeholder="Nhập tin nhắn..." (keyup.enter)="sendChatMessage()">
+        <button (click)="sendChatMessage()" [disabled]="!chatInput.trim()">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -57,6 +89,15 @@
     <button class="control-btn" [ngClass]="{'active': isScreenSharing}" (click)="toggleScreenShare()"
       title="{{ isScreenSharing ? 'Dừng chia sẻ màn hình' : 'Chia sẻ màn hình' }}">
       <i class="fas fa-desktop"></i>
+    </button>
+    <button class="control-btn" [ngClass]="{'active': isRecording}" (click)="toggleRecording()"
+      title="{{ isRecording ? 'Dừng ghi' : 'Bắt đầu ghi' }}">
+      <i class="fas fa-record-vinyl"></i>
+      <span class="recording-indicator" *ngIf="isRecording"></span>
+    </button>
+    <button class="control-btn" (click)="toggleChat()" title="Mở/đóng chat">
+      <i class="fas fa-comments"></i>
+      <span class="new-message-badge" *ngIf="hasNewMessages"></span>
     </button>
     <button class="control-btn disconnect-btn" (click)="disconnect()" title="Ngắt kết nối">
       <i class="fas fa-sign-out-alt"></i>

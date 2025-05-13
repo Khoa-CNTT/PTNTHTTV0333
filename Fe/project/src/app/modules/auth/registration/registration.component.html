@@ -12,18 +12,18 @@
                 <h1>Đăng ký</h1>
                 <p>Đăng ký nhanh, họp dễ dàng!</p>
             </div>
-            <form>
+            <form [formGroup]="formRegister" (ngSubmit)="submitRegister()" *ngIf="formRegister">
                 <div class="form-group">
-                    <input type="email" placeholder="Tên tài khoản" />
+                    <input type="email" placeholder="Tên tài khoản" formControlName="userName" />
                 </div>
                 <div class="form-group">
-                    <input type="email" placeholder="Email hoặc số điện thoại" />
+                    <input type="email" placeholder="Email" formControlName="email" />
                 </div>
                 <div class="form-group">
-                    <input type="password" placeholder="Mật khẩu" />
+                    <input type="password" placeholder="Mật khẩu" formControlName="password"/>
                 </div>
                 <div class="form-group">
-                    <input type="password" placeholder="Nhập lại mật khẩu" />
+                    <input type="password" placeholder="Nhập lại mật khẩu" formControlName="rePassword" />
                 </div>
                 <button type="submit" class="submit-btn">Đăng ký</button>
                 <button class="google-btn"><i class="fab fa-google"></i>Đăng nhập bằng Google</button>

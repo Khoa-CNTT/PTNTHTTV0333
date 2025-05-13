@@ -1,30 +1,87 @@
 <app-navigation></app-navigation>
-
 <div class="profile-container">
-    <h2>Thông tin cá nhân</h2>
-  
-    <div class="profile-avatar">
-      <img [src]="previewImage || 'assets/imgs/default-avatar.png'" alt="Avatar" />
-      <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+  <div class="profile-wrapper">
+    <button class="back-btn" routerLink="/pages/components/home-main">
+      <i class="fas fa-arrow-left"></i> Quay lại
+    </button>
+    <div class="profile-card">
+      <h3 class="profile-title"><strong>THÔNG TIN CÁ NHÂN</strong></h3>
+      <div class="profile-content">
+        
+        <form [formGroup]="userForm" (ngSubmit)="edit()" *ngIf="user">
+          <div class="row align-items-end">
+            <div class="form-group col-md-4">
+              <div class="avatar-upload">
+                <label for="fileInput" class="upload-area">
+                  <img src="{{urlImg}}" id="previewImage" alt="Preview Image">
+                  <ng-template #placeholder>
+                    <span>Chọn Ảnh</span>
+                  </ng-template>
+                </label>
+                <input (change)="showPreview($event)" formControlName="avatar" type="file" id="fileInput"
+                                accept=".png, .jpg, .jpeg, .gif" class="file-input">
+              </div>
+            </div>
+
+            <div class="form-group col-md-8">
+              <div class="form-group d-flex justify-content-between">
+                <div style="width: 30%;">
+                  <label>Họ:</label>
+                  <input type="text" class="form-control" formControlName="lastName" name="lastName">
+                  <div class="text-danger error-message"></div>
+                </div>
+
+                <div style="width: 65%;">
+                  <label>Tên:</label>
+                  <input type="text" class="form-control" formControlName="firstName" name="firstName">
+                  <div class="text-danger error-message"></div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Email:</label>
+                <input type="text" class="form-control" formControlName="email" name="email">
+                <div class="text-danger error-message"></div>
+              </div>
+
+              <div class="form-group">
+                <label>Giới Tính:</label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" formControlName="gender" name="gender" id="male" [value]="1">
+                  <label class="form-check-label" for="male">Nam</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" formControlName="gender" name="gender" id="female" [value]="2">
+                  <label class="form-check-label" for="female">Nữ</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" formControlName="gender" name="gender" id="other" [value]="3">
+                  <label class="form-check-label" for="other">Khác</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group col-md-12">
+              <label>Địa Chỉ:</label>
+              <input type="text" class="form-control" formControlName="address" name="address">
+            </div>
+
+            <div class="form-group col-md-6">
+              <label>Ngày Sinh:</label>
+              <input type="date" class="form-control" formControlName="birthday" name="birthday">
+            </div>
+
+            <div class="form-group col-md-6">
+              <label>Số Điện Thoại:</label>
+              <input type="text" class="form-control" formControlName="phone" name="phone" maxlength="11">
+            </div>
+          </div>
+
+          <div class="text-center mt-4">
+            <button class="btn-submit" type="submit">Cập nhật</button>
+          </div>
+        </form>
+      </div>
     </div>
-  
-    <form class="profile-form" (ngSubmit)="onSubmit()" #form="ngForm">
-      <div class="form-group">
-        <label>Họ và tên</label>
-        <input type="text" class="form-control" [(ngModel)]="profile.fullName" name="fullName" required />
-      </div>
-  
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" class="form-control" [(ngModel)]="profile.email" name="email" required />
-      </div>
-  
-      <div class="form-group">
-        <label>Số điện thoại</label>
-        <input type="text" class="form-control" [(ngModel)]="profile.phone" name="phone" />
-      </div>
-  
-      <button type="submit" class="btn-save">Lưu thay đổi</button>
-    </form>
   </div>
-  
+</div>

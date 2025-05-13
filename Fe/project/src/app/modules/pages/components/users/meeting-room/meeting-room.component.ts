@@ -1,15 +1,15 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 import { MeetingService } from 'src/app/services/meeting.service';
+import * as RecordRTC from 'recordrtc';
 
 declare global {
   interface MediaDevices {
     getDisplayMedia(constraints: MediaStreamConstraints): Promise<MediaStream>;
   }
 }
+
 @Component({
   selector: 'app-meeting-room',
   templateUrl: './meeting-room.component.html',
@@ -21,6 +21,9 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
   videoEnabled: boolean = true;
   micEnabled: boolean = true;
   isScreenSharing: boolean = false;
+  isChatOpen: boolean = false;
+  hasNewMessages: boolean = false;
+  isRecording: boolean = false;
   localStream: MediaStream | null = null;
   screenStream: MediaStream | null = null;
   peers: { id: string; videoEnabled: boolean; micEnabled: boolean }[] = [];
@@ -28,10 +31,14 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
   peerConnections: Map<string, RTCPeerConnection> = new Map();
   signalQueue: Map<string, Array<{ type: string; signal: any }>> = new Map();
   participantId: string = uuidv4();
+  chatMessagesList: { senderId: string; message: string; timestamp: Date }[] = [];
+  chatInput: string = '';
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
   errorMessage: string | null = null;
-  private disconnectedPeers: Set<string> = new Set(); // Track disconnected peers
+  private disconnectedPeers: Set<string> = new Set();
+  private recorder: RecordRTC | null = null;
+  @ViewChild('chatMessages') chatMessagesContainer!: ElementRef;
 
   constructor(
     private route: ActivatedRoute,
@@ -52,7 +59,36 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
       },
     });
     await this.startWebRTC();
+    this.loadChatHistory();
     this.connectWebSocket();
+  }
+
+  loadChatHistory() {
+    this.meetingService.getChatHistory(this.roomId).subscribe({
+      next: (messages: any[]) => {
+        this.chatMessagesList = messages.map(msg => ({
+          senderId: msg.senderId,
+          message: msg.message,
+          timestamp: new Date(msg.timestamp)
+        }));
+        this.cdr.detectChanges();
+        this.scrollChatToBottom();
+      },
+      error: (err) => {
+        console.error('Error loading chat history:', err);
+        this.errorMessage = 'Không thể tải lịch sử chat. Vui lòng thử lại.';
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  scrollChatToBottom() {
+    setTimeout(() => {
+      if (this.chatMessagesContainer) {
+        const container = this.chatMessagesContainer.nativeElement;
+        container.scrollTop = container.scrollHeight;
+      }
+    }, 0);
   }
 
   async startWebRTC() {
@@ -85,7 +121,7 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
       try {
         this.screenStream = await navigator.mediaDevices.getDisplayMedia({
           video: true,
-          audio: false,
+          audio: true, // Attempt to capture system audio
         });
         this.isScreenSharing = true;
         console.log('Screen stream initialized with tracks:', this.screenStream.getTracks());
@@ -123,7 +159,7 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
         this.cdr.detectChanges();
       } catch (error) {
         console.error('Error accessing display media:', error);
-        this.errorMessage = error.name === 'NotAllowedError'
+        this.errorMessage = (error as Error).name === 'NotAllowedError'
           ? 'Quyền chia sẻ màn hình bị từ chối. Vui lòng cấp quyền.'
           : 'Không thể chia sẻ màn hình. Vui lòng thử lại.';
         this.isScreenSharing = false;
@@ -135,6 +171,9 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
 
   stopScreenShare() {
     if (this.screenStream) {
+      if (this.isRecording) {
+        this.stopRecording();
+      }
       this.screenStream.getTracks().forEach(track => track.stop());
       this.screenStream = null;
       this.isScreenSharing = false;
@@ -161,6 +200,85 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
       }
 
       this.cdr.detectChanges();
+    }
+  }
+
+  startRecording() {
+    if (!this.localStream && !this.screenStream) {
+      this.errorMessage = 'Không có luồng video hoặc âm thanh để ghi. Vui lòng bật camera/microphone hoặc chia sẻ màn hình.';
+      this.cdr.detectChanges();
+      return;
+    }
+
+    try {
+      let stream: MediaStream;
+      let audioStream: MediaStream | null = null;
+
+      // Always include localStream for audio (microphone)
+      if (this.localStream) {
+        audioStream = new MediaStream(this.localStream.getAudioTracks());
+      }
+
+      if (this.isScreenSharing && this.screenStream) {
+        // Combine screenStream (video and possibly audio) with localStream audio
+        stream = new MediaStream([
+          ...this.screenStream.getVideoTracks(),
+          ...(audioStream ? audioStream.getAudioTracks() : this.screenStream.getAudioTracks())
+        ]);
+      } else if (this.localStream) {
+        // Record only localStream (camera + microphone)
+        stream = new MediaStream([
+          ...this.localStream.getVideoTracks(),
+          ...this.localStream.getAudioTracks()
+        ]);
+      } else {
+        throw new Error('No valid stream available for recording');
+      }
+
+      this.recorder = new RecordRTC(stream, {
+        type: 'video',
+        mimeType: 'video/webm;codecs=vp8,opus',
+        disableLogs: false,
+        timeSlice: 1000,
+        videoBitsPerSecond: 128000,
+        audioBitsPerSecond: 128000,
+      });
+
+      this.recorder.startRecording();
+      this.isRecording = true;
+      console.log('Started recording with RecordRTC, stream tracks:', stream.getTracks());
+      this.cdr.detectChanges();
+    } catch (err) {
+      console.error('Error starting recording:', err);
+      this.errorMessage = 'Không thể bắt đầu ghi. Vui lòng kiểm tra quyền truy cập và thử lại.';
+      this.cdr.detectChanges();
+    }
+  }
+
+  stopRecording() {
+    if (this.recorder && this.isRecording) {
+      this.recorder.stopRecording(() => {
+        const blob = this.recorder!.getBlob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `recording-${new Date().toISOString()}.webm`;
+        a.click();
+        URL.revokeObjectURL(url);
+        this.recorder = null;
+        console.log('Recording saved and downloaded');
+      });
+      this.isRecording = false;
+      console.log('Stopped recording');
+      this.cdr.detectChanges();
+    }
+  }
+
+  toggleRecording() {
+    if (this.isRecording) {
+      this.stopRecording();
+    } else {
+      this.startRecording();
     }
   }
 
@@ -208,14 +326,13 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
           return;
         }
 
-        // Ignore signals from disconnected peers
         if (this.disconnectedPeers.has(peerId)) {
           console.log(`Ignoring signal from disconnected peer: ${peerId}, type: ${signal.type}`);
           return;
         }
 
         let peerConnection = this.peerConnections.get(peerId);
-        if (!peerConnection && signal.type !== 'new-participant' && signal.type !== 'participant-left' && signal.type !== 'status-update') {
+        if (!peerConnection && signal.type !== 'new-participant' && signal.type !== 'participant-left' && signal.type !== 'status-update' && signal.type !== 'chat-message') {
           console.log('Creating new peer connection for:', peerId);
           peerConnection = this.createPeerConnection(peerId);
           this.peerConnections.set(peerId, peerConnection);
@@ -271,14 +388,30 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
               : peer
           );
           this.cdr.detectChanges();
+        } else if (signal.type === 'chat-message') {
+          console.log('Received chat message from:', peerId, signal.message);
+          this.chatMessagesList.push({
+            senderId: peerId,
+            message: signal.message,
+            timestamp: new Date()
+          });
+          if (!this.isChatOpen) {
+            this.hasNewMessages = true;
+          }
+          this.cdr.detectChanges();
+          this.scrollChatToBottom();
         }
       } catch (err) {
         console.error('Error processing WebSocket message:', err);
+        this.errorMessage = 'Lỗi xử lý tin nhắn WebSocket. Vui lòng thử lại.';
+        this.cdr.detectChanges();
       }
     };
 
     this.ws.onerror = (err) => {
       console.error('WebSocket error:', err);
+      this.errorMessage = 'Lỗi kết nối WebSocket. Vui lòng kiểm tra kết nối.';
+      this.cdr.detectChanges();
     };
 
     this.ws.onclose = (event) => {
@@ -297,13 +430,56 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
     };
   }
 
+  sendChatMessage() {
+    if (!this.chatInput.trim()) {
+      return;
+    }
+    if (!this.ws || this.ws.readyState !== WebSocket.OPEN) {
+      this.errorMessage = 'Không thể gửi tin nhắn. Kết nối WebSocket không hoạt động.';
+      this.cdr.detectChanges();
+      return;
+    }
+
+    const message = this.chatInput.trim();
+    const chatMessage = {
+      roomId: this.roomId,
+      senderId: this.participantId,
+      type: 'chat-message',
+      message: message
+    };
+
+    try {
+      this.ws.send(JSON.stringify(chatMessage));
+      this.chatMessagesList.push({
+        senderId: this.participantId,
+        message: message,
+        timestamp: new Date()
+      });
+      this.chatInput = '';
+      this.hasNewMessages = false;
+      this.cdr.detectChanges();
+      this.scrollChatToBottom();
+    } catch (err) {
+      console.error('Error sending chat message:', err);
+      this.errorMessage = 'Lỗi khi gửi tin nhắn. Vui lòng thử lại.';
+      this.cdr.detectChanges();
+    }
+  }
+
+  toggleChat() {
+    this.isChatOpen = !this.isChatOpen;
+    if (this.isChatOpen) {
+      this.hasNewMessages = false;
+      this.scrollChatToBottom();
+    }
+    this.cdr.detectChanges();
+  }
+
   cleanupPeer(peerId: string) {
     console.log(`Cleaning up peer: ${peerId}`);
 
-    // Mark peer as disconnected
     this.disconnectedPeers.add(peerId);
 
-    // Close and remove peer connection
     const peerConnection = this.peerConnections.get(peerId);
     if (peerConnection) {
       peerConnection.close();
@@ -311,10 +487,8 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
       console.log(`Closed peer connection for peer: ${peerId}`);
     }
 
-    // Remove from signal queue
     this.signalQueue.delete(peerId);
 
-    // Remove from peers array
     const peerExists = this.peers.some(peer => peer.id === peerId);
     if (peerExists) {
       this.peers = this.peers.filter(peer => peer.id !== peerId);
@@ -323,7 +497,6 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
       console.log(`Peer ${peerId} not found in peers array`);
     }
 
-    // Remove video element from DOM
     const videoElement = document.getElementById(`peerVideo-${peerId}`) as HTMLVideoElement;
     if (videoElement) {
       videoElement.srcObject = null;
@@ -333,13 +506,11 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
       console.log(`No video element found for peer: ${peerId}`);
     }
 
-    // Trigger UI update
     this.cdr.detectChanges();
     console.log(`Completed cleanup for peer: ${peerId}`);
   }
 
   async processSignalQueue(peerId: string) {
-    // Skip processing if peer is disconnected
     if (this.disconnectedPeers.has(peerId)) {
       console.log(`Skipping signal queue for disconnected peer: ${peerId}`);
       this.signalQueue.delete(peerId);
@@ -408,7 +579,6 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
   }
 
   createPeerConnection(peerId: string): RTCPeerConnection {
-    // Prevent creating peer connection for disconnected peer
     if (this.disconnectedPeers.has(peerId)) {
       console.log(`Prevented creating peer connection for disconnected peer: ${peerId}`);
       throw new Error(`Peer ${peerId} is disconnected`);
@@ -432,14 +602,13 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
     }
 
     if (this.screenStream) {
-      this.screenStream.getVideoTracks().forEach((track) => {
+      this.screenStream.getTracks().forEach((track) => {
         peerConnection.addTrack(track, this.screenStream!);
         console.log('Added screen track to peer:', peerId, track);
       });
     }
 
     peerConnection.ontrack = (e) => {
-      // Skip if peer is disconnected
       if (this.disconnectedPeers.has(peerId)) {
         console.log(`Ignoring ontrack event for disconnected peer: ${peerId}`);
         return;
@@ -533,7 +702,6 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
   }
 
   async recreatePeerConnection(peerId: string) {
-    // Skip if peer is disconnected
     if (this.disconnectedPeers.has(peerId)) {
       console.log(`Skipping recreate peer connection for disconnected peer: ${peerId}`);
       return;
@@ -564,6 +732,8 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
       console.log('Sent new offer to:', peerId);
     } catch (err) {
       console.error('Error recreating peer connection:', err);
+      this.errorMessage = 'Lỗi khi tạo lại kết nối với người tham gia. Vui lòng thử lại.';
+      this.cdr.detectChanges();
     }
   }
 
@@ -626,6 +796,11 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
     this.peerConnections.clear();
     this.peers = [];
     this.disconnectedPeers.clear();
+    this.chatMessagesList = [];
+    this.hasNewMessages = false;
+    if (this.isRecording) {
+      this.stopRecording();
+    }
     if (this.ws) {
       this.ws.close();
       this.ws = null;
@@ -653,6 +828,11 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
     this.peerConnections.clear();
     this.peers = [];
     this.disconnectedPeers.clear();
+    this.chatMessagesList = [];
+    this.hasNewMessages = false;
+    if (this.isRecording) {
+      this.stopRecording();
+    }
     if (this.ws) {
       this.ws.close();
       this.ws = null;

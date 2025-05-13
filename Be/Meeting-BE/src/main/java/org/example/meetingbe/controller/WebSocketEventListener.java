@@ -25,24 +25,24 @@ public class WebSocketEventListener {
         logger.info("Received a new web socket connection");
     }
 
-    @EventListener
-    public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
-        StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
-
-        User username = (User) headerAccessor.getSessionAttributes().get("username");
-
-        if(username != null) {
-
-            logger.info("User Disconnected : " + username);
-
-            ChatMessage chatMessage = new ChatMessage();
-            if (headerAccessor.getSessionAttributes().get("user") == null) {
-                headerAccessor.getSessionAttributes().put("user", chatMessage.getUser());
-            }
-            chatMessage.setType(ChatMessage.MessageType.LEAVE);
-            chatMessage.setUser(username);
-
-            messagingTemplate.convertAndSend("/topic/public", chatMessage);
-        }
-    }
+//    @EventListener
+//    public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
+//        StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
+//
+//        User username = (User) headerAccessor.getSessionAttributes().get("username");
+//
+//        if(username != null) {
+//
+//            logger.info("User Disconnected : " + username);
+//
+//            ChatMessage chatMessage = new ChatMessage();
+//            if (headerAccessor.getSessionAttributes().get("user") == null) {
+//                headerAccessor.getSessionAttributes().put("user", chatMessage.getUser());
+//            }
+//            chatMessage.setType(ChatMessage.MessageType.LEAVE);
+//            chatMessage.setUser(username);
+//
+//            messagingTemplate.convertAndSend("/topic/public", chatMessage);
+//        }
+//    }
 }

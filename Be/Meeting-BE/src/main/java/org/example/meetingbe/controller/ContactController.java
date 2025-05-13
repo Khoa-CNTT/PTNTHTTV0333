@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.example.meetingbe.dto.ContactDto;
 import org.example.meetingbe.model.Contact;
+import org.example.meetingbe.service.contact.ContactService;
 import org.example.meetingbe.service.contact.IContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,9 @@ import org.springframework.web.bind.annotation.*;
 public class ContactController {
     @Autowired
     private IContactService icontactService;
+    @Autowired
+    private ContactService contactService;
+
     @PostMapping("/addNewContact")
     public ResponseEntity<Contact> addNewContact(@RequestBody @Valid ContactDto contact) {
         Contact saveContact = icontactService.addNewContact(contact);
@@ -74,4 +78,8 @@ public class ContactController {
         }
     }
 
+    @GetMapping("/getContactById/{id}")
+    public ResponseEntity<?> getContactById(@PathVariable("id")Long id) {
+        return ResponseEntity.ok(contactService.getById(id));
+    }
 }
