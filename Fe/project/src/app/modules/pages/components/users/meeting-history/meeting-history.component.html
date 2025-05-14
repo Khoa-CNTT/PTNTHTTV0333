@@ -1,1 +1,27 @@
-<p>meeting-history works!</p>
+<app-navigation></app-navigation>
+
+<div class="meeting-history-container">
+  <div class="meeting-history-wrapper">
+    <div class="meeting-history-card">
+      <button class="back-btn" routerLink="/pages/components/home-main">
+        <i class="fas fa-arrow-left"></i> Quay lại
+      </button>
+      <h3 class="title"><strong>LỊCH SỬ CUỘC HỌP</strong></h3>
+
+      <!-- Đây là nơi hiển thị lịch sử cuộc họp -->
+      <div class="meeting-list">
+        <!-- Một ví dụ đơn lẻ về lịch sử cuộc họp -->
+        <div class="meeting-item">
+          <div class="meeting-info">
+            <p><strong>Tiêu đề:</strong> Cuộc họp dự án A</p>
+            <p><strong>Thời gian:</strong> 10/05/2025 - 10:00 AM</p>
+            <p><strong>Thành viên:</strong> Huy, Lan, Nam, Bình</p>
+          </div>
+          <button class="btn-view">Xem lại</button>
+        </div>
+
+        <!-- Có thể lặp qua danh sách các cuộc họp ở đây -->
+      </div>
+    </div>
+  </div>
+</div>

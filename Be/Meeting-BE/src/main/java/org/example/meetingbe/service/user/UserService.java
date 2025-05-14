@@ -1,15 +1,12 @@
 package org.example.meetingbe.service.user;
 
 import jakarta.mail.MessagingException;
-import org.example.meetingbe.dto.MonthlyUserCountDTO;
-import org.example.meetingbe.dto.Register;
-import org.example.meetingbe.dto.UserNameDTO;
+import org.example.meetingbe.dto.*;
 import org.example.meetingbe.model.Contact;
 import org.example.meetingbe.model.Role;
 import org.example.meetingbe.model.User;
 import org.example.meetingbe.repository.IRoleRepo;
 import jakarta.persistence.EntityNotFoundException;
-import org.example.meetingbe.dto.UserDto;
 import org.example.meetingbe.model.User;
 import org.example.meetingbe.repository.IUserRepo;
 import org.example.meetingbe.service.mailSender.MailRegister;
@@ -142,17 +139,30 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserNameDTO getByUsername(String username) {
+    public UserEditTO getByUsername(String username) {
         User user = userRepo.findByUserName(username);
-        UserNameDTO userDto = new UserNameDTO();
+        UserEditTO userDto = new UserEditTO();
         userDto.setId(user.getId());
         userDto.setEmail(user.getEmail());
         userDto.setFirstName(user.getFirstName());
         userDto.setLastName(user.getLastName());
-        userDto.setAvatar(user.getAvatar());
+        userDto.setUserName(user.getUserName());
         userDto.setVip(user.getVip());
-        userDto.setCreateAt(user.getCreateAt());
+        userDto.setGender(user.getGender());
+        userDto.setAvatar(user.getAvatar());
+        userDto.setPhone(user.getPhone());
+        userDto.setBirthday(user.getBirthday());
+        userDto.setAddress(user.getAddress());
         return userDto;
+    }
+
+    @Override
+    public User updateProfile(Long id,UserEditTO userEditTO) {
+        if (userRepo.existsById(id)) {
+            return userRepo.save(userEditToObject(userEditTO));
+        } else {
+            throw new EntityNotFoundException("User with id " + id + " not found");
+        }
     }
 
     public User dtoToObject(UserDto dto){
@@ -167,6 +177,22 @@ public class UserService implements IUserService {
         user.setAvatar(dto.getAvatar());
         user.setCreateAt(dto.getCreateAt() != null ? dto.getCreateAt() : LocalDateTime.now());
         user.setRoles(dto.getRoleIds());
+        return user;
+    }
+
+    public User userEditToObject(UserEditTO dto){
+        User user = new User();
+        user.setId(dto.getId());
+        user.setEmail(dto.getEmail());
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setUserName(dto.getUserName());
+        user.setVip(dto.getVip());
+        user.setAvatar(dto.getAvatar());
+        user.setPhone(dto.getPhone());
+        user.setAddress(dto.getAddress());
+        user.setGender(dto.getGender());
+        user.setBirthday(dto.getBirthday());
         return user;
     }
 

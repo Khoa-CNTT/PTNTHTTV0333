@@ -237,8 +237,8 @@ public class UserController {
     }
 
     @PutMapping("/updateProfile/{id}")
-    public ResponseEntity<?> updateProfile(@PathVariable("id")Long id, @RequestBody UserDto userDto) {
-        userService.updateUser(id, userDto);
+    public ResponseEntity<?> updateProfile(@PathVariable("id")Long id, @RequestBody UserEditTO userDto) {
+        userService.updateProfile(id, userDto);
         return new ResponseEntity<>(new ResponseMessage("Update success"), HttpStatus.OK);
     }
 }

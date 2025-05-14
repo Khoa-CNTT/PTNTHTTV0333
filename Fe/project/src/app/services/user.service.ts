@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { JwtResponse } from '../models/JwtResponse';
 import { LoginForm } from '../models/LoginForm';
 import { Contact } from '../models/Contact';
+import { UserEditDto } from '../models/DTO/UserEditDto';
 
 @Injectable({
   providedIn: 'root'
@@ -14,9 +15,9 @@ import { Contact } from '../models/Contact';
 export class UserService {
   private API_URL = 'http://localhost:8080/api/user/';
 
-  
+
   private httpOptions: any;
-  constructor(private httpClient: HttpClient, private jwtService: JwtService, private router: Router) { 
+  constructor(private httpClient: HttpClient, private jwtService: JwtService, private router: Router) {
     this.httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
@@ -27,18 +28,18 @@ export class UserService {
   }
 
   getMonthlyUserRegistrations(year: number): Observable<any> {
-    return this.httpClient.get(this.API_URL+ 'monthly-registrations/' + year);
+    return this.httpClient.get(this.API_URL + 'monthly-registrations/' + year);
   }
 
-  register(user: any): Observable<any>{
+  register(user: any): Observable<any> {
     return this.httpClient.post<any>(this.API_URL + "register", user, this.httpOptions);
   }
 
-  login(formLogin: LoginForm): Observable<JwtResponse>{
-    return this.httpClient.post<JwtResponse>(this.API_URL+"login", formLogin);
+  login(formLogin: LoginForm): Observable<JwtResponse> {
+    return this.httpClient.post<JwtResponse>(this.API_URL + "login", formLogin);
   }
 
-  logout(){
+  logout() {
     this.jwtService.removeDate();
     this.jwtService.removeName();
     this.jwtService.removeRoles();
@@ -46,14 +47,15 @@ export class UserService {
     this.router.navigateByUrl("/auth/login");
   }
 
-  getByUserName(): Observable<any>{
+  getByUserName(): Observable<UserEditDto> {
     let name = this.jwtService.getName();
     return this.httpClient.get(this.API_URL + 'getByUserName/' + name);
   }
 
-  editUser(userForm): Observable<Contact> {
-    let name = this.jwtService.getName();
-    return this.httpClient.put<Contact>(this.API_URL + 'updateProfile/' + name, userForm);
+  editUser(id: number, userForm: any): Observable<UserEditDto> {
+    console.log(userForm);
+    return this.httpClient.put<UserEditDto>(this.API_URL + 'updateProfile/' + id, userForm);
   }
+
 
 }

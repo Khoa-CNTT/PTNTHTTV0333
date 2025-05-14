@@ -12,14 +12,14 @@
           <div class="row align-items-end">
             <div class="form-group col-md-4">
               <div class="avatar-upload">
-                <label for="fileInput" class="upload-area">
-                  <img src="{{avatar}}" id="previewImage" alt="Chọn ảnh">
+                <label for="fileInput" class="upload-label">
+                  <img [src]="avatar || user?.avatar || 'assets/placeholder.png'" id="previewImage" alt="Chọn ảnh">
                   <ng-template #placeholder>
                     <span>Chọn Ảnh</span>
                   </ng-template>
                 </label>
-                <input (change)="showPreview($event)" formControlName="avatar" type="file" id="fileInput"
-                  accept=".png, .jpg, .jpeg, .gif" class="file-input">
+                <input (change)="showPreview($event)" type="file" id="fileInput" accept=".png, .jpg, .jpeg, .gif"
+                  class="file-input">
               </div>
             </div>
 
@@ -46,21 +46,24 @@
                 <div class="text-danger error-message"></div>
               </div>
 
-              <!-- <div class="form-group">
+              <div class="form-group">
                 <label>Giới Tính:</label>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" formControlName="gender" name="gender" id="male" [value]="1">
+                  <input class="form-check-input" type="radio" formControlName="gender" name="gender" id="male"
+                    [value]="1">
                   <label class="form-check-label" for="male">Nam</label>
                 </div>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" formControlName="gender" name="gender" id="female" [value]="2">
+                  <input class="form-check-input" type="radio" formControlName="gender" name="gender" id="female"
+                    [value]="2">
                   <label class="form-check-label" for="female">Nữ</label>
                 </div>
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" formControlName="gender" name="gender" id="other" [value]="3">
+                  <input class="form-check-input" type="radio" formControlName="gender" name="gender" id="other"
+                    [value]="3">
                   <label class="form-check-label" for="other">Khác</label>
                 </div>
-              </div> -->
+              </div>
             </div>
 
             <div class="form-group col-md-12">

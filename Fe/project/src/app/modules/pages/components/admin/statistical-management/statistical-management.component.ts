@@ -135,7 +135,7 @@ export class StatisticalManagementComponent implements OnInit, AfterViewInit {
         labels,
         datasets: [{
           label: 'Số người đăng ký',
-          data: [3123, 1234, 2345, 3456, 4567, 5678, 6789, 7890, 8901, 9012, 10123, 11123],
+          data: realDataBar,
           backgroundColor: '#c2363f',
           borderColor: 'rgba(255, 99, 132, 1)',
           borderWidth: 1,

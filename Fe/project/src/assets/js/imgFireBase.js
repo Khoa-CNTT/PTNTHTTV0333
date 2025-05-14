@@ -9,7 +9,3 @@ fileInput.addEventListener('change', function (event) {
     };
     reader.readAsDataURL(file);
 });
-
-  
-    
-  

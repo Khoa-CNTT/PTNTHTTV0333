@@ -106,9 +106,10 @@
         <form [formGroup]="contactUpdateForm">
           <p><strong>Người gửi: </strong> {{contactUpdateForm.value.user.firstName}}
             {{contactUpdateForm.value.user.lastName}}</p>
+          <p><strong>Số điện thoại: </strong> {{contactUpdateForm.value.user.phone}}</p>
           <p><strong>Ngày gửi: </strong> {{contactUpdateForm.value.dateSend | date: 'short'}}</p>
           <p><strong>Nội dung: </strong>
-            <textarea id="content" formControlName="content" class="form-control" rows="5"
+            <textarea disabled id="content" formControlName="content" class="form-control" rows="5"
               placeholder="Nhập nội dung liên hệ..."></textarea>
           </p>
         </form>
