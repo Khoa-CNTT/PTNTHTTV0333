@@ -9,6 +9,7 @@ import org.example.meetingbe.repository.IParticipantsRepo;
 import org.example.meetingbe.repository.IUserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -25,14 +26,17 @@ public class MeetingService implements IMeetingService {
 
     private final Map<String, MeetingDto> meetings = new HashMap<>();
     @Override
-    public MeetingDto createRoom() {
+    public MeetingDto createRoom( Long senderId) {
         MeetingDto meeting = new MeetingDto();
+        User user = userRepo.findById(senderId).get();
+
         meeting.setCode(UUID.randomUUID().toString());
         meeting.setCreateAt(LocalDateTime.now());
         meetings.put(meeting.getCode(), meeting);
         meetings.put(meeting.getCreateAt().toString(), meeting);
 
         Meeting mt1 = convertToEntity(meeting);
+        mt1.setUser(user);
         meetingRepo.save(mt1);
         return meeting;
     }
@@ -45,9 +49,9 @@ public class MeetingService implements IMeetingService {
         MeetingDto meeting = meetings.get(meetingId);
         if (meeting != null) {
             meeting.getUser().add(userId);
-            Optional<Meeting> mt = meetingRepo.findById(meeting.getId());
-            Participants p = new Participants(LocalDateTime.now(),null,mt.get(),userRepo.findById(userId).get());
-            participantsRepo.save(p);
+//            Optional<Meeting> mt = meetingRepo.findById(meeting.getId());
+//            Participants p = new Participants(LocalDateTime.now(),null,mt.get(),userRepo.findById(userId).get());
+//            participantsRepo.save(p);
         }
     }
 

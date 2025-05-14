@@ -1,9 +1,13 @@
 package org.example.meetingbe.controller;
 
 import org.example.meetingbe.dto.MeetingDto;
+import org.example.meetingbe.model.Participants;
+import org.example.meetingbe.repository.IParticipantsRepo;
 import org.example.meetingbe.service.meeting.MeetingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api")
@@ -12,19 +16,25 @@ public class MeetingController {
 
     @Autowired
     private MeetingService meetingService;
+    @Autowired
+    private IParticipantsRepo participantsRepo;
 
     @PostMapping
-    public MeetingDto createRoom() {
-        return meetingService.createRoom();
+    public MeetingDto createRoom(@RequestParam("senderId")Long senderId) {
+        return meetingService.createRoom(senderId);
     }
 
     @GetMapping("/{roomId}")
     public MeetingDto getRoom(@PathVariable String roomId) {
+        Participants p = new Participants(LocalDateTime.now(),null,null,null);
+        participantsRepo.save(p);
         return meetingService.getRoom(roomId);
     }
 
     @PostMapping("/{roomId}/join")
     public void joinRoom(@PathVariable String roomId, @RequestBody Long userId) {
         meetingService.addParticipant(roomId, userId);
+        Participants p = new Participants(LocalDateTime.now(),null,null,null);
+            participantsRepo.save(p);
     }
 }
