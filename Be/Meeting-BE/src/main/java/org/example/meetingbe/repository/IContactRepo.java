@@ -15,6 +15,8 @@ public interface IContactRepo extends JpaRepository<Contact, Long> {
     @Query(value = "select * from contact", nativeQuery = true)
     List<Contact> getAllContact();
     Page<Contact> findBy(Pageable pageable);
+    Page<Contact> getAllByStatusTrue(Pageable pageable);
+    Page<Contact> getAllByStatusFalse(Pageable pageable);
     @Query(value = "UPDATE Contact as b SET b.status = false WHERE b.id =:id ", nativeQuery = true)
     void updateContact(@Param("id") Integer id);
 }

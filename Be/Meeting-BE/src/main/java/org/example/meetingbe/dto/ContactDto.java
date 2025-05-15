@@ -7,7 +7,7 @@ import java.time.LocalDate;
 public class ContactDto {
     private Long id;
     private String content;
-    private LocalDate dateSend;
+    private LocalDate dateSend =LocalDate.now();
     private Boolean status;
     private User user;
 

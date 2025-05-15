@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class WebSocketHandler extends TextWebSocketHandler {
-    private static final Logger logger = LoggerFactory.getLogger(WebSocketHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(WebSocketHandler.class.getName());
     private final Map<String, Map<String, WebSocketSession>> roomSessions = new ConcurrentHashMap<>();
     private final Map<String, String> sessionToParticipantId = new ConcurrentHashMap<>();
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -45,6 +45,25 @@ public class WebSocketHandler extends TextWebSocketHandler {
             String senderId = (String) signal.get("senderId");
             String targetParticipantId = (String) signal.get("targetParticipantId");
             String type = (String) signal.get("type");
+
+            if ("chat".equals(type)) {
+                String chatMessage = (String) signal.get("message");
+                String sendAt = (String) signal.get("sendAt");
+                
+
+                // Broadcast message to all participants in the room
+                roomSessions.getOrDefault(roomId, new ConcurrentHashMap<>()).forEach((participantId, participantSession) -> {
+                    if (participantSession.isOpen() && !participantSession.getId().equals(session.getId())) {
+                        try {
+                            participantSession.sendMessage(new TextMessage(payload));
+                            logger.info("Sent chat message to: " + participantId);
+                        } catch (Exception e) {
+                            logger.error("Error sending chat message: " + e.getMessage());
+                        }
+                    }
+                });
+            }
+
 
             if (roomId == null || senderId == null || type == null) {
                 logger.warn("Missing required fields in signal: " + payload);
@@ -165,6 +184,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                     }
                 }
             }
+
 
             logger.info("Connection closed: sessionId=" + session.getId() + ", participantId=" + participantId + ", status=" + status);
         }

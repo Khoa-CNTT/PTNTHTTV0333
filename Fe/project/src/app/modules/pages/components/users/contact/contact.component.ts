@@ -6,6 +6,7 @@ import { FormBuilder } from '@angular/forms';
 import { ContactService } from 'src/app/services/contact.service';
 import { JwtService } from 'src/app/services/jwt.service';
 import { ToastrService } from 'ngx-toastr';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-contact',
@@ -20,22 +21,28 @@ export class ContactComponent implements OnInit {
 
   constructor(
     private jwtService: JwtService,
+    private userSer: UserService,
     private toast: ToastrService,
     private fb: FormBuilder,
     private contactService: ContactService
   ) { }
 
   ngOnInit(): void {
+    this.userSer.getByUserName().subscribe(data => {
+      this.user = data.id;
+      this.contactForm.patchValue({
+        userId: this.user
+      });
+    });
     this.initForm();
-  }
 
+  }
   initForm() {
-    this.user = this.jwtService.getName();
     this.contactForm = this.fb.group({
       content: ['', Validators.required],
       dateSend: [''],
       status: [false],
-      userId: [this.user]
+      userId: []
     });
   }
 
