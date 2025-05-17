@@ -53,8 +53,11 @@ export class UserService {
   }
 
   editUser(id: number, userForm: any): Observable<UserEditDto> {
-    console.log(userForm);
     return this.httpClient.put<UserEditDto>(this.API_URL + 'updateProfile/' + id, userForm);
+  }
+
+  countTotalUsers(year: number): Observable<any> {
+    return this.httpClient.get(this.API_URL + 'count?year=' + year);
   }
 
 

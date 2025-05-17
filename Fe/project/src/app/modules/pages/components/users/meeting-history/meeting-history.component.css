@@ -29,34 +29,58 @@
   font-weight: bold;
 }
 
-/* Danh sách cuộc họp */
-.meeting-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+/* Ô tìm kiếm */
+.search-bar {
+  margin-bottom: 20px;
+  width: 100%;
 }
 
-.meeting-item {
-  border: 1px solid #eee;
-  padding: 20px;
-  border-radius: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: 0.2s;
+.search-input {
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  width: 100%;
 }
 
-.meeting-item:hover {
-  background-color: #fdf3f4;
+/* Bảng */
+.table-responsive {
+  overflow-x: auto;
 }
 
-.meeting-info p {
-  margin: 4px 0;
+.meeting-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+
+.meeting-table thead {
+  background-color: #fae8ea;
+  color: #333;
+}
+
+.meeting-table th,
+.meeting-table td {
+  padding: 16px 12px;
+  text-align: left;
+}
+
+/* Zebra striping */
+.meeting-table tbody tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+.meeting-table tbody tr:nth-child(even) {
+  background-color: #fcf8f8;
+}
+
+.meeting-table tbody tr:hover {
+  background-color: #fae8ea;
 }
 
 /* Nút xem lại */
 .btn-view {
-  padding: 10px 16px;
+  padding: 8px 14px;
   background-color: #c2363f;
   color: white;
   border: none;
@@ -92,13 +116,23 @@
 
 /* Responsive */
 @media (max-width: 767px) {
-  .meeting-item {
-    flex-direction: column;
-    align-items: flex-start;
+
+  .meeting-table th,
+  .meeting-table td {
+    padding: 12px 8px;
+    font-size: 14px;
+  }
+
+  .search-bar {
+    text-align: center;
+  }
+
+  .search-input {
+    width: 100%;
+    margin-bottom: 12px;
   }
 
   .btn-view {
-    margin-top: 10px;
     width: 100%;
     text-align: center;
   }

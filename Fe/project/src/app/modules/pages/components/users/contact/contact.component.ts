@@ -14,10 +14,10 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./contact.component.css']
 })
 export class ContactComponent implements OnInit {
-
+  isLoading = false;
   contact: Contact[] = [];
   contactForm!: FormGroup;
-  user = null
+  userId = null
 
   constructor(
     private jwtService: JwtService,
@@ -29,9 +29,9 @@ export class ContactComponent implements OnInit {
 
   ngOnInit(): void {
     this.userSer.getByUserName().subscribe(data => {
-      this.user = data.id;
+      this.userId = data;
       this.contactForm.patchValue({
-        userId: this.user
+        user: this.userId
       });
     });
     this.initForm();
@@ -42,23 +42,26 @@ export class ContactComponent implements OnInit {
       content: ['', Validators.required],
       dateSend: [''],
       status: [false],
-      userId: []
+      user: []
     });
   }
 
 
 
   onSubmit() {
+    this.isLoading = true;
     if (this.contactForm.valid) {
       const formValue = this.contactForm.value;
-      console.log(formValue)
       this.contactService.addNewContact(formValue).subscribe(() => {
+        this.isLoading = false;
         this.toast.success('Cảm ơn bạn đã liên hệ với chúng tôi');
         this.contactForm.reset();
       }, error => {
-        console.error('Thêm contact lỗi', error);
         this.toast.error('Hiện đang lỗi');
       });
+    } else {
+      this.isLoading = false;
+      this.toast.error('Vui lòng nhập đầy đủ thông tin');
     }
   }
 

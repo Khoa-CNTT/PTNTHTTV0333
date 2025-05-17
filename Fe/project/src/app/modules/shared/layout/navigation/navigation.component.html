@@ -12,7 +12,7 @@
     <i class="fas fa-envelope icon" title="Contact Us" routerLink="/pages/components/contact"></i>
 
     <!-- Admin dropdown -->
-    <div class="admin-menu">
+    <div class="admin-menu" *ngIf="!setupNavi()">
       <i class="fas fa-cogs icon" title="Quản lý tài khoản" (click)="toggleAdminDropdown()"></i>
       <div class="admin-sub-menu" [class.show]="adminDropdownVisible">
         <div><a routerLink="/pages/components/users-management"> Quản lý người dùng</a></div>

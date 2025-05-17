@@ -18,6 +18,8 @@ export class StatisticalManagementComponent implements OnInit, AfterViewInit {
   months: number[] = Array.from({ length: 12 }, (_, i) => i + 1);
   private lineChart: Chart | null = null;
   private barChart: Chart | null = null;
+  sumUser: number;
+
 
 
   constructor(
@@ -42,6 +44,7 @@ export class StatisticalManagementComponent implements OnInit, AfterViewInit {
       },
       error: (error) => console.error('Error fetching years:', error)
     });
+
   }
 
   private loadRevenueData(year: number): void {
@@ -60,6 +63,10 @@ export class StatisticalManagementComponent implements OnInit, AfterViewInit {
       },
       error: (error) => console.error(`Error fetching revenue for year ${year}:`, error)
     });
+
+    this.userService.countTotalUsers(year).subscribe(data => {
+      this.sumUser = data;
+    })
   }
 
   private setupYearSelectorListener(): void {

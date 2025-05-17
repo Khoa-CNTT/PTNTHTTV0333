@@ -13,13 +13,11 @@
             <div class="form-group col-md-4">
               <div class="avatar-upload">
                 <label for="fileInput" class="upload-label">
-                  <img [src]="avatar || user?.avatar || 'assets/placeholder.png'" id="previewImage" alt="Chọn ảnh">
-                  <ng-template #placeholder>
-                    <span>Chọn Ảnh</span>
-                  </ng-template>
+                  <img src="{{avatar}}" id="previewImage">
+                  <span>Chọn Ảnh</span>
                 </label>
-                <input (change)="showPreview($event)" type="file" id="fileInput" accept=".png, .jpg, .jpeg, .gif"
-                  class="file-input">
+                <input (change)="showPreview($event)" formControlName="avatar" type="file" id="fileInput"
+                  accept=".png, .jpg, .jpeg, .gif" class="file-input">
               </div>
             </div>
 
@@ -96,3 +94,6 @@
     </div>
   </div>
 </div>
+
+
+<script src="assets/js/imgFireBase.js"></script>

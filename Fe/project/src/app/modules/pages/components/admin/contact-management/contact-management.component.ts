@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { Contact } from 'src/app/models/Contact';
 import { ContactService } from 'src/app/services/contact.service';
 
@@ -23,18 +24,21 @@ export class ContactManagementComponent implements OnInit {
   contactUpdateForm: FormGroup;
 
 
-  constructor(private contactService: ContactService) { }
+  constructor(
+    private contactService: ContactService,
+    private toast: ToastrService,
+  ) { }
 
   ngOnInit(): void {
     this.applyFilter(this.currentPage)
-
     this.contactUpdateForm = new FormGroup({
       id: new FormControl(''),
-      content: new FormControl(''),
+      content: new FormControl({ value: '', disabled: true }, Validators.required),
       dateSend: new FormControl(''),
       status: new FormControl(''),
       user: new FormControl(''),
     })
+
   }
 
   applyFilter(page: number): void {
@@ -52,29 +56,29 @@ export class ContactManagementComponent implements OnInit {
         (error) => console.error('Error loading blogs:', error)
       );
     } else if (this.filterStatus === 'approved') {
-      // this.blogApproveService.getActive(page, this.pageSize).subscribe(
-      //   (response: any) => {
-      //     this.blogs = response.content;
-      //     this.currentPage = response.pageable.pageNumber;
-      //     this.totalPages = response.totalPages;
-      //     this.pages = this.totalPages > 1;
-      //     this.countPageCanShow();
-      //     this.noRecord = this.blogs.length
-      //   },
-      //   (error) => console.error('Error loading blogs:', error)
-      // );
+      this.contactService.getAllContactTrue(page, this.pageSize).subscribe(
+        (response: any) => {
+          this.contacts = response.content;
+          this.currentPage = response.pageable.pageNumber;
+          this.totalPages = response.totalPages;
+          this.pages = this.totalPages > 1;
+          this.countPageCanShow();
+          this.noRecord = this.contacts.length
+        },
+        (error) => console.error('Error loading blogs:', error)
+      );
     } else if (this.filterStatus === 'pending') {
-      // this.blogApproveService.getNoneActive(page, this.pageSize).subscribe(
-      //   (response: any) => {
-      //     this.blogs = response.content;
-      //     this.currentPage = response.pageable.pageNumber;
-      //     this.totalPages = response.totalPages;
-      //     this.pages = this.totalPages > 1;
-      //     this.countPageCanShow();
-      //     this.noRecord = this.blogs.length
-      //   },
-      //   (error) => console.error('Error loading blogs:', error)
-      // );
+      this.contactService.getAllContactFalse(page, this.pageSize).subscribe(
+        (response: any) => {
+          this.contacts = response.content;
+          this.currentPage = response.pageable.pageNumber;
+          this.totalPages = response.totalPages;
+          this.pages = this.totalPages > 1;
+          this.countPageCanShow();
+          this.noRecord = this.contacts.length
+        },
+        (error) => console.error('Error loading blogs:', error)
+      );
     }
 
   }
@@ -121,18 +125,18 @@ export class ContactManagementComponent implements OnInit {
       id: this.contactUpdate.id,
       content: this.contactUpdate.content,
       dateSend: this.contactUpdate.dateSend,
-      status: true,
+      status: this.contactUpdate.status,
       user: this.contactUpdate.user,
     })
   }
 
-  // updateStatus() {
-  //   console.log(this.contactUpdateForm.value)
-  //   this.blogApproveService.updateApprove(this.contactUpdateForm.value.id, this.contactUpdateForm.value).subscribe(data => {
-  //     this.toastr.success('Blog đã được duyệt', 'Thành công');
-  //     this.ngOnInit();
-  //   })
-  // }
+  updateStatus() {
+    console.log(this.contactUpdateForm.value.id);
+    this.contactService.updateContact(this.contactUpdateForm.value.id, this.contactUpdateForm.value).subscribe(data => {
+      this.toast.success('Chỉnh sửa thành công');
+      this.ngOnInit();
+    })
+  }
 
   FormatStatusColor(status: number): string {
     if (status == 0) {

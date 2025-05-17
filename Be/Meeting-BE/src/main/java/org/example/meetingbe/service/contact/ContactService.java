@@ -42,7 +42,7 @@ public class ContactService implements IContactService {
     @Override
     public Contact updateContact(Long id) {
         Contact contact = icontactRepo.findById(id).get();
-        contact.setStatus(true);
+        contact.setStatus(!contact.getStatus());
         icontactRepo.save(contact);
         return contact;
     }

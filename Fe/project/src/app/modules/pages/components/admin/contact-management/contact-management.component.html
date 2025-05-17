@@ -43,7 +43,7 @@
               (click)="getIdBlog(item)">
               <i class="fas fa-eye"></i> Xem
             </button>
-            <button [disabled]="item.status == true" (click)="getIdBlog(item)" class="btn btn-danger btn-sm"
+            <button (click)="getIdBlog(item)" class="btn btn-danger btn-sm"
               data-bs-toggle="modal" data-bs-target="#duyet">
               <i class="fas fa-check-circle"></i> Duyệt
             </button>
@@ -73,13 +73,13 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content" style="border-radius: 12px;">
       <div class="modal-header" style="background-color: #c2363f; color: white;">
-        <h5 class="modal-title" id="duyetLabel">Duyệt bài viết</h5>
+        <h5 class="modal-title" id="duyetLabel">Chỉnh sửa trạng thái</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"
           style="filter: invert(1);"></button>
       </div>
-      <form>
+      <form [formGroup]="contactUpdateForm" (ngSubmit)="updateStatus()">
         <div class="modal-body">
-          <p>Bạn có muốn duyệt bài viết này không?</p>
+          <p>Bạn có muốn chỉnh sửa trạng thái này không?</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="color: #c2363f;">Hủy</button>
@@ -109,7 +109,7 @@
           <p><strong>Số điện thoại: </strong> {{contactUpdateForm.value.user.phone}}</p>
           <p><strong>Ngày gửi: </strong> {{contactUpdateForm.value.dateSend | date: 'short'}}</p>
           <p><strong>Nội dung: </strong>
-            <textarea disabled id="content" formControlName="content" class="form-control" rows="5"
+            <textarea id="content" formControlName="content" class="form-control" rows="5"
               placeholder="Nhập nội dung liên hệ..."></textarea>
           </p>
         </form>

@@ -17,6 +17,7 @@ export class NavigationComponent implements OnInit {
   ngOnInit() {
     this.updateTime();
     this.intervalId = setInterval(() => this.updateTime(), 60000);
+    this.setupNavi();
   }
 
   updateTime() {
@@ -53,5 +54,16 @@ export class NavigationComponent implements OnInit {
     this.userService.logout();
   }
   
+
+  setupNavi(): boolean {
+    const roleData = localStorage.getItem('Role_Key');
+    const roles = JSON.parse(roleData);
+    for (let role of roles) {
+      if (role.authority === 'ADMIN') {
+        return true
+      }
+    }
+    return false;
+  }
 
 }

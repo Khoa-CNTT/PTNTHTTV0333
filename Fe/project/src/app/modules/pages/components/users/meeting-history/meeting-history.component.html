@@ -8,19 +8,44 @@
       </button>
       <h3 class="title"><strong>LỊCH SỬ CUỘC HỌP</strong></h3>
 
-      <!-- Đây là nơi hiển thị lịch sử cuộc họp -->
-      <div class="meeting-list">
-        <!-- Một ví dụ đơn lẻ về lịch sử cuộc họp -->
-        <div class="meeting-item">
-          <div class="meeting-info">
-            <p><strong>Tiêu đề:</strong> Cuộc họp dự án A</p>
-            <p><strong>Thời gian:</strong> 10/05/2025 - 10:00 AM</p>
-            <p><strong>Thành viên:</strong> Huy, Lan, Nam, Bình</p>
-          </div>
-          <button class="btn-view">Xem lại</button>
-        </div>
+      <!-- Ô tìm kiếm -->
+      <div class="search-bar">
+        <input type="text" class="search-input" placeholder="Tìm kiếm cuộc họp...">
+      </div>
 
-        <!-- Có thể lặp qua danh sách các cuộc họp ở đây -->
+      <!-- Bảng hiển thị cuộc họp -->
+      <div class="table-responsive">
+        <table class="meeting-table">
+          <thead>
+            <tr>
+              <th>Tiêu đề</th>
+              <th>Thời gian tham gia</th>
+              <th>Thời gian rời phòng</th>
+              <th>Chức năng</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Cuộc họp dự án A</td>
+              <td>10/05/2025 - 10:00 AM</td>
+              <td>10/05/2025 - 10:00 AM</td>
+              <td><button class="btn-view">Chi tiết</button></td>
+            </tr>
+            <tr>
+              <td>Họp nhóm B</td>
+              <td>11/05/2025 - 2:00 PM</td>
+              <td>11/05/2025 - 2:00 PM</td>
+              <td><button class="btn-view">Chi tiết</button></td>
+            </tr>
+             <tr>
+              <td>Họp nhóm B</td>
+              <td>11/05/2025 - 2:00 PM</td>
+              <td>11/05/2025 - 2:00 PM</td>
+              <td><button class="btn-view">Chi tiết</button></td>
+            </tr>
+            <!-- Thêm dòng khác tùy ý -->
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
