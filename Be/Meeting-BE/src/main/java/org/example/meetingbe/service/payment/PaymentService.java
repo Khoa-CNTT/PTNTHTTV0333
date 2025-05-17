@@ -29,8 +29,8 @@ public class PaymentService implements IPaymentService {
     }
 
     @Override
-    public Double getRevenueBetween(LocalDateTime start, LocalDateTime end) {
-        Double revenue = paymentRepo.getRevenueBetween(start, end);
+    public Double getTotalRevenueByYear(int year) {
+        Double revenue = paymentRepo.getTotalRevenueByYear(year);
         return revenue != null ? revenue : 0.0;
     }
     public List<MonthlyTotalDTO> getRevenueByYear(int year) {

@@ -9,7 +9,7 @@ import java.util.List;
 public interface IPaymentService {
     Double getTotalRevenue();
     Long countSuccessfulPayments(int year);
-    Double getRevenueBetween(LocalDateTime start, LocalDateTime end);
+    Double getTotalRevenueByYear(int year);
 
     Double getTotalSpentByUser(Long userId);
     List<MonthlyTotalDTO> getRevenueByYear(int year);
