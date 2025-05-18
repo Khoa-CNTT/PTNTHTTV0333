@@ -16,4 +16,8 @@ export class PaymentService {
   GetRegistrationYears(){
     return this.http.get(this.API_PAYMENT + '/years');
   }
+
+  GetRevenueBetween(year: number){
+    return this.http.get(this.API_PAYMENT + '/revenue/total?year=' + year);
+  }
 }

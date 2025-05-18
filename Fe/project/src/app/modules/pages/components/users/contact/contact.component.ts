@@ -50,19 +50,26 @@ export class ContactComponent implements OnInit {
 
   onSubmit() {
     this.isLoading = true;
-    if (this.contactForm.valid) {
-      const formValue = this.contactForm.value;
-      this.contactService.addNewContact(formValue).subscribe(() => {
-        this.isLoading = false;
-        this.toast.success('Cảm ơn bạn đã liên hệ với chúng tôi');
-        this.contactForm.reset();
-      }, error => {
-        this.toast.error('Hiện đang lỗi');
-      });
-    } else {
+    if (this.contactForm.value.user.firstName == null || this.contactForm.value.user.lastName == null || this.contactForm.value.user.phone == null) {
       this.isLoading = false;
-      this.toast.error('Vui lòng nhập đầy đủ thông tin');
+      this.toast.error('Vui lòng cập nhập đầy đủ thông tin cá nhân của bạn');
+      return;
+    } else {
+      if (this.contactForm.valid) {
+        const formValue = this.contactForm.value;
+        this.contactService.addNewContact(formValue).subscribe(() => {
+          this.isLoading = false;
+          this.toast.success('Cảm ơn bạn đã liên hệ với chúng tôi');
+          this.contactForm.reset();
+        }, error => {
+          this.toast.error('Hiện đang lỗi');
+        });
+      } else {
+        this.isLoading = false;
+        this.toast.error('Vui lòng nhập đầy đủ thông tin');
+      }
     }
+
   }
 
 }

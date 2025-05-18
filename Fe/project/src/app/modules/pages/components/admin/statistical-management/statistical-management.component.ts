@@ -19,6 +19,7 @@ export class StatisticalManagementComponent implements OnInit, AfterViewInit {
   private lineChart: Chart | null = null;
   private barChart: Chart | null = null;
   sumUser: number;
+  sumPayment: number;
 
 
 
@@ -67,6 +68,9 @@ export class StatisticalManagementComponent implements OnInit, AfterViewInit {
     this.userService.countTotalUsers(year).subscribe(data => {
       this.sumUser = data;
     })
+    this.paymentService.GetRevenueBetween(year).subscribe((data: number) => {
+      this.sumPayment = data;
+    })
   }
 
   private setupYearSelectorListener(): void {
@@ -82,53 +86,53 @@ export class StatisticalManagementComponent implements OnInit, AfterViewInit {
   }
 
   private renderLineChart(): void {
-  const labels = this.months.map(month => `Tháng ${month}`);
-  const realData = this.chartLineData.map(item => item.total);
+    const labels = this.months.map(month => `Tháng ${month}`);
+    const realData = this.chartLineData.map(item => item.total);
 
-  this.lineChart = new Chart('LinechartTotal', {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [{
-        label: 'Doanh thu',
-        data: realData,
-        backgroundColor: '#c2363f',
-        borderColor: '#c2363f',
-        borderWidth: 2,
-        tension: 0.1,
-        fill: false,
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        title: {
-          display: true,
-          text: `Biểu đồ doanh thu ${this.selectedYear}`,
-          font: { size: 20 }
-        },
-        tooltip: {
-          callbacks: {
-            label: (context: any) => {
-              const value = context.parsed.y;
-              return `Doanh thu: ${value.toLocaleString('vi-VN')} VNĐ`;
+    this.lineChart = new Chart('LinechartTotal', {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Doanh thu',
+          data: realData,
+          backgroundColor: '#c2363f',
+          borderColor: '#c2363f',
+          borderWidth: 2,
+          tension: 0.1,
+          fill: false,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: `Biểu đồ doanh thu ${this.selectedYear}`,
+            font: { size: 20 }
+          },
+          tooltip: {
+            callbacks: {
+              label: (context: any) => {
+                const value = context.parsed.y;
+                return `Doanh thu: ${value.toLocaleString('vi-VN')} VNĐ`;
+              }
             }
           }
-        }
-      },
-      scales: {
-        y: {
-          beginAtZero: true,
-          ticks: {
-            callback: function(value: any) {
-              return value.toLocaleString('vi-VN') + ' VNĐ';
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function (value: any) {
+                return value.toLocaleString('vi-VN') + ' VNĐ';
+              }
             }
           }
         }
       }
-    }
-  });
-}
+    });
+  }
 
 
 

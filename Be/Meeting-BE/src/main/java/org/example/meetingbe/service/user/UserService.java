@@ -159,7 +159,19 @@ public class UserService implements IUserService {
     @Override
     public User updateProfile(Long id,UserEditTO userEditTO) {
         if (userRepo.existsById(id)) {
-            return userRepo.save(userEditToObject(userEditTO));
+            User user = userRepo.findById(id).get();
+            user.setId(userEditTO.getId());
+            user.setEmail(userEditTO.getEmail());
+            user.setFirstName(userEditTO.getFirstName());
+            user.setLastName(userEditTO.getLastName());
+            user.setUserName(userEditTO.getUserName());
+            user.setVip(userEditTO.getVip());
+            user.setAvatar(userEditTO.getAvatar());
+            user.setPhone(userEditTO.getPhone());
+            user.setAddress(userEditTO.getAddress());
+            user.setGender(userEditTO.getGender());
+            user.setBirthday(userEditTO.getBirthday());
+            return userRepo.save(user);
         } else {
             throw new EntityNotFoundException("User with id " + id + " not found");
         }
