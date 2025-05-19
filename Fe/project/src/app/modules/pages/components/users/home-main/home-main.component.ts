@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { JwtService } from 'src/app/services/jwt.service';
 import { MeetingService } from 'src/app/services/meeting.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-home-main',
@@ -11,11 +12,13 @@ import { MeetingService } from 'src/app/services/meeting.service';
 })
 export class HomeMainComponent {
   meetingCode: string = '';
+  hostId: any
 
   constructor(
     private meetingService: MeetingService,
     private router: Router,
     private toastr: ToastrService,
+    private userSer: UserService,
     private jwtService: JwtService
   ) { }
 
@@ -24,10 +27,14 @@ export class HomeMainComponent {
   }
 
   createRoom() {
-    this.meetingService.createRoom().subscribe((meeting) => {
-      console.log('Meeting created:', meeting);
-      this.router.navigate([`pages/components/meeting-room/${meeting.code}`]);
-    });
+    this.userSer.getByUserName().subscribe((user) => {
+      this.hostId = user.id;
+      this.meetingService.createRoom(this.hostId).subscribe((meeting) => {
+        this.router.navigate([`pages/components/meeting-room/${meeting.code}`]);
+      }, (error) => {
+        this.toastr.error('Không thể tạo phòng họp!', 'Error');
+      });
+    })
   }
 
   joinMeeting() {
@@ -39,8 +46,8 @@ export class HomeMainComponent {
     }
   }
 
-  Load(){
-    if(this.jwtService.verifyToken()){
+  Load() {
+    if (this.jwtService.verifyToken()) {
       this.router.navigateByUrl("/pages/components/home-main");
     }
   }

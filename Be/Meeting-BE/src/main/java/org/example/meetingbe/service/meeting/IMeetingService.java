@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public interface IMeetingService {
-    MeetingDto createRoom();
+    MeetingDto createRoom(Long hostId);
     MeetingDto getRoom(String meetingId);
 
     void addParticipant(String meetingId, Long userId) ;
