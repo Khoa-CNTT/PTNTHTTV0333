@@ -33,7 +33,6 @@ public class MeetingService implements IMeetingService {
         meeting.setCreateAt(LocalDateTime.now());
         meetings.put(meeting.getCode(), meeting);
         meetings.put(meeting.getCreateAt().toString(), meeting);
-
         Meeting mt1 = convertToEntity(meeting);
         meetingRepo.save(mt1);
         return meeting;

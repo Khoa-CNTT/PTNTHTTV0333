@@ -1,0 +1,91 @@
+.profile-container {
+    width: 100%;
+    height: auto;
+}
+
+.profile-wrapper {
+    max-width: 1000px;
+    margin: 0 auto 100px;
+    padding: 20px;
+}
+
+.profile-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    transition: 0.3s;
+}
+
+.profile-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background-color: transparent;
+    color: #c2363f;
+    border: 2px solid #c2363f;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 24px;
+}
+
+.back-btn:hover {
+    background-color: #c2363f;
+    color: white;
+}
+
+
+.profile-title {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+
+.benefit-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+    font-size: 16px;
+}
+
+.benefit-table th,
+.benefit-table td {
+    border: 1px solid #eee;
+    padding: 12px 16px;
+    text-align: left;
+}
+
+.benefit-table thead {
+    background-color: #f7f7f7;
+    color: #333;
+}
+
+.benefit-table .vip-header {
+    color: #c2363f;
+}
+
+.upgrade-btn {
+    background-color: #c2363f;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.upgrade-btn:hover {
+    background-color: #a62830;
+}

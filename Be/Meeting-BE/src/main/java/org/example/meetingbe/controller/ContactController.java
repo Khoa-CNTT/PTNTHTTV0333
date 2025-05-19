@@ -33,7 +33,7 @@ public class ContactController {
     public ResponseEntity<Page<Contact>> getPageContact(
             @RequestParam(name = "page",defaultValue = "0") int page,
             @RequestParam(name = "size",defaultValue = "5") int size,
-            @RequestParam(name = "sort",defaultValue = "dateSend,asc") String[] sort
+            @RequestParam(name = "sort",defaultValue = "dateSend,desc") String[] sort
     ) {
         Sort.Direction direction = Sort.Direction.fromString(sort[1]);
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort[0]));
@@ -45,7 +45,7 @@ public class ContactController {
     public ResponseEntity<Page<Contact>> getPageContactTrue(
             @RequestParam(name = "page",defaultValue = "0") int page,
             @RequestParam(name = "size",defaultValue = "5") int size,
-            @RequestParam(name = "sort",defaultValue = "dateSend,asc") String[] sort
+            @RequestParam(name = "sort",defaultValue = "dateSend,desc") String[] sort
     ) {
         Sort.Direction direction = Sort.Direction.fromString(sort[1]);
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort[0]));
@@ -57,7 +57,7 @@ public class ContactController {
     public ResponseEntity<Page<Contact>> getPageContactFalse(
             @RequestParam(name = "page",defaultValue = "0") int page,
             @RequestParam(name = "size",defaultValue = "5") int size,
-            @RequestParam(name = "sort",defaultValue = "dateSend,asc") String[] sort
+            @RequestParam(name = "sort",defaultValue = "dateSend,desc") String[] sort
     ) {
         Sort.Direction direction = Sort.Direction.fromString(sort[1]);
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort[0]));
