@@ -2,15 +2,21 @@ package org.example.meetingbe.service.meeting;
 
 import org.example.meetingbe.dto.MeetingDto;
 import org.example.meetingbe.model.Meeting;
+import org.example.meetingbe.model.User;
 import org.example.meetingbe.model.Participants;
 import org.example.meetingbe.model.User;
 import org.example.meetingbe.repository.IMeetingRepo;
+import org.example.meetingbe.repository.IUserRepo;
 import org.example.meetingbe.repository.IParticipantsRepo;
 import org.example.meetingbe.repository.IUserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,18 +30,37 @@ public class MeetingService implements IMeetingService {
     @Autowired
     private IUserRepo userRepo;
 
+    @Autowired
+    private IUserRepo iUserRepo;
+
     private final Map<String, MeetingDto> meetings = new HashMap<>();
     @Override
-    public MeetingDto createRoom() {
-        MeetingDto meeting = new MeetingDto();
-
-        meeting.setCode(UUID.randomUUID().toString());
+    public MeetingDto createRoom(Long hostId) {
+        Meeting meeting = new Meeting();
+        meeting.setCode(UUID.randomUUID().toString().substring(0, 12));
+        meeting.setTitle("Untitled Meeting");
         meeting.setCreateAt(LocalDateTime.now());
-        meetings.put(meeting.getCode(), meeting);
-        meetings.put(meeting.getCreateAt().toString(), meeting);
-        Meeting mt1 = convertToEntity(meeting);
-        meetingRepo.save(mt1);
-        return meeting;
+        meeting.setStartTime(LocalDateTime.now());
+
+        // Gán host (người tạo phòng)
+        User host = iUserRepo.findById(hostId)
+                .orElseThrow(() -> new RuntimeException("Host not found"));
+        meeting.setUser(host);
+
+        // Lưu vào cơ sở dữ liệu
+        Meeting savedMeeting = meetingRepo.save(meeting);
+
+        // Chuyển entity sang DTO
+        MeetingDto meetingDto = new MeetingDto();
+        meetingDto.setId(savedMeeting.getId());
+        meetingDto.setCode(savedMeeting.getCode());
+        meetingDto.setTitle(savedMeeting.getTitle());
+        meetingDto.setStartTime(savedMeeting.getStartTime());
+        meetingDto.setEndTime(savedMeeting.getEndTime());
+        meetingDto.setCreateAt(savedMeeting.getCreateAt());
+        meetingDto.setHostId(savedMeeting.getUser().getId());
+
+        return meetingDto;
     }
     @Override
     public MeetingDto getRoom(String meetingId) {

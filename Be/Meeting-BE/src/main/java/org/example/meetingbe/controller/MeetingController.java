@@ -7,6 +7,8 @@ import org.example.meetingbe.service.meeting.MeetingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 import java.time.LocalDateTime;
 
 @RestController
@@ -19,9 +21,10 @@ public class MeetingController {
     @Autowired
     private IParticipantsRepo participantsRepo;
 
-    @PostMapping
-    public MeetingDto createRoom() {
-        return meetingService.createRoom();
+    @PostMapping("/meetings")
+    public MeetingDto createRoom(@RequestBody Map<String, Long> request) {
+        Long hostId = request.get("hostId"); // Lấy hostId từ body request
+        return meetingService.createRoom(hostId);
     }
 
     @GetMapping("/{roomId}")
