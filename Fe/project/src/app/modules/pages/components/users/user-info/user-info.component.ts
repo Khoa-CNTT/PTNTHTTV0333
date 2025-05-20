@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -16,20 +16,23 @@ import { finalize } from 'rxjs/operators';
 export class UserInfoComponent implements OnInit {
   userForm: FormGroup;
   selectedImage: any = null;
-  avatar: string = null;
+  avatar: string;
   isLoading = false;
   user: UserEditDto;
 
   constructor(
     private formBuilder: FormBuilder,
     private userService: UserService,
+    private renderer: Renderer2,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private toast: ToastrService,
     private storage: AngularFireStorage
-  ) {}
+  ) { }
 
   ngOnInit(): void {
+
+
     this.userService.getByUserName().subscribe(data => {
       this.user = data;
       this.avatar = this.user.avatar;
@@ -43,39 +46,33 @@ export class UserInfoComponent implements OnInit {
         gender: [this.user.gender, Validators.required],
         phone: [this.user.phone, [Validators.pattern(/^\d{10,11}$/)]],
         address: [this.user.address],
-        birthday: [this.user.birthday]
+        birthday: [this.user.birthday],
+        avatar: [this.user.avatar],
       });
     });
+
+    const script = this.renderer.createElement('script');
+    script.src = 'assets/js/imgFireBase.js';
+    this.renderer.appendChild(document.body, script);
   }
 
   edit() {
     const updatedUser = this.userForm.value;
     const userId = this.user.id;
 
-    if (this.userForm.dirty || this.selectedImage) {
+    if (this.userForm.dirty && this.userForm.valid) {
       if (this.selectedImage) {
         const nameImg = this.getCurrentDateTime() + this.selectedImage.name;
         const fileRef = this.storage.ref(nameImg);
         this.isLoading = true;
         this.storage.upload(nameImg, this.selectedImage).snapshotChanges().pipe(
           finalize(() => {
-            fileRef.getDownloadURL().subscribe({
-              next: (url) => {
-                updatedUser.avatar = url;
-                this.updateUser(userId, updatedUser);
-              },
-              error: (err) => {
-                this.toast.error('Tải ảnh lên thất bại.', 'Lỗi');
-                this.isLoading = false;
-              }
+            fileRef.getDownloadURL().subscribe((url) => {
+              updatedUser.avatar = url;
+              this.updateUser(userId, updatedUser);
             });
           })
-        ).subscribe({
-          error: (err) => {
-            this.toast.error('Tải ảnh lên thất bại.', 'Lỗi');
-            this.isLoading = false;
-          }
-        });
+        ).subscribe();
       } else {
         this.isLoading = true;
         if (JSON.stringify(updatedUser) === JSON.stringify(this.user)) {
@@ -83,47 +80,37 @@ export class UserInfoComponent implements OnInit {
           this.isLoading = false;
           return;
         }
-        updatedUser.avatar = this.user.avatar;
-        this.updateUser(updatedUser,userId);
+        this.updateUser(userId, updatedUser);
       }
     } else {
-      this.toast.warning('Vui lòng điền thông tin cần chỉnh sửa hoặc chọn ảnh.', 'Message');
+      this.toast.warning('Vui lòng điền thông tin cần chỉnh sửa.', 'Message');
     }
   }
 
   private updateUser(userId: number, updatedUser: any) {
-    this.userService.editUser(userId, updatedUser).subscribe({
-      next: (data) => {
-        this.toast.success('Chỉnh sửa thành công!', 'Message');
+    console.log(updatedUser);
+    this.userService.editUser(userId, updatedUser,).subscribe(
+      (data) => {
         this.isLoading = false;
+        this.toast.success('Chỉnh sửa thành công.', 'Message');
       },
-      error: (error) => {
+      (error) => {
         this.toast.error('Chỉnh sửa thất bại.', 'Message');
         this.isLoading = false;
       }
-    });
+    );
   }
 
+
+
+
   showPreview(event: any) {
-    const file = event.target.files[0];
-    const allowedTypes = ['image/png', 'image/jpeg', 'image/gif'];
-    const maxSize = 5 * 1024 * 1024; // 5MB
-    if (file) {
-      if (!allowedTypes.includes(file.type)) {
-        this.toast.error('Vui lòng chọn file ảnh (PNG, JPG, GIF).', 'Lỗi');
-        return;
-      }
-      if (file.size > maxSize) {
-        this.toast.error('Kích thước ảnh không được vượt quá 5MB.', 'Lỗi');
-        return;
-      }
-      this.selectedImage = file;
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (e: any) => {
-        this.avatar = e.target.result;
-      };
-    }
+    this.selectedImage = event.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(this.selectedImage);
+    reader.onload = (e: any) => {
+      this.avatar = e.target.result;
+    };
   }
 
   getCurrentDateTime(): string {

@@ -16,7 +16,11 @@
           <textarea id="content" formControlName="content" class="form-control" rows="5"
             placeholder="Nhập nội dung liên hệ..."></textarea>
         </div>
-        <button class="submit-btn" type="submit" [disabled]="contactForm.invalid">Gửi liên hệ</button>
+        <button class="submit-btn" type="submit" [disabled]="isLoading">
+          <span *ngIf="!isLoading">Gửi liên hệ</span>
+          <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          <span *ngIf="isLoading" class="ms-2">Đang cập nhập...</span>
+        </button>
       </form>
     </div>
 

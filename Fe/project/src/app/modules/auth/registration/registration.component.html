@@ -6,7 +6,7 @@
         <div class="form-container">
             <a routerLink="/auth/login" class="back-link">
                 <i class="fas fa-arrow-left"></i> Đăng nhập
-              </a>
+            </a>
             <div class="form-header">
                 <i class="fas fa-video"></i>
                 <h1>Đăng ký</h1>
@@ -20,12 +20,17 @@
                     <input type="email" placeholder="Email" formControlName="email" />
                 </div>
                 <div class="form-group">
-                    <input type="password" placeholder="Mật khẩu" formControlName="password"/>
+                    <input type="password" placeholder="Mật khẩu" formControlName="password" />
                 </div>
                 <div class="form-group">
                     <input type="password" placeholder="Nhập lại mật khẩu" formControlName="rePassword" />
                 </div>
-                <button type="submit" class="submit-btn">Đăng ký</button>
+                <button class="submit-btn" type="submit" [disabled]="isLoading">
+                    <span *ngIf="!isLoading">Đăng ký</span>
+                    <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                    <span *ngIf="isLoading" class="ms-2">Đang cập nhập...</span>
+                </button>
                 <button class="google-btn"><i class="fab fa-google"></i>Đăng nhập bằng Google</button>
             </form>
         </div>

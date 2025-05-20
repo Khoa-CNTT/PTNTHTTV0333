@@ -1,6 +1,7 @@
 package org.example.meetingbe.model;
 
 import jakarta.persistence.*;
+import org.example.meetingbe.dto.MeetingDto;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
@@ -29,6 +30,8 @@ public class Meeting {
 
     public Meeting() {
     }
+
+
 
     public Long getId() {
         return id;

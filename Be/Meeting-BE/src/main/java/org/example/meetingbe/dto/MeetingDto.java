@@ -15,9 +15,8 @@ public class MeetingDto {
     private Boolean isActive;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private LocalDateTime createAt;
-
     private Long hostId;
+    private LocalDateTime createAt = LocalDateTime.now();
     private Set<Long> user = new HashSet<>();
 
     public MeetingDto() {

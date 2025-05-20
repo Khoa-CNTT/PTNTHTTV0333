@@ -13,6 +13,8 @@ declare const google: any;
 export class LoginComponent implements OnInit {
 
   formLogin: FormGroup;
+  isLoading = false;
+
 
   constructor(private userService: UserService, private jwtService: JwtService, private router: Router, private http: HttpClient, private ngZone: NgZone) {
     this.formLogin = new FormGroup({
@@ -61,12 +63,14 @@ export class LoginComponent implements OnInit {
 
 
   loginSubmit() {
+    this.isLoading = true;
     this.userService.login(this.formLogin.value).subscribe(next => {
       if (next.token != undefined) {
         this.jwtService.setToken(next.token);
         this.jwtService.setRoles(next.roles);
         this.jwtService.setName(next.name);
         this.jwtService.setDate(next.createdTime);
+        this.isLoading = false;
         this.router.navigateByUrl("/pages/components/home-main");
       }
     })
@@ -90,8 +94,8 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  Load(){
-    if(this.jwtService.verifyToken()){
+  Load() {
+    if (this.jwtService.verifyToken()) {
       this.router.navigateByUrl("/pages/components/home-main");
     }
   }

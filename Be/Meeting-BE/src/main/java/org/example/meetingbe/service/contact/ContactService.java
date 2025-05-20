@@ -42,9 +42,32 @@ public class ContactService implements IContactService {
     @Override
     public Contact updateContact(Long id) {
         Contact contact = icontactRepo.findById(id).get();
-        contact.setStatus(true);
+        contact.setStatus(!contact.getStatus());
         icontactRepo.save(contact);
         return contact;
+    }
+    public Page<Contact> getAllByStatusTrue(Pageable pageable) {
+        Page<Contact> contacts = icontactRepo.getAllByStatusTrue(pageable);
+        return contacts;
+    }
+
+    @Override
+    public Page<Contact> getAllByStatusFalse(Pageable pageable) {
+        Page<Contact> contacts = icontactRepo.getAllByStatusFalse(pageable);
+        return contacts;
+    }
+
+    @Override
+    public Contact updateContact(@Valid ContactDto updatedContact) {
+        Long id = updatedContact.getId();
+       if(icontactRepo.existsById(id)){
+          Contact contact = icontactRepo.findById(id).get();
+          contact.setStatus(updatedContact.getStatus());
+          return icontactRepo.save(contact);
+    }  else {
+           throw new EntityNotFoundException("Contact with id " + id + " not found");
+       }
+
     }
 
     @Override

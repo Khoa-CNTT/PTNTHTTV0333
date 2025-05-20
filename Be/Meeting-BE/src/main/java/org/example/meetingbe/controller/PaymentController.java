@@ -26,13 +26,11 @@ public class PaymentController {
     public int countSuccessfulPayments(@RequestParam("Year") int year){
         return paymentService.countSuccessfulPayments(year).intValue();
     }
-    @GetMapping("/revenue/between")//Tong doanh thu tu ngay start - end
-    public Double getRevenueBetween(
-            @RequestParam @DateTimeFormat (iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
-        return paymentService.getRevenueBetween(start, end);
+    @GetMapping("/revenue/total")//Tong doanh thu theo nam
+    public Double getRevenueBetween(@RequestParam("year") int year) {
+        return paymentService.getTotalRevenueByYear(year);
     }
-    @GetMapping("/revenue/getByYear")
+    @GetMapping("/revenue/getByYear") // danh sach thanh toan theo nam
     public List<MonthlyTotalDTO> getRevenueByYear(@RequestParam(name = "year") int year) {
         return paymentService.getRevenueByYear(year);
     }
