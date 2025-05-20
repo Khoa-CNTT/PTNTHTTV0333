@@ -32,7 +32,7 @@ export class UserService {
     return this.httpClient.get(this.API_URL + 'monthly-registrations/' + year);
   }
 
-  register(user: any): Observable<any> {
+  register(user: any): Observable<any>{
     return this.httpClient.post<any>(this.API_URL + "register", user, this.httpOptions);
   }
 
@@ -61,7 +61,7 @@ export class UserService {
     return this.httpClient.get(this.API_URL + 'count?year=' + year);
   }
 
-  
+
   getAllUser(page: number, pageSize: number): Observable<Contact[]> {
     const users = `${this.API_URL}getPageUser?page=${page}&size=${pageSize}`;
     return this.httpClient.get<User[]>(users)
