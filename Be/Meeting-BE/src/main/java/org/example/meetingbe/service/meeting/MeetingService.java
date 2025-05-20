@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class MeetingService implements IMeetingService {
+
     @Autowired
     private IMeetingRepo meetingRepo;
     @Autowired
@@ -29,10 +30,8 @@ public class MeetingService implements IMeetingService {
     @Autowired
     private IUserRepo userRepo;
 
-    @Autowired
-    private IUserRepo iUserRepo;
-
     private final Map<String, MeetingDto> meetings = new HashMap<>();
+
     @Override
     public MeetingDto createRoom(Long hostId) {
         Meeting meeting = new Meeting();
@@ -41,15 +40,12 @@ public class MeetingService implements IMeetingService {
         meeting.setCreateAt(LocalDateTime.now());
         meeting.setStartTime(LocalDateTime.now());
 
-        // Gán host (người tạo phòng)
-        User host = iUserRepo.findById(hostId)
+        User host = userRepo.findById(hostId)
                 .orElseThrow(() -> new RuntimeException("Host not found"));
         meeting.setUser(host);
 
-        // Lưu vào cơ sở dữ liệu
         Meeting savedMeeting = meetingRepo.save(meeting);
 
-        // Chuyển entity sang DTO
         MeetingDto meetingDto = new MeetingDto();
         meetingDto.setId(savedMeeting.getId());
         meetingDto.setCode(savedMeeting.getCode());
@@ -59,40 +55,53 @@ public class MeetingService implements IMeetingService {
         meetingDto.setCreateAt(savedMeeting.getCreateAt());
         meetingDto.setHostId(savedMeeting.getUser().getId());
 
-        return meetingDto;
+        meetings.put(savedMeeting.getCode(), meetingDto);
 
+        // Thêm host vào danh sách người tham gia
+        addParticipant(savedMeeting.getCode(), hostId);
+
+        return meetingDto;
     }
+
     @Override
     public MeetingDto getRoom(String meetingId) {
         return meetings.get(meetingId);
     }
+
     @Override
     public void addParticipant(String meetingId, Long userId) {
-        MeetingDto meeting = meetings.get(meetingId);
-        if (meeting != null) {
-            meeting.getUser().add(userId);
-//            Optional<Meeting> mt = meetingRepo.findById(meeting.getId());
-//            Participants p = new Participants(LocalDateTime.now(),null,mt.get(),userRepo.findById(userId).get());
-//            participantsRepo.save(p);
+        MeetingDto meetingDto = meetings.get(meetingId);
+        if (meetingDto == null) {
+            throw new RuntimeException("Meeting not found");
+        }
+
+        Meeting meeting = meetingRepo.findByCode(meetingId)
+                .orElseThrow(() -> new RuntimeException("Meeting not found in database"));
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Kiểm tra xem người dùng đã tham gia chưa
+        boolean alreadyParticipant = participantsRepo.findByMeetingAndUser(meeting, user).isPresent();
+        if (!alreadyParticipant) {
+            Participants participant = new Participants();
+            participant.setJoinAt(LocalDateTime.now());
+            participant.setMeeting(meeting);
+            participant.setUser(user);
+            participantsRepo.save(participant);
+
+            meetingDto.getUser().add(userId);
         }
     }
 
+    public void updateParticipantLeft(String meetingId, Long userId) {
+        Meeting meeting = meetingRepo.findByCode(meetingId)
+                .orElseThrow(() -> new RuntimeException("Meeting not found"));
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-    public Meeting convertToEntity(MeetingDto dto) {
-        Set<User> users = dto.getUser().stream()
-                .map(id -> userRepo.findById(id)
-                        .orElseThrow(() -> new RuntimeException("User not found: " + id)))
-                .collect(Collectors.toSet());
-
-        Meeting meeting = new Meeting();
-        meeting.setId(dto.getId());
-        meeting.setCode(dto.getCode());
-        meeting.setTitle(dto.getTitle());
-        meeting.setActive(dto.getActive());
-        meeting.setStartTime(dto.getStartTime());
-        meeting.setEndTime(dto.getEndTime());
-        meeting.setCreateAt(dto.getCreateAt());
-        return meeting;
+        participantsRepo.findByMeetingAndUser(meeting, user).ifPresent(participant -> {
+            participant.setLeftAt(LocalDateTime.now());
+            participantsRepo.save(participant);
+        });
     }
-
 }

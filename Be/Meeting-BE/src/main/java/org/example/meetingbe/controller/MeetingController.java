@@ -17,26 +17,20 @@ public class MeetingController {
 
     @Autowired
     private MeetingService meetingService;
-    @Autowired
-    private IParticipantsRepo participantsRepo;
 
     @PostMapping("/meetings")
     public MeetingDto createRoom(@RequestBody Map<String, Long> request) {
-        Long hostId = request.get("hostId"); // Lấy hostId từ body request
+        Long hostId = request.get("hostId");
         return meetingService.createRoom(hostId);
     }
 
     @GetMapping("/{roomId}")
     public MeetingDto getRoom(@PathVariable String roomId) {
-        Participants p = new Participants(LocalDateTime.now(),null,null,null);
-        participantsRepo.save(p);
         return meetingService.getRoom(roomId);
     }
 
     @PostMapping("/{roomId}/join")
     public void joinRoom(@PathVariable String roomId, @RequestBody Long userId) {
         meetingService.addParticipant(roomId, userId);
-        Participants p = new Participants(LocalDateTime.now(),null,null,null);
-            participantsRepo.save(p);
     }
 }

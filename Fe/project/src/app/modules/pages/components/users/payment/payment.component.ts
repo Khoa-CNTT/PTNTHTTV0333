@@ -38,8 +38,7 @@ export class PaymentComponent implements OnInit {
   }
 
   payment() {
-    console.log("pay");
-    this.paymentService.submitPay(1000000,"abc").subscribe(next => {
+    this.paymentService.submitPay2(1000000,"abc").subscribe(next => {
       this.url = next;
       console.log(this.url);
       const redirectUrl = next.redirectUrl;
