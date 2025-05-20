@@ -809,6 +809,13 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
       );
       console.log('Sent participant-left message');
     }
+    this.meetingService.leaveRoom(this.participantId,this.roomId).subscribe({
+      next: () => console.log('set paticipant time leave OK'),
+      error: (err) => {
+        console.error('user : '+ this.participantId+'Error set paticipant time leave:', err);
+        this.cdr.detectChanges();
+      },
+    });;
 
     this.stopScreenShare();
     this.localStream?.getTracks().forEach((track) => track.stop());

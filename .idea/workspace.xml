@@ -5,16 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ca89b201-fc21-4221-8a94-ef6bb5563224" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/config/WebConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/config/WebSocketHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/config/WebSocketHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/controller/ParticipantsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/controller/ParticipantsController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/model/Meeting.java" beforeDir="false" afterPath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/model/Meeting.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/repository/IMeetingRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/repository/IMeetingRepo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Be/Meeting-BE/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/Be/Meeting-BE/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Fe/project/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Fe/project/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Fe/project/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Fe/project/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Fe/project/src/app/modules/pages/components/users/meeting-room/meeting-room.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Fe/project/src/app/modules/pages/components/users/meeting-room/meeting-room.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Fe/project/src/app/services/participants.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Fe/project/src/app/services/participants.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Fe/project/src/app/services/meeting.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Fe/project/src/app/services/meeting.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +52,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;Spring Boot.MeetingBeApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Merge-Dien-Bao-2&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;DienTT-V4&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -104,10 +99,22 @@
       <workItem from="1746436067020" duration="301000" />
       <workItem from="1747033739061" duration="468000" />
       <workItem from="1747138080280" duration="921000" />
+      <workItem from="1747762344234" duration="3263000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

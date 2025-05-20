@@ -2,8 +2,11 @@ package org.example.meetingbe.config;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.meetingbe.repository.IUserRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -12,12 +15,14 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
+@Component
 public class WebSocketHandler extends TextWebSocketHandler {
     private static final Logger logger = LoggerFactory.getLogger(WebSocketHandler.class.getName());
     private final Map<String, Map<String, WebSocketSession>> roomSessions = new ConcurrentHashMap<>();
     private final Map<String, String> sessionToParticipantId = new ConcurrentHashMap<>();
     private final ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    IUserRepo userRepo;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -177,6 +182,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
                     put("senderId", participantId);
                     put("type", "participant-left");
                 }});
+
+
                 for (WebSocketSession s : sessionsInRoom.values()) {
                     if (s.isOpen()) {
                         s.sendMessage(new TextMessage(payload));
