@@ -22,8 +22,8 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.Load();
     this.loadGoogleScript();
+    this.Load();
   }
   loadGoogleScript(): void {
     const scriptId = 'google-client-script';
@@ -50,10 +50,17 @@ export class LoginComponent implements OnInit {
         callback: (response: any) => this.handleGoogleLogin(response.credential)
       });
 
-      google.accounts.id.renderButton(
-        document.getElementById('google-btn'),
-        { theme: 'outline', size: 'large' }
-      );
+      setTimeout(() => {
+        google.accounts.id.renderButton(
+          document.getElementById('google-btn'),
+          { theme: 'outline', size: 'large' }
+        );
+      }, 0);
+
+      // google.accounts.id.renderButton(
+      //   document.getElementById('google-btn'),
+      //   { theme: 'outline', size: 'large' }
+      // );
     } else {
       console.error('Google object is not defined yet');
     }

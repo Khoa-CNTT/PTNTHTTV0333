@@ -1,4 +1,7 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { PaymentService } from 'src/app/services/payment.service';
 
 @Component({
   selector: 'app-payment',
@@ -6,10 +9,28 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./payment.component.css']
 })
 export class PaymentComponent implements OnInit {
+  success: boolean | null = null;
 
-  constructor() { }
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-  }
+    const params = this.route.snapshot.queryParams;
 
+    const httpParams = new HttpParams({ fromObject: params });
+
+    this.http.get<boolean>('http://localhost:8080/api/payment/vnpay-payment', { params: httpParams })
+      .subscribe(
+        result => {
+          this.success = result;
+          // Redirect sau vài  setTimeout(() => this.router.navigateByUrl('/pages/components/home-main'), 3000);
+        },
+        error => {
+          this.success = false;
+        }
+      );
+  }
 }
