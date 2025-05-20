@@ -11,7 +11,7 @@ public class Meeting {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(columnDefinition = "varchar(12)")
+    @Column(columnDefinition = "varchar(50)")
     private String code;
     @Column(columnDefinition = "varchar(50)")
     private String title;

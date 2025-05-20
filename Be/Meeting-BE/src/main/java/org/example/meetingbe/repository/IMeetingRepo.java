@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IMeetingRepo extends JpaRepository<Meeting, Long> {
+    Meeting findByCode(String code);
 }
