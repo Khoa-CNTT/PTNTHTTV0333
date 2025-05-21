@@ -137,3 +137,34 @@
     text-align: center;
   }
 }
+
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination-btn {
+  padding: 10px 15px;
+  margin: 0 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+
+.pagination-btn.active {
+  background-color: #c2363f;
+  color: white;
+  border-color: #c2363f;
+}
+
+.pagination-btn:hover:not(.active):not([disabled]) {
+  background-color: #eaeaea;
+}
+
+.pagination-btn[disabled] {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
