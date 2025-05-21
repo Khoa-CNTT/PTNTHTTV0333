@@ -2,7 +2,6 @@ package org.example.meetingbe.config;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.meetingbe.service.meeting.MeetingService;
 import org.example.meetingbe.repository.IUserRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +15,6 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 @Component
 public class WebSocketHandler extends TextWebSocketHandler {
     private static final Logger logger = LoggerFactory.getLogger(WebSocketHandler.class.getName());
@@ -25,7 +23,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
     private final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
     IUserRepo userRepo;
-
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -58,6 +55,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                 String chatMessage = (String) signal.get("message");
                 String sendAt = (String) signal.get("sendAt");
 
+
                 // Broadcast message to all participants in the room
                 roomSessions.getOrDefault(roomId, new ConcurrentHashMap<>()).forEach((participantId, participantSession) -> {
                     if (participantSession.isOpen() && !participantSession.getId().equals(session.getId())) {
@@ -70,6 +68,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                     }
                 });
             }
+
 
             if (roomId == null || senderId == null || type == null) {
                 logger.warn("Missing required fields in signal: " + payload);
@@ -191,8 +190,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
                         logger.info("Notified participant-left to: " + sessionToParticipantId.get(s.getId()));
                     }
                 }
-
             }
+
 
             logger.info("Connection closed: sessionId=" + session.getId() + ", participantId=" + participantId + ", status=" + status);
         }

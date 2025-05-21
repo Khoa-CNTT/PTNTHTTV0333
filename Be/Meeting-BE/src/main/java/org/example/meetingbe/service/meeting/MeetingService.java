@@ -33,10 +33,10 @@ public class MeetingService implements IMeetingService {
     private final Map<String, MeetingDto> meetings = new HashMap<>();
 
     @Override
-    public MeetingDto createRoom(Long hostId) {
+    public MeetingDto createRoom(Long hostId, String title) {
         Meeting meeting = new Meeting();
         meeting.setCode(UUID.randomUUID().toString().substring(0, 12));
-        meeting.setTitle("Untitled Meeting");
+        meeting.setTitle(title);
         meeting.setCreateAt(LocalDateTime.now());
         meeting.setStartTime(LocalDateTime.now());
 

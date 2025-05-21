@@ -2,7 +2,7 @@ export interface User {
     id?: number;
     email?: string;
     password?: string;
-    firstName?: Boolean;
+    firstName?: string;
     lastName?: string;
     userName?: string;
     isVip?: Boolean;

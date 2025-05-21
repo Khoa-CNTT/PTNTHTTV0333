@@ -19,11 +19,12 @@ public class MeetingController {
     private MeetingService meetingService;
 
     @PostMapping("/meetings")
-    public MeetingDto createRoom(@RequestBody Map<String, Long> request) {
-        Long hostId = request.get("hostId");
-        
-        return meetingService.createRoom(hostId);
+    public MeetingDto createRoom(@RequestBody Map<String, Object> request) {
+        Long hostId = Long.valueOf(request.get("hostId").toString());
+        String title = request.get("title").toString();
+        return meetingService.createRoom(hostId, title);
     }
+
 
     @GetMapping("/{roomId}")
     public MeetingDto getRoom(@PathVariable String roomId) {
