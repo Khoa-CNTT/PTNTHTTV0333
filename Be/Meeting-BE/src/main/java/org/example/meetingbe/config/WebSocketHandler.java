@@ -3,6 +3,7 @@ package org.example.meetingbe.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.meetingbe.service.meeting.MeetingService;
+import org.example.meetingbe.repository.IUserRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,9 @@ public class WebSocketHandler extends TextWebSocketHandler {
     private final Map<String, Map<String, WebSocketSession>> roomSessions = new ConcurrentHashMap<>();
     private final Map<String, String> sessionToParticipantId = new ConcurrentHashMap<>();
     private final ObjectMapper objectMapper = new ObjectMapper();
-
     @Autowired
-    private MeetingService meetingService;
+    IUserRepo userRepo;
+
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -182,18 +183,15 @@ public class WebSocketHandler extends TextWebSocketHandler {
                     put("senderId", participantId);
                     put("type", "participant-left");
                 }});
+
+
                 for (WebSocketSession s : sessionsInRoom.values()) {
                     if (s.isOpen()) {
                         s.sendMessage(new TextMessage(payload));
                         logger.info("Notified participant-left to: " + sessionToParticipantId.get(s.getId()));
                     }
                 }
-                // Cập nhật thời gian rời phòng trong bảng Participants
-                try {
-                    meetingService.updateParticipantLeft(roomId, Long.parseLong(participantId));
-                } catch (NumberFormatException e) {
-                    logger.error("Invalid participantId format: " + participantId, e);
-                }
+
             }
 
             logger.info("Connection closed: sessionId=" + session.getId() + ", participantId=" + participantId + ", status=" + status);

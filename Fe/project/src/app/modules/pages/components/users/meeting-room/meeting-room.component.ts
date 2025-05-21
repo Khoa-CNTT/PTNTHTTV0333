@@ -1,3 +1,5 @@
+import { Meeting } from './../../../../../models/Meeting';
+import { ParticipantsService } from 'src/app/services/participants.service';
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { v4 as uuidv4 } from 'uuid';
@@ -48,6 +50,7 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
     private jwtService: JwtService,
     private route: ActivatedRoute,
     private meetingService: MeetingService,
+    private ParticipantsService: ParticipantsService,
     private cdr: ChangeDetectorRef,
     private router: Router
   ) { }
@@ -70,6 +73,14 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
     await this.startWebRTC();
     this.loadChatHistory();
     this.connectWebSocket();
+    this.ParticipantsService.addParticipant(this.participantId,this.roomId).subscribe({
+      next: () => console.log('save paticipant successfully'),
+      error: (err) => {
+        console.error('Error save paticipant:', err);
+        this.cdr.detectChanges();
+      },
+    });
+    console.log("mt ID:  "+this.roomId)
   }
 
   loadChatHistory() {
@@ -798,6 +809,13 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
       );
       console.log('Sent participant-left message');
     }
+    this.meetingService.leaveRoom(this.participantId,this.roomId).subscribe({
+      next: () => console.log('set paticipant time leave OK'),
+      error: (err) => {
+        console.error('user : '+ this.participantId+'Error set paticipant time leave:', err);
+        this.cdr.detectChanges();
+      },
+    });;
 
     this.stopScreenShare();
     this.localStream?.getTracks().forEach((track) => track.stop());

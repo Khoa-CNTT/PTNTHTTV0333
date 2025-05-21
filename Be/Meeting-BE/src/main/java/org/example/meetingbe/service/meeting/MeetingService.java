@@ -70,38 +70,9 @@ public class MeetingService implements IMeetingService {
 
     @Override
     public void addParticipant(String meetingId, Long userId) {
-        MeetingDto meetingDto = meetings.get(meetingId);
-        if (meetingDto == null) {
-            throw new RuntimeException("Meeting not found");
+        MeetingDto meeting = meetings.get(meetingId);
+        if (meeting != null) {
+            meeting.getUser().add(userId);
         }
-
-        Meeting meeting = meetingRepo.findByCode(meetingId)
-                .orElseThrow(() -> new RuntimeException("Meeting not found in database"));
-        User user = userRepo.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        // Kiểm tra xem người dùng đã tham gia chưa
-        boolean alreadyParticipant = participantsRepo.findByMeetingAndUser(meeting, user).isPresent();
-        if (!alreadyParticipant) {
-            Participants participant = new Participants();
-            participant.setJoinAt(LocalDateTime.now());
-            participant.setMeeting(meeting);
-            participant.setUser(user);
-            participantsRepo.save(participant);
-
-            meetingDto.getUser().add(userId);
-        }
-    }
-
-    public void updateParticipantLeft(String meetingId, Long userId) {
-        Meeting meeting = meetingRepo.findByCode(meetingId)
-                .orElseThrow(() -> new RuntimeException("Meeting not found"));
-        User user = userRepo.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        participantsRepo.findByMeetingAndUser(meeting, user).ifPresent(participant -> {
-            participant.setLeftAt(LocalDateTime.now());
-            participantsRepo.save(participant);
-        });
     }
 }

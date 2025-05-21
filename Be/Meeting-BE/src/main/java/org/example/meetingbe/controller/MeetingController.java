@@ -21,6 +21,7 @@ public class MeetingController {
     @PostMapping("/meetings")
     public MeetingDto createRoom(@RequestBody Map<String, Long> request) {
         Long hostId = request.get("hostId");
+        
         return meetingService.createRoom(hostId);
     }
 

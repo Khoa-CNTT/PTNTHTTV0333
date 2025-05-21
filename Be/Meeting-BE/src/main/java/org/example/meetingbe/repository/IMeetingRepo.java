@@ -8,6 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface IMeetingRepo extends JpaRepository<Meeting, Long> {
-    Optional<Meeting> findByCode(String code);
 
+    Meeting findByCode(String code);
 }
