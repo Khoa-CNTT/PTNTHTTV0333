@@ -73,14 +73,14 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
     await this.startWebRTC();
     this.loadChatHistory();
     this.connectWebSocket();
-    this.ParticipantsService.addParticipant(this.participantId,this.roomId).subscribe({
+    this.ParticipantsService.addParticipant(this.participantId, this.roomId).subscribe({
       next: () => console.log('save paticipant successfully'),
       error: (err) => {
         console.error('Error save paticipant:', err);
         this.cdr.detectChanges();
       },
     });
-    console.log("mt ID:  "+this.roomId)
+    console.log("mt ID:  " + this.roomId)
   }
 
   loadChatHistory() {
@@ -809,10 +809,10 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
       );
       console.log('Sent participant-left message');
     }
-    this.meetingService.leaveRoom(this.participantId,this.roomId).subscribe({
+    this.meetingService.leaveRoom(this.participantId, this.roomId).subscribe({
       next: () => console.log('set paticipant time leave OK'),
       error: (err) => {
-        console.error('user : '+ this.participantId+'Error set paticipant time leave:', err);
+        console.error('user : ' + this.participantId + 'Error set paticipant time leave:', err);
         this.cdr.detectChanges();
       },
     });;
