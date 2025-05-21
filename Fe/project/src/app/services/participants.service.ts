@@ -17,4 +17,10 @@ export class ParticipantsService {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
     });
   }
+
+  getAllByUserId(userId: any, page: number, pageSize: number): Observable<Participants[]> {
+    const list = `${this.API_CONTACT}/getAllByUserId?userId=${userId}&page=${page}&size=${pageSize}`;
+    return this.http.get<Participants[]>(list)
+  }
+
 }

@@ -75,7 +75,7 @@ export class UsersManagementComponent implements OnInit {
     const rangeEnd = Math.min(this.totalPages - 1, this.currentPage + 2);
     this.pageRange = Array(rangeEnd - rangeStart + 1).fill(0).map((x, i) => i + rangeStart);
   }
-  nFilterChange(status: string): void {
+  FilterChange(status: string): void {
     this.filterStatus = status;
     this.applyFilter(this.currentPage); // Cập nhật danh sách bài viết hiển thị
   }
@@ -134,6 +134,10 @@ export class UsersManagementComponent implements OnInit {
     } else if (isVip == 1) {
       return " VIP"
     } 
+  }
+
+  getIdBlog(Item){
+
   }
 
 }
