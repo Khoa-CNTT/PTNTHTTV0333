@@ -17,4 +17,9 @@ public class MeetingRecordController {
         return meetingRecordingService.findByMeetingId(id);
     }
 
+    @PostMapping("/")
+    public MeetingRecording addNewRecord(@RequestBody MeetingRecording meetingRecording){
+        return meetingRecordingService.addNewRecord(meetingRecording);
+    }
+
 }
