@@ -163,7 +163,7 @@ public class UserController {
     }
 
     @PutMapping("/delete")
-    public Boolean deleteUser(@RequestParam Long id) {
+    public User deleteUser(@RequestParam Long id) {
         return userService.deleteUser(id);
     }
 

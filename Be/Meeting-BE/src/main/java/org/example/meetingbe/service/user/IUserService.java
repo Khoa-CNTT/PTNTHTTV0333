@@ -22,7 +22,7 @@ public interface IUserService {
     Page<User> getAllByStatusFalse(Pageable pageable);
     User getUserById(Long userId);
     User updateUser(Long id, UserDto updatedUser);
-    boolean deleteUser(Long userId);
+    User deleteUser(Long userId);
     Page<User> findBy(Pageable pageable);
     long countTotalUsers(int year);
     long countVipUsers();

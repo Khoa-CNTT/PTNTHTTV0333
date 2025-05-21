@@ -82,12 +82,17 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public boolean deleteUser(Long userId) {
-        if (userRepo.existsById(userId)){
-            userRepo.updateStatusUser(userRepo.findById(userId).get().getId());
-            return true;
+    public User deleteUser(Long userId) {
+        User user = userRepo.findById(userId).get();
+        if (user == null){
+            throw new EntityNotFoundException("User with id " + userId + " not found");
         }
-        return false;
+        if (user.getStatus()){
+            user.setStatus(false);
+        }else {
+            user.setStatus(true);
+        }
+        return userRepo.save(user);
     }
 
     @Override

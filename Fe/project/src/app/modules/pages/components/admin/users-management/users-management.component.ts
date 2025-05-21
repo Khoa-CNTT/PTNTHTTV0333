@@ -104,9 +104,9 @@ export class UsersManagementComponent implements OnInit {
   }
 
   FormatStatusColor(status: number): string {
-    if (status == 0) {
+    if (status == 1) {
       return 'green';
-    } else if (status == 1) {
+    } else if (status == 0) {
       return 'red';
     } else {
       return 'red';
@@ -122,9 +122,9 @@ export class UsersManagementComponent implements OnInit {
   }
 
   FormatStatus(status) {
-    if (status == 0) {
+    if (status == 1) {
       return "Đang hoạt động"
-    } else if (status == 1) {
+    } else if (status == 0) {
       return " Bị khóa"
     } 
   }

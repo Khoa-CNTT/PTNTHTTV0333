@@ -1,10 +1,14 @@
 package org.example.meetingbe.controller;
 
+import org.example.meetingbe.dto.MeetingRecordingDto;
 import org.example.meetingbe.model.MeetingRecording;
 import org.example.meetingbe.repository.IMeetingRecordingRepo;
 import org.example.meetingbe.service.meetingRecording.IMeetingRecordingService;
+import org.example.meetingbe.service.meetingRecording.MeetingRecordingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/meetingRecord")
@@ -18,8 +22,7 @@ public class MeetingRecordController {
     }
 
     @PostMapping("/")
-    public MeetingRecording addNewRecord(@RequestBody MeetingRecording meetingRecording){
-        return meetingRecordingService.addNewRecord(meetingRecording);
+    public MeetingRecording addNewRecord(@RequestBody MeetingRecordingDto meetingRecording){
+        return meetingRecordingService.addOrUpdateMeetingRecord(meetingRecording);
     }
-
 }
