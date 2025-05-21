@@ -11,5 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface IParticipantsRepo extends JpaRepository<Participants, Long> {
     Participants findByUserIdAndMeetingId(Long userId, Long meetingId);
     Page<Participants> findBy(Pageable pageable);
+    Page<Participants> findAllByUserId(Long id,Pageable pageable);
 
 }

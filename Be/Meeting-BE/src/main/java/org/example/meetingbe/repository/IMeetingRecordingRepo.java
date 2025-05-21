@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IMeetingRecordingRepo extends JpaRepository<MeetingRecording, Long> {
+    MeetingRecording findByMeetingId(Long id);
 }
