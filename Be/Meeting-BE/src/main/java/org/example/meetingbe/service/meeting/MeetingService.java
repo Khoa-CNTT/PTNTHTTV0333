@@ -75,4 +75,5 @@ public class MeetingService implements IMeetingService {
             meeting.getUser().add(userId);
         }
     }
+
 }
