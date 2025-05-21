@@ -18,11 +18,11 @@ public interface IUserService {
     Boolean exitsByEmail(String email);
 
     Optional<User> findByEmail(String email);
-
+    Page<User> getAllByStatusTrue(Pageable pageable);
+    Page<User> getAllByStatusFalse(Pageable pageable);
     User getUserById(Long userId);
     User updateUser(Long id, UserDto updatedUser);
     boolean deleteUser(Long userId);
-    List<User> getAllUsers();
     Page<User> findBy(Pageable pageable);
     long countTotalUsers(int year);
     long countVipUsers();

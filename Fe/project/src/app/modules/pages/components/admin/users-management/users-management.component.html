@@ -13,8 +13,8 @@
         <div class="post-filter">
             <select class="post-sort-select">
                 <option value="all">Tất cả</option>
-                <option value="approved">Đã duyệt</option>
-                <option value="pending">Chưa duyệt</option>
+                <option value="Active">Đang hoạt động</option>
+                <option value="Banned">Bị khóa</option>
             </select>
         </div>
 
@@ -33,53 +33,42 @@
             </thead>
             <!-- Add tbody here -->
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Nguyễn Văn A</td>
-                    <!-- <td>nguyenvana@gmail.com</td> -->
-                    <td>2023-10-01</td>
-                    <td>Thành viên thường</td>
-                    <td style="color: green;">Đang hoạt động</td>
-                    <td>
-                        <button class="back-btn" data-bs-toggle="modal" data-bs-target="#duyet">Xử lý</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Nguyễn Văn A</td>
-                    <!-- <td>nguyenvana@gmail.com</td> -->
-                    <td>2023-10-01</td>
-                    <td>Thành viên thường</td>
-                    <td style="color: green;">Đang hoạt động</td>
-                    <td>
-                        <button class="back-btn" data-bs-toggle="modal" data-bs-target="#duyet">Xử lý</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Nguyễn Văn A</td>
-                    <!-- <td>nguyenvana@gmail.com</td> -->
-                    <td>2023-10-01</td>
-                    <td>Thành viên thường</td>
-                    <td style="color: green;">Đang hoạt động</td>
-                    <td>
-                        <button class="back-btn" data-bs-toggle="modal" data-bs-target="#duyet">Xử lý</button>
-                    </td>
-                </tr>
-                
-                <!-- Add more rows as needed -->
-        </table>
+        <tr *ngFor="let item of users; index as i">
+          <td>{{i+1}}</td>
+          <td class="title-cell">{{item.lastName}} {{item.firstName}}</td>
+          <td>{{item.email}}</td>
+          <td>{{item.createAt | date: 'short'}}</td>
+          <td [ngStyle]="{'color': FormatIsVipColor(item.vip)}">
+            <strong>{{FormatIsVip(item.vip)}}</strong>
+          </td>
+          <td [ngStyle]="{'color': FormatStatusColor(item.status)}">
+            <strong>{{FormatStatus(item.status)}}</strong>
+          </td>
+          <td class="btn-cell">
+            
+            <button (click)="getIdBlog(item)" class="btn btn-danger btn-sm"
+              data-bs-toggle="modal" data-bs-target="#duyet">
+              <i class="fas fa-check-circle"></i> Duyệt
+            </button>
+          </td>
 
-        <div class="pagination">
-            <button class="pagination-btn">Trước</button>
-            <div>
-                <button class="pagination-btn">1</button>
-                <button class="pagination-btn">2</button>
-                <button class="pagination-btn">3</button>
-            </div>
-            <button class="pagination-btn">Tiếp</button>
-        </div>
+        </tr>
+      </tbody>
+      <tr *ngIf="noRecord === 0">
+        <td colspan="19">
+          <h5 style="padding: 20px 10px;" class="text-center validate-msg-color">Không có bài viết nào</h5>
+        </td>
+      </tr>
+    </table>
+    <div class="pagination" *ngIf="pages">
+      <button class="pagination-btn" (click)="previousPage()" [disabled]="currentPage === 0">Trước</button>
+      <div *ngFor="let page of pageRange">
+        <button class="pagination-btn" [class.active]="page === currentPage" (click)="goToPage(page)">{{ page +
+          1 }}</button>
+      </div>
+      <button class="pagination-btn" (click)="nextPage()" [disabled]="currentPage === totalPages - 1">Tiếp</button>
     </div>
+  </div>
 </div>
 
 <!-- Modal Duyet -->

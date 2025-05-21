@@ -56,6 +56,18 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public Page<User> getAllByStatusTrue(Pageable pageable) {
+        Page<User> users = userRepo.getAllByStatusTrue(pageable);
+        return users;
+    }
+
+    @Override
+    public Page<User> getAllByStatusFalse(Pageable pageable) {
+        Page<User> users = userRepo.getAllByStatusFalse(pageable);
+        return users;
+    }
+
+    @Override
     public User getUserById(Long userId) {
         return userRepo.findById(userId).get();
     }
@@ -76,11 +88,6 @@ public class UserService implements IUserService {
             return true;
         }
         return false;
-    }
-
-    @Override
-    public List<User> getAllUsers() {
-        return userRepo.findAll();
     }
 
     @Override

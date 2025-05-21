@@ -59,6 +59,19 @@ public class ParticipantsController {
         Page<Participants> participants = participantsService.getAll(pageable);
         return ResponseEntity.ok(participants);
     }
+    @GetMapping("/getAllByUserId")
+    public ResponseEntity<Page<Participants>> getAllByUserId(
+            @RequestParam("userId") Long id,
+            @RequestParam(name = "page",defaultValue = "0") int page,
+            @RequestParam(name = "size",defaultValue = "5") int size,
+            @RequestParam(name = "sort",defaultValue = "leftAt,desc") String[] sort
+    ) {
+        Sort.Direction direction = Sort.Direction.fromString(sort[1]);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort[0]));
+
+        Page<Participants> participants = participantsService.findAllByUserId(id,pageable);
+        return ResponseEntity.ok(participants);
+    }
 
     @PostMapping
     public Participants addNew(@RequestParam("userName") String userName, @RequestParam("meetingCode") String meetingCode){

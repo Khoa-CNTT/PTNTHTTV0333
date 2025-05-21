@@ -115,7 +115,7 @@ public class UserController {
         }
         user = new User();
         Set<Role> role = roleRepo.findByRoleName("USER");
-        if(!existsEmail){
+        if (!existsEmail) {
             user.setEmail(email);
             user.setUserName(name);
             user.setPassword("");
@@ -163,14 +163,10 @@ public class UserController {
     }
 
     @PutMapping("/delete")
-    public Boolean deleteUser(@RequestParam Long id){
+    public Boolean deleteUser(@RequestParam Long id) {
         return userService.deleteUser(id);
     }
-    // Lấy tất cả người dùng
-    @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
-    }
+
 
     // Lấy thông tin người dùng theo ID
     @GetMapping("/")
@@ -195,50 +191,81 @@ public class UserController {
     public long countVipUsers() {
         return userService.countVipUsers();
     }
+
     @GetMapping("/vip")
     public List<User> getVipUsers() {
         return userService.getVipUsers();
     }
+
     @GetMapping("/normal")
     public List<User> getNormalUsers() {
         return userService.getNormalUsers();
     }
+
     @GetMapping("/years")
     public List<Integer> getRegistrationYears() {
         return userService.getAllYears();
     }
+
     @GetMapping("/monthly-registrations/{year}")
     public List<MonthlyUserCountDTO> getMonthlyUserRegistrations(@PathVariable("year") int year) {
         return userService.getUserRegistrationsByYear(year);
     }
+
     @GetMapping("/getByYear")
     public List<User> getByYear(@RequestParam(name = "year") int year) {
         return userService.getAllByYear(year);
     }
-    @GetMapping("/getPageUser")
-    public ResponseEntity<Page<User>> getPageUser(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "create_at,asc") String[] sort
-    ) {
-        Sort.Direction direction = Sort.Direction.fromString(sort[1]);
-        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort[0]));
-
-        Page<User> users = userService.findBy(pageable);
-        return ResponseEntity.ok(users);
-    }
 
     @GetMapping("/getByUserName/{userName}")
     public ResponseEntity<?> getProfile(@PathVariable("userName") String userName) {
-        if(userService.getByUsername(userName)==null){
+        if (userService.getByUsername(userName) == null) {
             return new ResponseEntity(new ResponseMessage("Find not found user"), HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(userService.getByUsername(userName));
     }
 
     @PutMapping("/updateProfile/{id}")
-    public ResponseEntity<?> updateProfile(@PathVariable("id")Long id, @RequestBody UserEditTO userDto) {
+    public ResponseEntity<?> updateProfile(@PathVariable("id") Long id, @RequestBody UserEditTO userDto) {
         userService.updateProfile(id, userDto);
         return new ResponseEntity<>(new ResponseMessage("Update success"), HttpStatus.OK);
+    }
+
+    @GetMapping("/getPageUser")
+    public ResponseEntity<Page<User>> getPageUser(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createAt,asc") String[] sort
+    ) {
+        Sort.Direction direction = Sort.Direction.fromString(sort[1]);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort[0]));
+        Page<User> users = userService.findBy(pageable);
+        return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/getUserStatusTrue")
+    public ResponseEntity<Page<User>> getUserStatusTrue(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "sort", defaultValue = "createAt,desc") String[] sort
+    ) {
+        Sort.Direction direction = Sort.Direction.fromString(sort[1]);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort[0]));
+
+        Page<User> contacts = userService.getAllByStatusTrue(pageable);
+        return ResponseEntity.ok(contacts);
+    }
+
+    @GetMapping("/getUserStatusFalse")
+    public ResponseEntity<Page<User>> getUserStatusFalse(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "sort", defaultValue = "createAt,desc") String[] sort
+    ) {
+        Sort.Direction direction = Sort.Direction.fromString(sort[1]);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort[0]));
+
+        Page<User> contacts = userService.getAllByStatusTrue(pageable);
+        return ResponseEntity.ok(contacts);
     }
 }
