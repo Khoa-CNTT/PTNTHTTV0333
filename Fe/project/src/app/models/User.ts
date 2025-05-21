@@ -5,10 +5,11 @@ export interface User {
     firstName?: Boolean;
     lastName?: string;
     userName?: string;
-    isVip?: Boolean;
+    vip?: Boolean;
     avatar?: string;
     phone?: string;
     address?: string;
     birthday?: string;
     createAt?: string;
+    status?: Boolean;
 }

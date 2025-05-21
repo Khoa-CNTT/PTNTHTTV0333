@@ -27,6 +27,8 @@ public interface IUserRepo extends JpaRepository<User, Long> {
     long countByIsVipTrue();
     List<User> getAllByIsVipTrue();
     List<User> getAllByIsVipFalse();
+    Page<User> getAllByStatusTrue(Pageable pageable);
+    Page<User> getAllByStatusFalse(Pageable pageable);
     @Query("SELECT DISTINCT FUNCTION('YEAR', u.createAt) FROM User u ORDER BY FUNCTION('YEAR', u.createAt)")
     List<Integer> findAllYears();
 

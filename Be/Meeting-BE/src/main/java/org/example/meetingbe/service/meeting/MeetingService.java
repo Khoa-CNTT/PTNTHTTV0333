@@ -46,9 +46,6 @@ public class MeetingService implements IMeetingService {
         MeetingDto meeting = meetings.get(meetingId);
         if (meeting != null) {
             meeting.getUser().add(userId);
-//            Optional<Meeting> mt = meetingRepo.findById(meeting.getId());
-//            Participants p = new Participants(LocalDateTime.now(),null,mt.get(),userRepo.findById(userId).get());
-//            participantsRepo.save(p);
         }
     }
 

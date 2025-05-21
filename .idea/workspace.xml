@@ -6,10 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="ca89b201-fc21-4221-8a94-ef6bb5563224" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/config/WebSocketHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/config/WebSocketHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/controller/ParticipantsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/controller/ParticipantsController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Fe/project/src/app/modules/pages/components/users/meeting-room/meeting-room.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Fe/project/src/app/modules/pages/components/users/meeting-room/meeting-room.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Fe/project/src/app/services/meeting.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Fe/project/src/app/services/meeting.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/repository/IUserRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/repository/IUserRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/service/meeting/MeetingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/service/meeting/MeetingService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/service/user/IUserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/service/user/IUserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/service/user/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/service/user/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Fe/project/src/app/models/User.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Fe/project/src/app/models/User.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Fe/project/src/app/modules/pages/components/admin/users-management/users-management.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/Fe/project/src/app/modules/pages/components/admin/users-management/users-management.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Fe/project/src/app/modules/pages/components/admin/users-management/users-management.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Fe/project/src/app/modules/pages/components/admin/users-management/users-management.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Fe/project/src/app/services/user.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Fe/project/src/app/services/user.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,6 +105,7 @@
       <workItem from="1747033739061" duration="468000" />
       <workItem from="1747138080280" duration="921000" />
       <workItem from="1747762344234" duration="3263000" />
+      <workItem from="1747810824447" duration="5874000" />
     </task>
     <servers />
   </component>
