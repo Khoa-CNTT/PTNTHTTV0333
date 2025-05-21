@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="ca89b201-fc21-4221-8a94-ef6bb5563224" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/controller/MeetingRecordController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Be/Meeting-BE/src/main/java/org/example/meetingbe/controller/MeetingRecordController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Fe/project/src/app/modules/pages/components/admin/users-management/users-management.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/Fe/project/src/app/modules/pages/components/admin/users-management/users-management.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Fe/project/src/app/modules/pages/components/users/meeting-room/meeting-room.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Fe/project/src/app/modules/pages/components/users/meeting-room/meeting-room.component.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,7 +99,8 @@
       <workItem from="1747138080280" duration="921000" />
       <workItem from="1747762344234" duration="3263000" />
       <workItem from="1747810824447" duration="5874000" />
-      <workItem from="1747822760379" duration="156000" />
+      <workItem from="1747822760379" duration="580000" />
+      <workItem from="1747827496756" duration="1545000" />
     </task>
     <servers />
   </component>
