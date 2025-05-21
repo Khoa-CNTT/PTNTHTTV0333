@@ -12,9 +12,10 @@ export class MeetingService {
 
   constructor(private http: HttpClient) { }
 
-  createRoom(hostId: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/meetings`, { hostId });
-  }
+createRoom(hostId: number, title: string): Observable<any> {
+  return this.http.post(`${this.apiUrl}/meetings`, { hostId, title });
+}
+
 
   getRoom(roomId: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/${roomId}`);

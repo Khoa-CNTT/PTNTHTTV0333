@@ -15,7 +15,7 @@
 
     <div class="main-content">
         <div class="options-container">
-            <button class="option-card" (click)="createRoom()">
+            <button class="option-card" data-bs-toggle="modal" data-bs-target="#createMeetingModal">
                 <div class="option-header">
                     <i class="fas fa-plus"></i>
                     <span class="font-bold">Tạo cuộc họp mới</span>
@@ -49,6 +49,37 @@
     </div>
 </main>
 
+<!-- Modal for creating a meeting -->
+<div class="modal fade" id="createMeetingModal" tabindex="-1" aria-labelledby="createMeetingModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 12px;">
+            <div class="modal-header" style="background-color: #c2363f; color: white;">
+                <h5 class="modal-title" id="createMeetingModalLabel">Tạo cuộc họp</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"
+                    style="filter: invert(1);"></button>
+            </div>
+            <form [formGroup]="creatingForm" (ngSubmit)="createRoom()">
+
+                <div class="modal-body">
+                    <input type="text" class="form-control border-danger-subtle" formControlName="title"
+                        name="meetingTitle" placeholder="Nhập tiêu đề cuộc họp" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal"
+                        style="color: #c2363f;">Hủy</button>
+                    <button type="submit" class="btn btn-danger" data-bs-dismiss="modal"
+                        style="background-color: #c2363f;">Tạo phòng</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal for joining a meeting -->
 <div class="modal fade" id="joinMeetingModal" tabindex="-1" aria-labelledby="joinMeetingModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content" style="border-radius: 12px;">
@@ -70,37 +101,41 @@
     </div>
 </div>
 
-<div class="modal fade" id="scheduleMeetingModal" tabindex="-1" aria-labelledby="scheduleMeetingModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content" style="border-radius: 12px;">
-      <div class="modal-header" style="background-color: #c2363f; color: white;">
-        <h5 class="modal-title" id="scheduleMeetingModalLabel">Lên lịch cho cuộc họp</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng" style="filter: invert(1);"></button>
-      </div>
+<!-- Modal for scheduleMeeting a meeting -->
+<div class="modal fade" id="scheduleMeetingModal" tabindex="-1" aria-labelledby="scheduleMeetingModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 12px;">
+            <div class="modal-header" style="background-color: #c2363f; color: white;">
+                <h5 class="modal-title" id="scheduleMeetingModalLabel">Lên lịch cho cuộc họp</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"
+                    style="filter: invert(1);"></button>
+            </div>
 
-      <div class="modal-body">
-        <!-- Tiêu đề cuộc họp -->
-        <div class="mb-3">
-          <input type="text" class="form-control border-danger-subtle"placeholder="Tiêu đề cuộc họp" />
+            <div class="modal-body">
+                <!-- Tiêu đề cuộc họp -->
+                <div class="mb-3">
+                    <input type="text" class="form-control border-danger-subtle" placeholder="Tiêu đề cuộc họp" />
+                </div>
+
+
+                <!-- Email người tham gia -->
+                <div class="mb-3">
+                    <input type="email" class="form-control border-danger-subtle" placeholder="Email người tham gia" />
+                </div>
+
+                <!-- Ngày giờ bắt đầu -->
+                <div class="mb-3">
+                    <input type="datetime-local" class="form-control border-danger-subtle" />
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="color: #c2363f;">Hủy</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+                    style="background-color: #c2363f;">Tạo phòng</button>
+            </div>
         </div>
-
-
-        <!-- Email người tham gia -->
-        <div class="mb-3">
-          <input type="email" class="form-control border-danger-subtle" placeholder="Email người tham gia" />
-        </div>
-
-        <!-- Ngày giờ bắt đầu -->
-        <div class="mb-3">
-          <input type="datetime-local" class="form-control border-danger-subtle" />
-        </div>
-
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="color: #c2363f;">Hủy</button>
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="background-color: #c2363f;">Tạo phòng</button>
-      </div>
     </div>
-  </div>
 </div>
