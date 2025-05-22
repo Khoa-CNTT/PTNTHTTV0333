@@ -6,11 +6,21 @@ public class ScheduleDto {
     private String email;
     private String title;
     private LocalDateTime createAt;
+    private String userName;
 
-    public ScheduleDto(String email, String title, LocalDateTime createAt) {
+    public ScheduleDto(String email, String title, LocalDateTime createAt, String userName) {
         this.email = email;
         this.title = title;
         this.createAt = createAt;
+        this.userName = userName;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getEmail() {

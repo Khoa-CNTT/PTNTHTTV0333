@@ -53,11 +53,34 @@ public class MailRegister {
     }
 
     public void sendOtp(String email, String otp) throws MessagingException {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(email);
-        message.setSubject("MÃ OTP THAY ĐỔI MẬT KHẨU");
-        message.setText("MÃ XÁC THỨC CỦA BẠN LÀ: " + otp);
-        mailSender.send(message);
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, "UTF-8");
+
+        // Cấu hình Thymeleaf template resolver
+        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+        templateResolver.setPrefix("/templates/"); // Đường dẫn đến thư mục chứa template
+        templateResolver.setSuffix(".html");       // Chỉ định phần mở rộng là .html
+        templateResolver.setTemplateMode("HTML");
+
+        // Khởi tạo SpringTemplateEngine với template resolver
+        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+        templateEngine.setTemplateResolver(templateResolver);
+
+        // Tạo context và truyền dữ liệu (nếu cần)
+        Context context = new Context();
+        context.setVariable("otps", otp); // Truyền biến vào template nếu cần
+        context.setVariable("email", email);
+//
+        // Render template thành chuỗi HTML
+        String htmlContent = templateEngine.process("otp", context); // Tên template không cần phần mở rộng
+
+        // Thiết lập email với nội dung HTML
+        mimeMessageHelper.setTo(email);
+        mimeMessageHelper.setSubject("OTP XÁC THỰC");
+        mimeMessageHelper.setText(htmlContent, true); // true để chỉ định đây là nội dung HTML
+
+        // Gửi email
+        mailSender.send(mimeMessage);
     }
 
     public void paymentSuccess(String email, Payment payment) throws MessagingException {
@@ -91,7 +114,7 @@ public class MailRegister {
         // Gửi email
         mailSender.send(mimeMessage);
     }
-    public void sendSchedule(String emailList) throws MessagingException {
+    public void sendSchedule(String emailList, String title, LocalDateTime creatAt, String link) throws MessagingException {
         String[] emails = emailList.split(",");
 
         // Xóa khoảng trắng đầu/cuối từng email nếu có
@@ -99,11 +122,35 @@ public class MailRegister {
             emails[i] = emails[i].trim();
         }
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(emails); // gửi đến nhiều email
-        message.setSubject("LỊCH HẸN CUỘC HỌP");
-        message.setText("Đây là nội dung lịch hẹn cuộc họp."); // Thêm nội dung nếu cần
-        mailSender.send(message);
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, "UTF-8");
+
+        // Cấu hình Thymeleaf template resolver
+        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+        templateResolver.setPrefix("/templates/"); // Đường dẫn đến thư mục chứa template
+        templateResolver.setSuffix(".html");       // Chỉ định phần mở rộng là .html
+        templateResolver.setTemplateMode("HTML");
+
+        // Khởi tạo SpringTemplateEngine với template resolver
+        SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+        templateEngine.setTemplateResolver(templateResolver);
+
+        // Tạo context và truyền dữ liệu (nếu cần)
+        Context context = new Context();
+        context.setVariable("title", title); // Truyền biến vào template nếu cần
+        context.setVariable("time", creatAt);
+        context.setVariable("link", link);
+//
+        // Render template thành chuỗi HTML
+        String htmlContent = templateEngine.process("schedule", context); // Tên template không cần phần mở rộng
+
+        // Thiết lập email với nội dung HTML
+        mimeMessageHelper.setTo(emails);
+        mimeMessageHelper.setSubject("THÔNG BÁO LỊCH HẸN CUỘC HỌP TIẾP THEO");
+        mimeMessageHelper.setText(htmlContent, true); // true để chỉ định đây là nội dung HTML
+
+        // Gửi email
+        mailSender.send(mimeMessage);
     }
 
 

@@ -19,7 +19,7 @@ export class ScheduleService {
       };
     }
 
-  submit(schedule: any, email:string): Observable<any> {
-      return this.httpClient.post<any>(this.API_URL + "submit/" + email, schedule, this.httpOptions);
+  submit(schedule: any): Observable<any> {
+      return this.httpClient.post<any>(this.API_URL + "submit", schedule, this.httpOptions);
   }
 }

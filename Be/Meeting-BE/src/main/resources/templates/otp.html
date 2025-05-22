@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>OTP Verification</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f5f5f5; font-family: Arial, sans-serif;">
+
+<table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 20px;">
+    <tr>
+        <td align="center">
+            <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                <tr>
+                    <td align="center" style="background-color: #c2363f; padding: 20px;">
+                        <h1 style="color: white; margin: 0; font-size: 24px;">Xác thực tài khoản</h1>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="padding: 30px 20px;">
+                        <p style="font-size: 16px; color: #333333; margin-bottom: 20px;">
+                            Xin chào <strong th:text="${email}"></strong>,
+                        </p>
+                        <p style="font-size: 16px; color: #333333; margin-bottom: 20px;">
+                            Bạn vừa yêu cầu mã xác thực OTP. Vui lòng sử dụng mã sau để hoàn tất quá trình:
+                        </p>
+
+                        <div style="text-align: center; margin: 30px 0;">
+                <span style="display: inline-block; background-color: #c2363f; color: white; font-size: 24px; font-weight: bold; padding: 15px 30px; border-radius: 8px; letter-spacing: 4px;" th:text="${otps}">
+
+                </span>
+                        </div>
+
+                        <p style="font-size: 14px; color: #777777;">
+                            Mã OTP sẽ hết hạn sau 5 phút. Nếu bạn không yêu cầu thao tác này, vui lòng bỏ qua email này.
+                        </p>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td align="center" style="background-color: #f0f0f0; padding: 15px;">
+                        <p style="font-size: 12px; color: #999999; margin: 0;">
+                            © 2025 Nền tảng họp trực tuyến tích hợp AI. Mọi quyền được bảo lưu.
+                        </p>
+                    </td>
+                </tr>
+
+            </table>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

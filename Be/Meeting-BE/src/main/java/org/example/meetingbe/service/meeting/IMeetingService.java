@@ -1,6 +1,7 @@
 package org.example.meetingbe.service.meeting;
 
 import org.example.meetingbe.dto.MeetingDto;
+import org.example.meetingbe.dto.ScheduleDto;
 import org.example.meetingbe.model.Meeting;
 
 import java.util.HashMap;
@@ -12,4 +13,5 @@ public interface IMeetingService {
     MeetingDto getRoom(String meetingId);
 
     void addParticipant(String meetingId, Long userId) ;
+    String createRoomSchedule(Long hostId, ScheduleDto schedule);
 }

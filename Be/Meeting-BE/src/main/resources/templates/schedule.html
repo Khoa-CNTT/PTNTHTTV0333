@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thông báo cuộc họp</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f5f5f5; font-family: Arial, sans-serif;">
+
+<table width="100%" cellpadding="0" cellspacing="0" style="padding: 20px; background-color: #f5f5f5;">
+    <tr>
+        <td align="center">
+            <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+
+                <!-- Header -->
+                <tr>
+                    <td align="center" style="background-color: #c2363f; padding: 20px;">
+                        <h2 style="color: white; margin: 0; font-size: 22px;">📅 Cuộc họp sắp diễn ra</h2>
+                    </td>
+                </tr>
+
+                <!-- Body -->
+                <tr>
+                    <td style="padding: 30px 25px;">
+                        <p style="font-size: 16px; color: #333333; margin-bottom: 20px;">
+                            Xin chào <strong th:text="${email}"></strong>,
+                        </p>
+                        <p style="font-size: 16px; color: #333333; margin-bottom: 20px;">
+                            Bạn có một cuộc họp đã được lên lịch với thông tin như sau:
+                        </p>
+
+                        <table cellpadding="0" cellspacing="0" style="width: 100%; font-size: 16px; color: #333;">
+                            <tr>
+                                <td style="padding: 8px 0;"><strong>Tiêu đề:</strong></td>
+                                <td style="padding: 8px 0;" th:text="${title}"></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 0;"><strong>Thời gian:</strong></td>
+                                <td style="padding: 8px 0;" th:text="${#temporals.format(time, 'dd/MM/yyyy HH:mm')}"></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 0;"><strong>Đường link:</strong></td>
+                                <td style="padding: 48px 0;">
+                                    <a th:href="${link}" style="color: #c2363f; text-decoration: none;" th:text="${link}"></a>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div style="text-align: center; margin-top: 30px;">
+                            <a href="{{meetingLink}}" style="background-color: #c2363f; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px;">
+                                Tham gia cuộc họp
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- Footer -->
+                <tr>
+                    <td align="center" style="background-color: #f0f0f0; padding: 15px;">
+                        <p style="font-size: 12px; color: #999999; margin: 0;">
+                            © 2025 Nền tảng họp trực tuyến tích hợp AI. Vui lòng không trả lời email này.
+                        </p>
+                    </td>
+                </tr>
+
+            </table>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

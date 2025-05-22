@@ -113,17 +113,32 @@
         <!-- Tiêu đề cuộc họp -->
         <div class="mb-3">
           <input type="text" class="form-control border-danger-subtle"placeholder="Tiêu đề cuộc họp" formControlName="title" />
+          <div class="text-danger" *ngFor="let vl of validation_messages.title">
+            <div class="error-message"
+              *ngIf="scheduleForm.get('title').hasError(vl.type) && (scheduleForm.get('title').dirty || scheduleForm.get('title').touched)">
+              {{vl.message}}</div>
+        </div>
         </div>
 
 
         <!-- Email người tham gia -->
         <div class="mb-3">
           <input type="email" class="form-control border-danger-subtle" placeholder="Email người tham gia" formControlName="email" />
+          <div class="text-danger" *ngFor="let vl of validation_messages.email">
+            <div class="error-message"
+              *ngIf="scheduleForm.get('email').hasError(vl.type) && (scheduleForm.get('email').dirty || scheduleForm.get('email').touched)">
+              {{vl.message}}</div>
+        </div>
         </div>
 
         <!-- Ngày giờ bắt đầu -->
         <div class="mb-3">
           <input type="datetime-local" class="form-control border-danger-subtle" formControlName="createAt"/>
+          <div class="text-danger" *ngFor="let vl of validation_messages.createAt">
+            <div class="error-message"
+              *ngIf="scheduleForm.get('createAt').hasError(vl.type) && (scheduleForm.get('createAt').dirty || scheduleForm.get('createAt').touched)">
+              {{vl.message}}</div>
+        </div>
         </div>
 
       </div>

@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.*;
 public class ScheduleController {
     @Autowired
     private IScheduleService scheduleService;
-    @PostMapping("/submit/{userName}")
-    public ResponseEntity<?> submitSchedule(@RequestBody ScheduleDto schedule, @PathVariable("userName") String userName) throws MessagingException {
-        scheduleService.addNewSchedule(schedule,userName);
+    @PostMapping("/submit")
+    public ResponseEntity<?> submitSchedule(@RequestBody ScheduleDto schedule) throws MessagingException {
+        scheduleService.addNewSchedule(schedule,schedule.getUserName());
         return ResponseEntity.ok(new ResponseMessage("Tạo lịch hẹn thành công"));
     }
 }

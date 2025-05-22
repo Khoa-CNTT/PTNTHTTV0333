@@ -1,6 +1,7 @@
 package org.example.meetingbe.service.meeting;
 
 import org.example.meetingbe.dto.MeetingDto;
+import org.example.meetingbe.dto.ScheduleDto;
 import org.example.meetingbe.model.Meeting;
 import org.example.meetingbe.model.User;
 import org.example.meetingbe.repository.IMeetingRepo;
@@ -75,6 +76,39 @@ public class MeetingService implements IMeetingService {
         if (meeting != null) {
             meeting.getUser().add(userId);
         }
+    }
+
+    @Override
+    public String createRoomSchedule(Long hostId, ScheduleDto schedule) {
+        Meeting meeting = new Meeting();
+        meeting.setCode(UUID.randomUUID().toString().substring(0, 12));
+        meeting.setTitle(schedule.getTitle());
+        meeting.setCreateAt(schedule.getCreateAt());
+        meeting.setStartTime(schedule.getCreateAt());
+
+        User host = userRepo.findById(hostId)
+                .orElseThrow(() -> new RuntimeException("Host not found"));
+        meeting.setUser(host);
+
+        // Lưu vào cơ sở dữ liệu
+        Meeting savedMeeting = meetingRepo.save(meeting);
+
+        // Chuyển entity sang DTO
+        MeetingDto meetingDto = new MeetingDto();
+        meetingDto.setId(savedMeeting.getId());
+        meetingDto.setCode(savedMeeting.getCode());
+        meetingDto.setTitle(savedMeeting.getTitle());
+        meetingDto.setStartTime(savedMeeting.getStartTime());
+        meetingDto.setEndTime(savedMeeting.getEndTime());
+        meetingDto.setCreateAt(savedMeeting.getCreateAt());
+        meetingDto.setHostId(savedMeeting.getUser().getId());
+
+        meetings.put(savedMeeting.getCode(), meetingDto);
+
+        // Thêm host vào danh sách người tham gia
+        addParticipant(savedMeeting.getCode(), hostId);
+
+        return savedMeeting.getCode();
     }
 
 
