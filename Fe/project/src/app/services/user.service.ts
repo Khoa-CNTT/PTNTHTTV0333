@@ -32,6 +32,11 @@ export class UserService {
     return this.httpClient.get(this.API_URL + 'monthly-registrations/' + year);
   }
 
+  getUserByName():Observable<any>{
+    const userName = this.jwtService.getName();
+    return this.httpClient.get(this.API_URL+ 'getByUserName/' + userName);
+  }
+
   register(user: any): Observable<any> {
     return this.httpClient.post<any>(this.API_URL + "register", user, this.httpOptions);
   }

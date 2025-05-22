@@ -1,0 +1,102 @@
+/* Căn giữa toàn bộ */
+.wrap-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* căn giữa theo chiều dọc */
+    height: 100vh;
+    /* chiếm toàn bộ chiều cao màn hình */
+    padding: 0 16px;
+    background-color: #f5f5f5;
+}
+
+/* Bao khung ngoài */
+.contact-container {
+    display: flex;
+    flex-direction: row;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    max-width: 400px;
+    width: 100%;
+    overflow: hidden;
+    background-color: white;
+}
+
+/* Khu vực form */
+.form-section {
+    flex: 1;
+    padding: 48px 32px;
+}
+
+/* Form bên trong */
+.form {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    color: black;
+}
+
+.message {
+    color: #a3a3a3;
+    font-size: 14px;
+    margin-top: 4px;
+    text-align: center;
+}
+
+.inputs {
+    margin-top: 10px;
+}
+
+.inputs input {
+    width: 32px;
+    height: 32px;
+    text-align: center;
+    border: none;
+    border-bottom: 1.5px solid #d2d2d2;
+    margin: 0 10px;
+}
+
+.inputs input:focus {
+    border-bottom: 1.5px solid royalblue;
+    outline: none;
+}
+
+/* Nút quay lại nếu cần */
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background-color: transparent;
+    color: #c2363f;
+    border: 2px solid #c2363f;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 24px;
+}
+
+.back-btn:hover {
+    background-color: #c2363f;
+    color: white;
+}
+
+.action {
+    margin-top: 24px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: none;
+    background-color: #c2363f;
+    color: white;
+    cursor: pointer;
+    align-self: center;
+    /* căn giữa */
+}

@@ -1,4 +1,5 @@
 import { Component, ElementRef, HostListener, Inject, OnInit, Renderer2 } from '@angular/core';
+import { PaymentService } from 'src/app/services/payment.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -11,7 +12,8 @@ export class NavigationComponent implements OnInit {
   private intervalId: any;
   dropdownVisible = false;
   adminDropdownVisible = false;
-  constructor(private userService: UserService){
+  url:any = null;
+  constructor(private userService: UserService, private paymentService: PaymentService){
 
   }
   ngOnInit() {
@@ -54,6 +56,7 @@ export class NavigationComponent implements OnInit {
     this.userService.logout();
   }
   
+
 
   setupNavi(): boolean {
     const roleData = localStorage.getItem('Role_Key');

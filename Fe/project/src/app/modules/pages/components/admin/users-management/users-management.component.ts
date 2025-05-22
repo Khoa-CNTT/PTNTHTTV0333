@@ -46,12 +46,11 @@ export class UsersManagementComponent implements OnInit {
       }
     });
   }
-  
   applyFilter(page: number): void {
     if (this.filterStatus === 'all') {
       this.userService.getAllUser(page, this.pageSize).subscribe(
         (response: any) => {
-          console.log("ALL: " + response.content)
+          console.log(response);
           this.users = response.content;
           this.currentPage = response.pageable.pageNumber;
           this.totalPages = response.totalPages;
@@ -61,7 +60,7 @@ export class UsersManagementComponent implements OnInit {
         },
         (error) => console.error('Error loading Users:', error)
       );
-    } else if (this.filterStatus === 'banned') {
+    } else if (this.filterStatus === 'Active') {
       this.userService.getUserStatusTrue(page, this.pageSize).subscribe(
         (response: any) => {
           this.users = response.content;
@@ -97,6 +96,11 @@ export class UsersManagementComponent implements OnInit {
     const rangeEnd = Math.min(this.totalPages - 1, this.currentPage + 2);
     this.pageRange = Array(rangeEnd - rangeStart + 1).fill(0).map((x, i) => i + rangeStart);
   }
+  nFilterChange(status: string): void {
+    this.filterStatus = status;
+    this.applyFilter(this.currentPage); // Cập nhật danh sách bài viết hiển thị
+  }
+
 
   previousPage(): void {
     if (this.currentPage > 0) {
@@ -162,13 +166,13 @@ export class UsersManagementComponent implements OnInit {
       return 'red';
     }
   }
-  
+
   FormatIsVipColor(isVip: number): string {
     if (isVip == 0) {
       return 'black';
     } else if (isVip == 1) {
       return 'red';
-    } 
+    }
   }
 
   FormatStatus(status) {
@@ -176,21 +180,21 @@ export class UsersManagementComponent implements OnInit {
       return "Đang hoạt động"
     } else if (status == 1) {
       return " Bị khóa"
-    } 
+    }
   }
   FormatUpdateButton(status) {
     if (status == 0) {
       return "Khóa"
     } else if (status == 1) {
       return "Mở khóa"
-    } 
+    }
   }
   FormatIsVip(isVip) {
     if (isVip == 0) {
       return "Thường"
     } else if (isVip == 1) {
       return " VIP"
-    } 
+    }
   }
 
 }

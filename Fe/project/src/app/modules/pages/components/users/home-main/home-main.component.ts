@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { JwtService } from 'src/app/services/jwt.service';
 import { MeetingService } from 'src/app/services/meeting.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-home-main',
@@ -11,24 +13,38 @@ import { MeetingService } from 'src/app/services/meeting.service';
 })
 export class HomeMainComponent {
   meetingCode: string = '';
+  hostId: any
+  creatingForm: FormGroup
 
   constructor(
     private meetingService: MeetingService,
     private router: Router,
     private toastr: ToastrService,
+    private userSer: UserService,
     private jwtService: JwtService
   ) { }
 
   ngOnInit() {
     this.Load();
+
+    this.creatingForm = new FormGroup({
+      title: new FormControl('', Validators.required),
+    })
   }
 
   createRoom() {
-    this.meetingService.createRoom().subscribe((meeting) => {
-      console.log('Meeting created:', meeting);
+  this.userSer.getByUserName().subscribe((user) => {
+    this.hostId = user.id;
+    const title = this.creatingForm.get('title')?.value; 
+
+    this.meetingService.createRoom(this.hostId, title).subscribe((meeting) => {
       this.router.navigate([`pages/components/meeting-room/${meeting.code}`]);
+    }, (error) => {
+      this.toastr.error('Không thể tạo phòng họp!', 'Error');
     });
-  }
+  });
+}
+
 
   joinMeeting() {
     try {
@@ -39,8 +55,8 @@ export class HomeMainComponent {
     }
   }
 
-  Load(){
-    if(this.jwtService.verifyToken()){
+  Load() {
+    if (this.jwtService.verifyToken()) {
       this.router.navigateByUrl("/pages/components/home-main");
     }
   }

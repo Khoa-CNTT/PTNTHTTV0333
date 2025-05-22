@@ -54,7 +54,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
             if ("chat".equals(type)) {
                 String chatMessage = (String) signal.get("message");
                 String sendAt = (String) signal.get("sendAt");
-                
+
 
                 // Broadcast message to all participants in the room
                 roomSessions.getOrDefault(roomId, new ConcurrentHashMap<>()).forEach((participantId, participantSession) -> {

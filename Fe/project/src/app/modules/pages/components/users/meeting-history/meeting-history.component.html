@@ -18,6 +18,7 @@
         <table class="meeting-table">
           <thead>
             <tr>
+              <th>STT</th>
               <th>Tiêu đề</th>
               <th>Thời gian tham gia</th>
               <th>Thời gian rời phòng</th>
@@ -25,27 +26,49 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Cuộc họp dự án A</td>
-              <td>10/05/2025 - 10:00 AM</td>
-              <td>10/05/2025 - 10:00 AM</td>
-              <td><button class="btn-view">Chi tiết</button></td>
-            </tr>
-            <tr>
-              <td>Họp nhóm B</td>
-              <td>11/05/2025 - 2:00 PM</td>
-              <td>11/05/2025 - 2:00 PM</td>
-              <td><button class="btn-view">Chi tiết</button></td>
-            </tr>
-             <tr>
-              <td>Họp nhóm B</td>
-              <td>11/05/2025 - 2:00 PM</td>
-              <td>11/05/2025 - 2:00 PM</td>
-              <td><button class="btn-view">Chi tiết</button></td>
+            <tr *ngFor="let item of lists; index as i">
+              <td>{{i+1}}</td>
+              <td>{{item.meeting.title}}</td>
+              <td>{{item.joinAt | date: 'short'}}</td>
+              <td>{{item.leftAt | date: 'short'}}</td>
+              <td><button class="btn-view" data-bs-toggle="modal" data-bs-target="#xem">Chi tiết</button></td>
             </tr>
             <!-- Thêm dòng khác tùy ý -->
           </tbody>
+          <tr *ngIf="noRecord === 0">
+            <td colspan="19">
+              <h5 style="padding: 20px 10px;" class="text-center validate-msg-color">Không có bài viết nào</h5>
+            </td>
+          </tr>
         </table>
+        <div class="pagination" *ngIf="pages">
+          <button class="pagination-btn" (click)="previousPage()" [disabled]="currentPage === 0">Trước</button>
+          <div *ngFor="let page of pageRange">
+            <button class="pagination-btn" [class.active]="page === currentPage" (click)="goToPage(page)">{{ page +
+              1 }}</button>
+          </div>
+          <button class="pagination-btn" (click)="nextPage()" [disabled]="currentPage === totalPages - 1">Tiếp</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="xem" tabindex="-1" aria-labelledby="xemLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-radius: 12px;">
+      <div class="modal-header" style="background-color: #c2363f; color: white;">
+        <h5 class="modal-title" id="xemLabel">
+          <strong>Xem chi tiết</strong>
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"
+          style="filter: invert(1);"></button>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="color: #c2363f;">Đóng</button>
       </div>
     </div>
   </div>
