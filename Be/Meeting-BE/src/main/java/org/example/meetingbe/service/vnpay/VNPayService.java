@@ -12,7 +12,7 @@ import java.util.*;
 
 @Service
 public class VNPayService {
-    public String createOrder(int total, String orderInfor, String urlReturn){
+    public String createOrder(int total, String orderInfor){
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String vnp_TxnRef = VNPayConfig.getRandomNumber(8);
@@ -34,8 +34,8 @@ public class VNPayService {
         String locate = "vn";
         vnp_Params.put("vnp_Locale", locate);
 
-        urlReturn += VNPayConfig.vnp_Returnurl;
-        vnp_Params.put("vnp_ReturnUrl", urlReturn);
+//        urlReturn += VNPayConfig.vnp_Returnurl;
+        vnp_Params.put("vnp_ReturnUrl", VNPayConfig.vnp_Returnurl);
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
@@ -84,17 +84,24 @@ public class VNPayService {
     public int orderReturn(HttpServletRequest request) {
         Map fields = new HashMap();
         for (Enumeration params = request.getParameterNames(); params.hasMoreElements(); ) {
-            String fieldName = null;
-            String fieldValue = null;
+            String fieldName = (String) params.nextElement();
+            String fieldValue = request.getParameter(fieldName);
             try {
-                fieldName = URLEncoder.encode((String) params.nextElement(), StandardCharsets.US_ASCII.toString());
-                fieldValue = URLEncoder.encode(request.getParameter(fieldName), StandardCharsets.US_ASCII.toString());
+                fieldValue = URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString());
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
             if ((fieldValue != null) && (fieldValue.length() > 0)) {
                 fields.put(fieldName, fieldValue);
             }
+        }
+
+        // Lấy userName từ vnp_OrderInfo
+        String orderInfo = request.getParameter("vnp_OrderInfo");
+        String userName = null;
+        if (orderInfo != null && orderInfo.contains("|userName=")) {
+            userName = orderInfo.split("\\|userName=")[1];
+            request.setAttribute("userName", userName); // Lưu userName vào request để sử dụng sau
         }
 
         String vnp_SecureHash = request.getParameter("vnp_SecureHash");

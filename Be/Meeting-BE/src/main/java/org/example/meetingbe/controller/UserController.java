@@ -17,6 +17,8 @@ import org.example.meetingbe.response.JwtResponse;
 import org.example.meetingbe.response.ResponseMessage;
 import org.example.meetingbe.security.jwt.JwtTokenProvider;
 import org.example.meetingbe.security.userpricipal.UserPrinciple;
+import org.example.meetingbe.service.mailSender.MailRegister;
+import org.example.meetingbe.service.cache.CacheService;
 import org.example.meetingbe.service.user.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,10 +41,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.example.meetingbe.model.User;
-import org.example.meetingbe.service.user.IUserService;
-import org.example.meetingbe.service.user.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.*;
@@ -52,6 +50,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/user")
 @CrossOrigin(origins = "http://localhost:4200/", allowedHeaders = "*")
 public class UserController {
+    @Autowired
+    private CacheService cacheService;
     @Autowired
     private IRoleRepo roleRepo;
     @Autowired
@@ -64,6 +64,8 @@ public class UserController {
     private String googleClientId;
     @Autowired
     private IUserRepo userRepo;
+    @Autowired
+    private MailRegister mailRegister;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Register register) throws MessagingException {
@@ -101,7 +103,7 @@ public class UserController {
         GoogleIdToken.Payload payload = idToken.getPayload();
         String email = payload.getEmail();
         String name = (String) payload.get("name");
-        System.out.println("name:" + name);
+        String picture = (String) payload.get("picture");
         // Kiểm tra user
         Optional<User> optionalUser = userService.findByEmail(email);
         Boolean existsEmail = userService.exitsByEmail(email);
@@ -110,16 +112,18 @@ public class UserController {
             user = optionalUser.get();
             if (!"google".equals(user.getProvider())) {
                 return ResponseEntity.status(HttpStatus.CONFLICT)
-                        .body("Email này đã được đăng ký bằng tài khoản mật hkẩu");
+                        .body(new ResponseMessage("Email này đã được đăng ký bằng tài khoản mật khẩu"));
             }
         }
         user = new User();
         Set<Role> role = roleRepo.findByRoleName("USER");
-        if(!existsEmail){
+        if (!existsEmail) {
+            user.setAvatar(picture);
             user.setEmail(email);
             user.setUserName(name);
             user.setPassword("");
             user.setProvider("google");
+            user.setVip(false);
             user.setRoles(role);
             user = userRepo.save(user);
         }
@@ -163,9 +167,10 @@ public class UserController {
     }
 
     @PutMapping("/delete")
-    public Boolean deleteUser(@RequestParam Long id){
+    public Boolean deleteUser(@RequestParam Long id) {
         return userService.deleteUser(id);
     }
+
     // Lấy tất cả người dùng
     @GetMapping
     public List<User> getAllUsers() {
@@ -195,26 +200,32 @@ public class UserController {
     public long countVipUsers() {
         return userService.countVipUsers();
     }
+
     @GetMapping("/vip")
     public List<User> getVipUsers() {
         return userService.getVipUsers();
     }
+
     @GetMapping("/normal")
     public List<User> getNormalUsers() {
         return userService.getNormalUsers();
     }
+
     @GetMapping("/years")
     public List<Integer> getRegistrationYears() {
         return userService.getAllYears();
     }
+
     @GetMapping("/monthly-registrations/{year}")
     public List<MonthlyUserCountDTO> getMonthlyUserRegistrations(@PathVariable("year") int year) {
         return userService.getUserRegistrationsByYear(year);
     }
+
     @GetMapping("/getByYear")
     public List<User> getByYear(@RequestParam(name = "year") int year) {
         return userService.getAllByYear(year);
     }
+
     @GetMapping("/getPageUser")
     public ResponseEntity<Page<User>> getPageUser(
             @RequestParam(defaultValue = "0") int page,
@@ -230,15 +241,53 @@ public class UserController {
 
     @GetMapping("/getByUserName/{userName}")
     public ResponseEntity<?> getProfile(@PathVariable("userName") String userName) {
-        if(userService.getByUsername(userName)==null){
+        if (userService.getByUsername(userName) == null) {
             return new ResponseEntity(new ResponseMessage("Find not found user"), HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(userService.getByUsername(userName));
     }
 
     @PutMapping("/updateProfile/{id}")
-    public ResponseEntity<?> updateProfile(@PathVariable("id")Long id, @RequestBody UserEditTO userDto) {
+    public ResponseEntity<?> updateProfile(@PathVariable("id") Long id, @RequestBody UserEditTO userDto) {
         userService.updateProfile(id, userDto);
         return new ResponseEntity<>(new ResponseMessage("Update success"), HttpStatus.OK);
     }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestParam String email) throws MessagingException {
+        if (!userService.exitsByEmail(email)) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("Email không tồn tại"));
+        }
+        String otp = cacheService.generateOtp(email);
+        mailRegister.sendOtp(email, otp);
+        return ResponseEntity.ok("OTP đã được gửi về mail của bạn");
+    }
+
+    @PostMapping("/verify-otp")
+    public ResponseEntity<?> verifyOtp(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String otp = request.get("otp");
+        String cachedOtp = cacheService.getOtp(email);
+        System.out.println("otp after input: " + otp);
+        System.out.println("otp after get: " + cachedOtp);
+        if (otp == null || otp.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(new ResponseMessage("OTP không được để trống"));
+        }
+        if (otp != null && cachedOtp != null && cachedOtp.equals(otp)) {
+            System.out.println(otp != null && cachedOtp != null && cachedOtp.equals(otp));
+            cacheService.clearOtp(email);
+            return ResponseEntity.ok(new ResponseMessage("Xác minh OTP thành công"));
+        }
+        return ResponseEntity.badRequest().body(new ResponseMessage("OTP không khớp"));
+    }
+
+    @PutMapping("/resetPassword")
+    public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String password = request.get("password");
+        System.out.println(password);
+        userService.resetPassword(password,email);
+        return ResponseEntity.ok(new ResponseMessage("Thay đổi mật khẩu thành công"));
+    }
+
 }

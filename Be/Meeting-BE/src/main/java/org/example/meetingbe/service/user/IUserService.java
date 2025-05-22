@@ -32,6 +32,7 @@ public interface IUserService {
     List<User> getAllByYear(int year);
     List<MonthlyUserCountDTO> getUserRegistrationsByYear(int year);
     UserEditTO getByUsername(String username);
-
+    User resetPassword(String password, String email);
     User updateProfile(Long id,UserEditTO userEditTO);
+    int updateUserVip(String userName);
 }

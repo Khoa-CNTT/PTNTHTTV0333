@@ -1,5 +1,5 @@
 
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { JwtService } from './jwt.service';
 import { Router } from '@angular/router';
@@ -63,6 +63,26 @@ export class UserService {
 
   countTotalUsers(year: number): Observable<any> {
     return this.httpClient.get(this.API_URL + 'count?year=' + year);
+  }
+
+  forgotPassword(email:string):Observable<string>{
+    return this.httpClient.post(this.API_URL + "forgot-password?email=" + email, {},
+      {responseType: 'text'}
+    );
+  }
+
+  verifyOtp(email: string, otp: string): Observable<any> {
+    return this.httpClient.post<any>(
+      `${this.API_URL}verify-otp`,
+      { email, otp } 
+    );
+  }
+
+  resetPassword(email: string, password: string): Observable<any>{
+    return this.httpClient.put<any>(
+      `${this.API_URL}resetPassword`,
+      { email, password } 
+    );
   }
 
 

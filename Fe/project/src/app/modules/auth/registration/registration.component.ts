@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, NgZone, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { JwtService } from 'src/app/services/jwt.service';
@@ -23,11 +23,36 @@ export class RegistrationComponent implements OnInit {
 
   constructor(private userService: UserService, private router: Router, private toast: ToastrService, private jwtService: JwtService, private http: HttpClient, private ngZone: NgZone) {
     this.formRegister = new FormGroup({
-      userName: new FormControl(),
-      password: new FormControl(),
-      email: new FormControl(),
-      rePassword: new FormControl()
-    })
+      userName: new FormControl('', [
+        Validators.required,
+        Validators.minLength(6),
+        Validators.pattern(/^(?=.*[a-z])(?=.*\d)[a-zA-Z\d]+$/)  
+      ]),
+      password: new FormControl('', [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern(/^(?=.*[a-z])(?=.*\d)[a-zA-Z\d]+$/) 
+      ]),
+      email: new FormControl('', [
+        Validators.required,
+        Validators.pattern(/^[a-zA-Z0-9._%+-]+@gmail\.com$/) 
+      ]),
+      rePassword: new FormControl('', Validators.required)
+    });
+  }
+  validation_messages = {
+    userName:[
+      { type: 'required', message: 'Vui lòng nhập tên tài khoản.' },
+      { type: 'pattern', message: 'Tên tài khoản chứa chữ thường, chữ số và trên 5 ký tự.' }
+    ],
+    email: [
+      { type: 'required', message: 'Vui lòng nhập email.' },
+      { type: 'pattern', message: 'Vui lòng nhập đúng định dạng.' }
+    ],
+    password:[
+      { type: 'required', message: 'Vui lòng nhập mật khẩu.' },
+      { type: 'pattern', message: 'Mật khẩu chứa chữ thường, chữ số và trên 8 ký tự (vd: abcd123456).' }
+    ] 
   }
 
   
@@ -35,11 +60,18 @@ export class RegistrationComponent implements OnInit {
   submitRegister() {
     this.isLoading = true;
     if (this.formRegister.get('rePassword')?.value == this.formRegister.get('password')?.value) {
-      this.userService.register(this.formRegister.value).subscribe(next => {
-        this.toast.success('Đăng ký thành công');
+      this.userService.register(this.formRegister.value).subscribe( {
+        next: (res) =>{
+          this.toast.success('Đăng ký thành công');
 
-        this.isLoading = false;
-        this.router.navigateByUrl("/auth/login");
+          this.isLoading = false;
+          this.router.navigateByUrl("/auth/login");
+        },
+        error: (err) => {
+          this.isLoading = false;
+          const errorMessage = err.error?.message || 'Đăng ký thất bại. Vui lòng thử lại.';
+          this.toast.error(errorMessage);
+        }
       })
     } else {
       this.isLoading = false;
@@ -96,7 +128,10 @@ export class RegistrationComponent implements OnInit {
         });
       },
       error: err => {
-        console.error('Google login failed:', err);
+        const errorMessage = err.error?.message || 'Đăng nhập Google thất bại. Vui lòng thử lại.';
+        this.ngZone.run(() => {
+          this.toast.error(errorMessage);
+        });
       }
     });
   }

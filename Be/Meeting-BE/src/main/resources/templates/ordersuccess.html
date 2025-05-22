@@ -1,10 +1,110 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi"  xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="UTF-8" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .email-header {
+            background-color: #c2363f;
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .email-body {
+            padding: 30px 20px;
+            color: #333333;
+            line-height: 1.6;
+        }
+
+        .email-body h2 {
+            margin-top: 0;
+            color: #c2363f;
+        }
+
+        .email-footer {
+            text-align: center;
+            font-size: 13px;
+            color: #999999;
+            padding: 20px;
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .info-table td {
+            padding: 8px 0;
+        }
+
+        .info-table td:first-child {
+            font-weight: bold;
+            width: 150px;
+            color: #444;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 24px;
+            background-color: #c2363f;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background-color: #a52b34;
+        }
+    </style>
 </head>
 <body>
-<H1>Thanh toán thành công</H1>
+<div class="email-container">
+    <div class="email-header">
+        <h1>Thanh toán thành công</h1>
+    </div>
+    <div class="email-body">
+        <h2>Xin chào <span style="color:#000;" th:text="${name}"></span>,</h2>
+        <p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi. Chúng tôi xác nhận rằng thanh toán của bạn đã được xử lý thành công.</p>
+
+        <table class="info-table">
+            <tr>
+                <td>👤 Người dùng:</td>
+                <td th:text="${name}"></td>
+            </tr>
+            <tr>
+                <td>📅 Ngày thanh toán:</td>
+                <td th:text="${#temporals.format(time, 'dd/MM/yyyy HH:mm')}"></td>
+            </tr>
+            <tr>
+                <td>💰 Số tiền:</td>
+                <td th:text="${#numbers.formatDecimal(total, 0, 'COMMA', 3, 'POINT')}"></td>
+            </tr>
+        </table>
+
+        <a href="{{redirectUrl}}" class="btn">Xem chi tiết</a>
+    </div>
+    <div class="email-footer">
+        © 2025 Công ty của bạn. Mọi quyền được bảo lưu.
+    </div>
+</div>
 </body>
 </html>

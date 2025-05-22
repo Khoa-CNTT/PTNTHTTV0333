@@ -35,9 +35,9 @@ public class UserService implements IUserService {
     @Override
     public void register(Register register) throws MessagingException {
         Set<Role> role = roleRepo.findByRoleName("USER");
-        User user = new User("local", false, register.getUserName(), passwordEncoder.encode(register.getPassword()),register.getEmail(), role);
+        User user = new User("local", false, register.getUserName(), passwordEncoder.encode(register.getPassword()),register.getEmail(), role, "https://scr.vn/wp-content/uploads/2020/07/Avatar-Facebook-trắng.jpg");
         userRepo.save(user);
-        mailRegister.sendEmailRegister(register.getEmail());
+        mailRegister.sendEmailRegister(register.getEmail(), register.getUserName());
     }
 
     @Override
@@ -157,6 +157,14 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public User resetPassword(String password, String email) {
+        Optional<User> user = userRepo.findByEmail(email);
+        user.get().setPassword(passwordEncoder.encode(password));
+        userRepo.save(user.get());
+        return user.get();
+    }
+
+    @Override
     public User updateProfile(Long id,UserEditTO userEditTO) {
         if (userRepo.existsById(id)) {
             User user = userRepo.findById(id).get();
@@ -175,6 +183,11 @@ public class UserService implements IUserService {
         } else {
             throw new EntityNotFoundException("User with id " + id + " not found");
         }
+    }
+
+    @Override
+    public int updateUserVip(String userName) {
+        return userRepo.updateUserVip(userName);
     }
 
     public User dtoToObject(UserDto dto){

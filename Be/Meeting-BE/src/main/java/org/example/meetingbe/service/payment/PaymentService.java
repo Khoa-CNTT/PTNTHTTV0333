@@ -1,8 +1,14 @@
 package org.example.meetingbe.service.payment;
 
+import jakarta.mail.MessagingException;
 import org.example.meetingbe.dto.MonthlyTotalDTO;
 import org.example.meetingbe.model.Payment;
+import org.example.meetingbe.model.User;
 import org.example.meetingbe.repository.IPaymentRepo;
+import org.example.meetingbe.repository.IUserRepo;
+import org.example.meetingbe.service.mailSender.MailRegister;
+import org.example.meetingbe.service.user.IUserService;
+import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +21,10 @@ import java.util.stream.Collectors;
 public class PaymentService implements IPaymentService {
     @Autowired
     private IPaymentRepo paymentRepo;
-
+    @Autowired
+    private IUserRepo userRepo;
+    @Autowired
+    private MailRegister mailRegister;
     @Override
     public Double getTotalRevenue() {
         Double total = paymentRepo.getTotalRevenue();
@@ -56,6 +65,14 @@ public class PaymentService implements IPaymentService {
     @Override
     public List<Integer> getAllYears() {
         return paymentRepo.findAllYears();
+    }
+
+    @Override
+    public Payment addNewPayment(String userName){
+        User user = userRepo.findByUserName(userName);
+        Payment payment = new Payment(1000000d, true, LocalDateTime.now(), user);
+        paymentRepo.save(payment);
+        return payment;
     }
 
     @Override

@@ -12,7 +12,6 @@ export class NavigationComponent implements OnInit {
   private intervalId: any;
   dropdownVisible = false;
   adminDropdownVisible = false;
-  url:any = null;
   constructor(private userService: UserService, private paymentService: PaymentService){
 
   }

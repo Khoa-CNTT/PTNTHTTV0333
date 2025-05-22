@@ -77,30 +77,31 @@
         <h5 class="modal-title" id="scheduleMeetingModalLabel">Lên lịch cho cuộc họp</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng" style="filter: invert(1);"></button>
       </div>
-
+      <form [formGroup]="scheduleForm" (ngSubmit)="submitSchedule()" *ngIf="scheduleForm">
       <div class="modal-body">
         <!-- Tiêu đề cuộc họp -->
         <div class="mb-3">
-          <input type="text" class="form-control border-danger-subtle"placeholder="Tiêu đề cuộc họp" />
+          <input type="text" class="form-control border-danger-subtle"placeholder="Tiêu đề cuộc họp" formControlName="title" />
         </div>
 
 
         <!-- Email người tham gia -->
         <div class="mb-3">
-          <input type="email" class="form-control border-danger-subtle" placeholder="Email người tham gia" />
+          <input type="email" class="form-control border-danger-subtle" placeholder="Email người tham gia" formControlName="email" />
         </div>
 
         <!-- Ngày giờ bắt đầu -->
         <div class="mb-3">
-          <input type="datetime-local" class="form-control border-danger-subtle" />
+          <input type="datetime-local" class="form-control border-danger-subtle" formControlName="createAt"/>
         </div>
 
       </div>
 
       <div class="modal-footer">
         <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="color: #c2363f;">Hủy</button>
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" style="background-color: #c2363f;">Tạo phòng</button>
+        <button type="submit" class="btn btn-danger" data-bs-dismiss="modal" style="background-color: #c2363f;">Tạo phòng</button>
       </div>
+    </form>
     </div>
   </div>
 </div>
