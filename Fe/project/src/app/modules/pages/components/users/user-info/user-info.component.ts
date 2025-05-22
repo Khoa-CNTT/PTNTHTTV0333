@@ -38,12 +38,12 @@ export class UserInfoComponent implements OnInit {
       this.avatar = this.user.avatar;
       this.userForm = this.formBuilder.group({
         id: [this.user.id],
-        email: [this.user.email, [Validators.required, Validators.email]],
-        firstName: [this.user.firstName, Validators.required],
-        lastName: [this.user.lastName, Validators.required],
-        userName: [this.user.userName, Validators.required],
+        email: [this.user.email, [Validators.email]],
+        firstName: [this.user.firstName],
+        lastName: [this.user.lastName],
+        userName: [this.user.userName],
         isVip: [this.user.isVip],
-        gender: [this.user.gender, Validators.required],
+        gender: [this.user.gender],
         phone: [this.user.phone, [Validators.pattern(/^\d{10,11}$/)]],
         address: [this.user.address],
         birthday: [this.user.birthday],
@@ -60,7 +60,6 @@ export class UserInfoComponent implements OnInit {
     const updatedUser = this.userForm.value;
     const userId = this.user.id;
 
-    if (this.userForm.dirty && this.userForm.valid) {
       if (this.selectedImage) {
         const nameImg = this.getCurrentDateTime() + this.selectedImage.name;
         const fileRef = this.storage.ref(nameImg);
@@ -82,9 +81,6 @@ export class UserInfoComponent implements OnInit {
         }
         this.updateUser(userId, updatedUser);
       }
-    } else {
-      this.toast.warning('Vui lòng điền thông tin cần chỉnh sửa.', 'Message');
-    }
   }
 
   private updateUser(userId: number, updatedUser: any) {
