@@ -81,33 +81,22 @@ public class MeetingService implements IMeetingService {
         }
     }
 
-        Meeting meeting = meetingRepo.findByCode(meetingId)
-                .orElseThrow(() -> new RuntimeException("Meeting not found in database"));
-        User user = userRepo.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Kiểm tra xem người dùng đã tham gia chưa
-        boolean alreadyParticipant = participantsRepo.findByMeetingAndUser(meeting, user).isPresent();
-        if (!alreadyParticipant) {
-            Participants participant = new Participants();
-            participant.setJoinAt(LocalDateTime.now());
-            participant.setMeeting(meeting);
-            participant.setUser(user);
-            participantsRepo.save(participant);
+    public Meeting convertToEntity(MeetingDto dto) {
+        Set<User> users = dto.getUser().stream()
+                .map(id -> userRepo.findById(id)
+                        .orElseThrow(() -> new RuntimeException("User not found: " + id)))
+                .collect(Collectors.toSet());
 
-            meetingDto.getUser().add(userId);
-        }
+        Meeting meeting = new Meeting();
+        meeting.setId(dto.getId());
+        meeting.setCode(dto.getCode());
+        meeting.setTitle(dto.getTitle());
+        meeting.setActive(dto.getActive());
+        meeting.setStartTime(dto.getStartTime());
+        meeting.setEndTime(dto.getEndTime());
+        meeting.setCreateAt(dto.getCreateAt());
+        return meeting;
     }
 
-    public void updateParticipantLeft(String meetingId, Long userId) {
-        Meeting meeting = meetingRepo.findByCode(meetingId)
-                .orElseThrow(() -> new RuntimeException("Meeting not found"));
-        User user = userRepo.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        participantsRepo.findByMeetingAndUser(meeting, user).ifPresent(participant -> {
-            participant.setLeftAt(LocalDateTime.now());
-            participantsRepo.save(participant);
-        });
-    }
 }

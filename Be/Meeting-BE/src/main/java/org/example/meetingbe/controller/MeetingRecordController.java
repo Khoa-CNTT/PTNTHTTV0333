@@ -23,6 +23,7 @@ public class MeetingRecordController {
 
     @PostMapping("/")
     public MeetingRecording addNewRecord(@RequestBody MeetingRecordingDto meetingRecording){
+        System.out.println(meetingRecording.getMeetingId());
         return meetingRecordingService.addOrUpdateMeetingRecord(meetingRecording);
     }
 }

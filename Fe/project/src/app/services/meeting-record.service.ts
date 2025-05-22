@@ -10,10 +10,11 @@ export class MeetingRecordService {
   constructor(private http: HttpClient) { }
 
   findByMeetingId(meetingId: any) {
+    console.log(this.API_MEETING_RECORD + meetingId);
     return this.http.get(this.API_MEETING_RECORD + meetingId);
   }
 
   addNewRecord(record: any) {
-    return this.http.post(this.API_MEETING_RECORD + 'addNewRecord', record);
+    return this.http.post(this.API_MEETING_RECORD, record);
   }
 }

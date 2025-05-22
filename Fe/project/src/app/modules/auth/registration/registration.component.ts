@@ -21,8 +21,7 @@ export class RegistrationComponent implements OnInit {
   formRegister: FormGroup;
   isLoading = false;
 
-  constructor(private userService: UserService, private router: Router, private toast: ToastrService) {
-  constructor(private userService: UserService, private router:Router, private toast: ToastrService, private jwtService: JwtService, private http: HttpClient, private ngZone: NgZone) {
+  constructor(private userService: UserService, private router: Router, private toast: ToastrService, private jwtService: JwtService, private http: HttpClient, private ngZone: NgZone) {
     this.formRegister = new FormGroup({
       userName: new FormControl(),
       password: new FormControl(),
@@ -31,7 +30,7 @@ export class RegistrationComponent implements OnInit {
     })
   }
 
-
+  
 
   submitRegister() {
     this.isLoading = true;
@@ -40,10 +39,6 @@ export class RegistrationComponent implements OnInit {
         this.toast.success('Đăng ký thành công');
 
         this.isLoading = false;
-  submitRegister(){
-    if(this.formRegister.get('rePassword')?.value == this.formRegister.get('password')?.value){
-        this.userService.register(this.formRegister.value).subscribe(next=>{
-        this.toast.success('Đăng ký tài khoản thành công');
         this.router.navigateByUrl("/auth/login");
       })
     } else {
