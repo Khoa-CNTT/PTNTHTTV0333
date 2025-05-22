@@ -17,6 +17,8 @@ public class MeetingDto {
     private LocalDateTime endTime;
     private Long hostId;
     private LocalDateTime createAt = LocalDateTime.now();
+
+    private Long hostId;
     private Set<Long> user = new HashSet<>();
 
     public MeetingDto() {

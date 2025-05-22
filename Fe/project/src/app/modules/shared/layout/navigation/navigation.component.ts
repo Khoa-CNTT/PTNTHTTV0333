@@ -56,6 +56,17 @@ export class NavigationComponent implements OnInit {
     this.userService.logout();
   }
   
+  payment(){
+    console.log("pay");
+    this.paymentService.submitPay(1000000, "abcd").subscribe(next =>{
+      this.url = next;
+      console.log(this.url);
+      const redirectUrl = next.redirectUrl;
+      window.location.href = redirectUrl;
+    })
+
+    
+  }
 
 
   setupNavi(): boolean {

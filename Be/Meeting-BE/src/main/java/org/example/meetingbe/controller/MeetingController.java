@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+
 import java.time.LocalDateTime;
 
 @RestController
@@ -24,7 +25,6 @@ public class MeetingController {
         String title = request.get("title").toString();
         return meetingService.createRoom(hostId, title);
     }
-
 
     @GetMapping("/{roomId}")
     public MeetingDto getRoom(@PathVariable String roomId) {

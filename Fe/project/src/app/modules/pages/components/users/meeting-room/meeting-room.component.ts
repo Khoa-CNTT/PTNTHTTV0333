@@ -73,7 +73,7 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
     await this.startWebRTC();
     this.loadChatHistory();
     this.connectWebSocket();
-    this.ParticipantsService.addParticipant(this.participantId,this.roomId).subscribe({
+    this.ParticipantsService.addParticipant(this.participantId, this.roomId).subscribe({
       next: () => console.log('save paticipant successfully'),
       error: (err) => {
         console.error('Error save paticipant:', err);
@@ -839,7 +839,6 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    window.addEventListener('popstate', this.onBackButton);
     clearInterval(this.intervalId);
 
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {

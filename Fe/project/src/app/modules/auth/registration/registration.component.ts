@@ -30,7 +30,7 @@ export class RegistrationComponent implements OnInit {
     })
   }
 
-  
+
 
   submitRegister() {
     this.isLoading = true;

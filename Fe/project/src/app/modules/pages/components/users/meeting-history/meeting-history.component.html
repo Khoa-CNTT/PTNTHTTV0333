@@ -31,7 +31,8 @@
               <td>{{item.meeting.title}}</td>
               <td>{{item.joinAt | date: 'short'}}</td>
               <td>{{item.leftAt | date: 'short'}}</td>
-              <td><button class="btn-view" data-bs-toggle="modal" data-bs-target="#xem">Chi tiết</button></td>
+              <td><button (click)="getIdBlog(item)" class="btn-view" data-bs-toggle="modal" data-bs-target="#xem">Chi
+                  tiết</button></td>
             </tr>
             <!-- Thêm dòng khác tùy ý -->
           </tbody>
@@ -55,21 +56,92 @@
 </div>
 
 <div class="modal fade" id="xem" tabindex="-1" aria-labelledby="xemLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content" style="border-radius: 12px;">
-      <div class="modal-header" style="background-color: #c2363f; color: white;">
-        <h5 class="modal-title" id="xemLabel">
-          <strong>Xem chi tiết</strong>
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"
-          style="filter: invert(1);"></button>
-      </div>
-      <div class="modal-body">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content rounded-4 shadow-sm border-0">
 
+      <!-- Modal Header -->
+      <div class="modal-header bg-danger text-white rounded-top-4">
+        <h5 class="modal-title fw-bold" id="xemLabel">Chi tiết lịch sử</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="color: #c2363f;">Đóng</button>
-      </div>
+
+      <!-- Modal Body -->
+      <form [formGroup]="form">
+        <div class="modal-body px-4 pt-4 pb-2">
+
+          <!-- Thông tin chung -->
+          <div class="mb-4">
+            <div class="row gy-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Tiêu đề:</label>
+                <div class="form-control-plaintext border rounded-2 px-3 py-2">
+                  {{ form.value.meeting?.title || 'Không có tiêu đề' }}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Email người tạo:</label>
+                <div class="form-control-plaintext border rounded-2 px-3 py-2">
+                  {{ form.value.meeting?.user?.email || 'Không có email' }}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Tham gia lúc:</label>
+                <div class="form-control-plaintext border rounded-2 px-3 py-2">
+                  {{ form.value.joinAt | date:'short' }}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Rời phòng lúc:</label>
+                <div class="form-control-plaintext border rounded-2 px-3 py-2">
+                  {{ form.value.leftAt | date:'short' }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </form>
+
+      <!-- Upload và Tóm tắt -->
+      <!-- Upload và Tóm tắt -->
+      <form [formGroup]="formRecord" (ngSubmit)="onSubmit()" enctype="multipart/form-data" *ngIf="formRecord"
+        class="px-4 pb-4">
+        <!-- Record -->
+        <div class="mb-4">
+          <label class="form-label fw-semibold">Bản ghi:</label>
+          <div class="d-flex flex-wrap align-items-center gap-3">
+            <div *ngIf="meetFile">
+              <div class="text-muted">Tệp: {{ meetFile }}</div>
+              <a (click)="downloadFile()" class="btn btn-outline-success btn-sm">
+                <i class="bi bi-download"></i> Tải bản ghi
+              </a>
+            </div>
+
+            <div *ngIf="!meetFile">
+              <div class="text-danger fst-italic">Chưa có bản ghi được tải lên.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upload file -->
+        <div class="mb-4">
+          <label for="recordFile" class="form-label fw-semibold">Tải bản ghi mới:</label>
+          <input type="file" formControlName="recordUrl" id="recordFile" class="form-control"
+            (change)="onFileSelected($event)">
+        </div>
+
+        <!-- Action buttons -->
+        <div class="modal-footer border-0 pt-0 px-0 d-flex justify-content-between">
+          <button type="button" class="btn btn-danger d-flex align-items-center gap-2" (click)="summarizeByAI()">
+            <i class="bi bi-stars"></i> Tóm tắt bằng AI
+          </button>
+          <button type="submit" class="btn btn-danger d-flex align-items-center gap-2" [disabled]="!selectedFile"
+            data-bs-dismiss="modal">
+            <i class="bi bi-upload"></i> Lưu bản ghi
+          </button>
+        </div>
+      </form>
+
     </div>
   </div>
 </div>
