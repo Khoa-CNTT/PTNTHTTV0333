@@ -34,7 +34,7 @@ public class User {
     @Column(name = "provider", columnDefinition = "varchar(20)")
     private String provider;
     @Column(name = "create_at", columnDefinition = "DATETIME")
-    private LocalDateTime createAt;
+    private LocalDateTime createAt = LocalDateTime.now();
     @Column(name = "status", columnDefinition = "BIT")
     private Boolean status = false;
     @Column(name = "birthday", columnDefinition = "DATE")
