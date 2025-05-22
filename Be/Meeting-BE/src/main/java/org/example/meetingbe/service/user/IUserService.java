@@ -34,5 +34,7 @@ public interface IUserService {
     UserEditTO getByUsername(String username);
     Page<User> getByUN(String userName,Pageable pageable);
 
+    User resetPassword(String password, String email);
     User updateProfile(Long id,UserEditTO userEditTO);
+    int updateUserVip(String userName);
 }

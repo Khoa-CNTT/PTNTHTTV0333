@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { JwtService } from 'src/app/services/jwt.service';
 import { MeetingService } from 'src/app/services/meeting.service';
+import { ScheduleService } from 'src/app/services/schedule.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -14,6 +15,7 @@ import { UserService } from 'src/app/services/user.service';
 export class HomeMainComponent {
   meetingCode: string = '';
   hostId: any
+  scheduleForm: FormGroup;
   creatingForm: FormGroup
 
   constructor(
@@ -21,8 +23,17 @@ export class HomeMainComponent {
     private router: Router,
     private toastr: ToastrService,
     private userSer: UserService,
-    private jwtService: JwtService
-  ) { }
+    private jwtService: JwtService,
+    private scheduleService: ScheduleService
+  ) {
+    this.scheduleForm = new FormGroup({
+      title: new FormControl(),
+      email: new FormControl(),
+      createAt: new FormControl()
+    })
+
+
+   }
 
   ngOnInit() {
     this.Load();
@@ -35,7 +46,7 @@ export class HomeMainComponent {
   createRoom() {
   this.userSer.getByUserName().subscribe((user) => {
     this.hostId = user.id;
-    const title = this.creatingForm.get('title')?.value; 
+    const title = this.creatingForm.get('title')?.value;
 
     this.meetingService.createRoom(this.hostId, title).subscribe((meeting) => {
       this.router.navigate([`pages/components/meeting-room/${meeting.code}`]);
@@ -59,6 +70,15 @@ export class HomeMainComponent {
     if (this.jwtService.verifyToken()) {
       this.router.navigateByUrl("/pages/components/home-main");
     }
+  }
+
+  submitSchedule(){
+    this.scheduleService.submit(this.scheduleForm.value, localStorage.getItem("Name_key")).subscribe(
+      next => {
+        this.toastr.success(next.message);
+        this.scheduleForm.reset();
+      }
+    )
   }
 
 }

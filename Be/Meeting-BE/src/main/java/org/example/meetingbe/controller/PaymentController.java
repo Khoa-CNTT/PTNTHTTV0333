@@ -1,10 +1,14 @@
 package org.example.meetingbe.controller;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.example.meetingbe.dto.MonthlyTotalDTO;
 import org.example.meetingbe.model.Payment;
 import org.example.meetingbe.repository.IPaymentRepo;
+import org.example.meetingbe.service.mailSender.MailRegister;
 import org.example.meetingbe.service.payment.IPaymentService;
+import org.example.meetingbe.service.user.IUserService;
 import org.example.meetingbe.service.vnpay.VNPayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +30,8 @@ public class PaymentController {
     private IPaymentService paymentService;
     @Autowired
     private VNPayService vnPayService;
+    @Autowired
+    private IUserService userService;
 
     @GetMapping("/revenue")//Tong doanh thu
     public Double getTotalRevenue(){
@@ -54,22 +61,28 @@ public class PaymentController {
     }
 
     @PostMapping("/submitOrder")
-    public ResponseEntity<Map<String, String>> submidOrder(@RequestParam(value = "amount", defaultValue = "1000000") int orderTotal,
+    public ResponseEntity<Map<String, String>> submidOrder(HttpServletRequest request,
+                                                           @RequestParam(value = "amount", defaultValue = "1000000") int orderTotal,
                                                            @RequestParam("orderInfo") String orderInfo,
-                                                           HttpServletRequest request){
-//        String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-        String baseUrl = "http://localhost:4200/pages/components/payment";
-        String vnpayUrl = vnPayService.createOrder(orderTotal, orderInfo, baseUrl);
+                                                           @RequestParam("userName") String userName){
+        String modifiedOrderInfo = orderInfo + "|userName=" + userName;
+        String vnpayUrl = vnPayService.createOrder(orderTotal, modifiedOrderInfo);
         Map<String, String> response = new HashMap<>();
         response.put("redirectUrl", vnpayUrl);
-
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/vnpay-payment")
-    public ResponseEntity<Boolean> GetMapping(HttpServletRequest request){
+    public ResponseEntity<Boolean> GetMapping(HttpServletRequest request) throws MessagingException {
+        request.getParameterMap().forEach((k, v) -> System.out.println(k + " = " + Arrays.toString(v)));
         int paymentStatus =vnPayService.orderReturn(request);
-        return ResponseEntity.ok(paymentStatus == 1 ? true : false);
+        String userName = (String) request.getAttribute("userName");
+        if(paymentStatus == 1){
+            userService.updateUserVip(userName);
+            paymentService.addNewPayment(userName);
+            return ResponseEntity.ok(true);
+        }
+        return ResponseEntity.ok(false);
     }
 
 }

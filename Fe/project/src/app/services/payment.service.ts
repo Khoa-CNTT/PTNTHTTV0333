@@ -22,21 +22,15 @@ export class PaymentService {
     return this.http.get(this.API_PAYMENT + '/revenue/total?year=' + year);
   }
 
-  submitPay(total: any, orderInfo: string): Observable<any> {
+  submitPay(total: any, orderInfo: string, userName:string):Observable<any>{
     let params = new HttpParams()
-      .set('amount', total.toString())
-      .set('orderInfo', orderInfo.toString());
-    return this.http.post<any>(`${this.API_PAYMENT}/submitOrder`, {}, { params });
+          .set('amount', total.toString())
+          .set('orderInfo', orderInfo.toString())
+          .set('userName', userName.toString());;
+    return this.http.post<any>(`${this.API_PAYMENT}/submitOrder`,{}, { params });
   }
 
-  submitPay2(total: any, orderInfo: string): Observable<any> {
-    let params = new HttpParams()
-      .set('amount', total.toString())
-      .set('orderInfo', orderInfo.toString());
-    return this.http.post<any>(`${this.API_PAYMENT}/submitOrder`, {}, { params });
-  }
-
-  getResultPay() {
+  getResultPay(){
     return this.http.get<boolean>(this.API_PAYMENT + '/vnpay-payment');
   }
 }

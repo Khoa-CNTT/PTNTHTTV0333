@@ -21,27 +21,16 @@ export class PaymentComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const params = this.route.snapshot.queryParams;
-
-    const httpParams = new HttpParams({ fromObject: params });
-
-    this.http.get<boolean>('http://localhost:8080/api/payment/vnpay-payment', { params: httpParams })
-      .subscribe(
-        result => {
-          this.success = result;
-          // Redirect sau vài  setTimeout(() => this.router.navigateByUrl('/pages/components/home-main'), 3000);
-        },
-        error => {
-          this.success = false;
-        }
-      );
   }
 
   payment() {
-    this.paymentService.submitPay2(1000000,"abc").subscribe(next => {
+    console.log("pay");
+    const userName = localStorage.getItem("Name_key")
+    this.paymentService.submitPay(1000000,"abc", userName).subscribe(next => {
       this.url = next;
       console.log(this.url);
       const redirectUrl = next.redirectUrl;
+      console.log(redirectUrl);
       window.location.href = redirectUrl;
     })
   }

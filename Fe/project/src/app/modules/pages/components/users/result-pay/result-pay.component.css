@@ -1,0 +1,78 @@
+.container {
+    margin: 100px auto;
+    font-family: 'Quicksand', sans-serif;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* height: 100vh */
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    padding: 40px 30px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    animation: fadeIn 0.8s ease-in-out;
+  }
+
+  .checkmark {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #c2363f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    animation: pop 0.5s ease;
+  }
+
+  .checkmark svg {
+    width: 40px;
+    height: 40px;
+    stroke: white;
+    stroke-width: 3;
+    fill: none;
+  }
+
+  .title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #c2363f;
+    margin-bottom: 12px;
+  }
+
+  .message {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 30px;
+  }
+
+  .btn-home {
+    background-color: #c2363f;
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-home:hover {
+    background-color: #a52b34;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pop {
+    0% { transform: scale(0); }
+    100% { transform: scale(1); }
+  }

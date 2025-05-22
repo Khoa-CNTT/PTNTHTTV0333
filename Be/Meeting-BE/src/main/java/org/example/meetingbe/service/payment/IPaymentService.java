@@ -1,5 +1,6 @@
 package org.example.meetingbe.service.payment;
 
+import jakarta.mail.MessagingException;
 import org.example.meetingbe.dto.MonthlyTotalDTO;
 import org.example.meetingbe.model.Payment;
 
@@ -14,4 +15,5 @@ public interface IPaymentService {
     Double getTotalSpentByUser(Long userId);
     List<MonthlyTotalDTO> getRevenueByYear(int year);
     List<Integer> getAllYears();
+    Payment addNewPayment(String userName) throws MessagingException;
 }

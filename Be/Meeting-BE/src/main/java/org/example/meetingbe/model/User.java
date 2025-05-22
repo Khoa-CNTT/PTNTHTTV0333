@@ -128,13 +128,14 @@ public class User {
         this.address = address;
     }
 
-    public User(String provider, Boolean isVip, String userName, String password, String email, Set<Role> roles) {
+    public User(String provider, Boolean isVip, String userName, String password, String email, Set<Role> roles, String avatar) {
         this.provider = provider;
         this.isVip = isVip;
         this.userName = userName;
         this.password = password;
         this.email = email;
         this.roles = roles;
+        this.avatar = avatar;
     }
 
     public Boolean getStatus() {
