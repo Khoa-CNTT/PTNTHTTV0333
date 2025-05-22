@@ -73,7 +73,7 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
     await this.startWebRTC();
     this.loadChatHistory();
     this.connectWebSocket();
-    this.ParticipantsService.addParticipant(this.participantId, this.roomId).subscribe({
+    this.ParticipantsService.addParticipant(this.participantId,this.roomId).subscribe({
       next: () => console.log('save paticipant successfully'),
       error: (err) => {
         console.error('Error save paticipant:', err);
@@ -839,6 +839,7 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    window.addEventListener('popstate', this.onBackButton);
     clearInterval(this.intervalId);
 
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
@@ -879,6 +880,15 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
     const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const date = now.toLocaleDateString('vi-VN', { weekday: 'short', day: '2-digit', month: '2-digit' });
     this.currentTime = `${time} • ${date}`;
+  }
+  onBackButton = (event: PopStateEvent) => {
+    this.meetingService.leaveRoom(this.participantId,this.roomId).subscribe({
+      next: () => console.log('save time leave successfully'),
+      error: (err) => {
+        console.error('Error time leave paticipant:', err);
+        this.cdr.detectChanges();
+      },
+    });
   }
 
 }
