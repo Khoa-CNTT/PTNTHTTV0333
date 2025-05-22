@@ -163,7 +163,7 @@ public class UserController {
     }
 
     @PutMapping("/delete")
-    public User deleteUser(@RequestParam Long id) {
+    public User deleteUser(@RequestParam("id") Long id) {
         return userService.deleteUser(id);
     }
 
@@ -265,7 +265,7 @@ public class UserController {
         Sort.Direction direction = Sort.Direction.fromString(sort[1]);
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort[0]));
 
-        Page<User> contacts = userService.getAllByStatusTrue(pageable);
+        Page<User> contacts = userService.getAllByStatusFalse(pageable);
         return ResponseEntity.ok(contacts);
     }
 }

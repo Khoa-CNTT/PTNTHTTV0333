@@ -15,6 +15,8 @@ import java.util.Optional;
 
 @Repository
 public interface IUserRepo extends JpaRepository<User, Long> {
+    @Query("select u from User as u where u.userName like :userName")
+    Page<User> findByUserName(String userName,Pageable pageable);
     User findByUserName(String userName);
     Page<User> findBy(Pageable pageable);
     Boolean existsByUserName(String userName);

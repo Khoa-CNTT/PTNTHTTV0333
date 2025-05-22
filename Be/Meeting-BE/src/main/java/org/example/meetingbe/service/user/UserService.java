@@ -169,6 +169,11 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public Page<User> getByUN(String userName, Pageable pageable) {
+        return userRepo.findByUserName(userName,pageable);
+    }
+
+    @Override
     public User updateProfile(Long id,UserEditTO userEditTO) {
         if (userRepo.existsById(id)) {
             User user = userRepo.findById(id).get();

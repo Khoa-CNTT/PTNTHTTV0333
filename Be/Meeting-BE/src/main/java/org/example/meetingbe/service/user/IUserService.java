@@ -32,6 +32,7 @@ public interface IUserService {
     List<User> getAllByYear(int year);
     List<MonthlyUserCountDTO> getUserRegistrationsByYear(int year);
     UserEditTO getByUsername(String username);
+    Page<User> getByUN(String userName,Pageable pageable);
 
     User updateProfile(Long id,UserEditTO userEditTO);
 }

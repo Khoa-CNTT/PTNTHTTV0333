@@ -53,6 +53,7 @@ export class UserService {
     return this.httpClient.get(this.API_URL + 'getByUserName/' + name);
   }
 
+
   editUser(id: number, userForm: any): Observable<UserEditDto> {
     return this.httpClient.put<UserEditDto>(this.API_URL + 'updateProfile/' + id, userForm);
   }
@@ -61,23 +62,32 @@ export class UserService {
     return this.httpClient.get(this.API_URL + 'count?year=' + year);
   }
 
+  searchUserByUserName(username: string) {
+    const user = `${this.API_URL}getByUserName/${encodeURIComponent(username)}`;
+  return this.httpClient.get<any>(user);
+}
   
-  getAllUser(page: number, pageSize: number): Observable<Contact[]> {
+  getAllUser(page: number, pageSize: number): Observable<any> {
     const users = `${this.API_URL}getPageUser?page=${page}&size=${pageSize}`;
-    return this.httpClient.get<User[]>(users)
+    return this.httpClient.get<any>(users)
   }
 
-  getUserStatusTrue(page: number, pageSize: number): Observable<Contact[]> {
+  getUserStatusTrue(page: number, pageSize: number): Observable<any> {
     const users = `${this.API_URL}getUserStatusTrue?page=${page}&size=${pageSize}`;
-    return this.httpClient.get<User[]>(users)
+              console.log("true: " + users)
+
+    return this.httpClient.get<any>(users)
   }
 
-  getUserStatusFalse(page: number, pageSize: number): Observable<Contact[]> {
+  getUserStatusFalse(page: number, pageSize: number): Observable<any> {
     const users = `${this.API_URL}getUserStatusFalse?page=${page}&size=${pageSize}`;
-    return this.httpClient.get<User[]>(users)
+                  console.log("false: " + users)
+
+    return this.httpClient.get<any>(users)
   }
   updateStatusUser(id: number): Observable<any> {
-    return this.httpClient.put(`${this.API_URL}delete`,id)
+    console.log(`${this.API_URL}delete?id=`,id)
+    return this.httpClient.put(`${this.API_URL}delete?id=${id}`, {})
   }
 
 }
