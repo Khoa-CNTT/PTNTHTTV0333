@@ -63,7 +63,6 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
       next: () => console.log('Joined room successfully'),
       error: (err) => {
         console.error('Error joining room:', err);
-        this.errorMessage = 'Lỗi khi tham gia phòng. Vui lòng thử lại.';
         this.cdr.detectChanges();
       },
     });
