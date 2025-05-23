@@ -51,26 +51,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
             String targetParticipantId = (String) signal.get("targetParticipantId");
             String type = (String) signal.get("type");
 
-            if ("chat".equals(type)) {
-                String chatMessage = (String) signal.get("message");
-                String sendAt = (String) signal.get("sendAt");
-
-
-
-                // Broadcast message to all participants in the room
-                roomSessions.getOrDefault(roomId, new ConcurrentHashMap<>()).forEach((participantId, participantSession) -> {
-                    if (participantSession.isOpen() && !participantSession.getId().equals(session.getId())) {
-                        try {
-                            participantSession.sendMessage(new TextMessage(payload));
-                            logger.info("Sent chat message to: " + participantId);
-                        } catch (Exception e) {
-                            logger.error("Error sending chat message: " + e.getMessage());
-                        }
-                    }
-                });
-            }
-
-
             if (roomId == null || senderId == null || type == null) {
                 logger.warn("Missing required fields in signal: " + payload);
                 return;
@@ -78,6 +58,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
             logger.info("Processing signal: type=" + type + ", roomId=" + roomId + ", senderId=" + senderId + ", targetParticipantId=" + targetParticipantId);
 
+            // Lưu phiên của người tham gia
             if (session.isOpen()) {
                 roomSessions.computeIfAbsent(roomId, k -> new ConcurrentHashMap<>()).put(senderId, session);
                 sessionToParticipantId.put(session.getId(), senderId);
@@ -86,19 +67,27 @@ public class WebSocketHandler extends TextWebSocketHandler {
                 return;
             }
 
+            // Xóa các phiên không còn mở
             roomSessions.getOrDefault(roomId, new ConcurrentHashMap<>()).entrySet().removeIf(entry -> !entry.getValue().isOpen());
 
             logger.info("Current sessions in room " + roomId + ": " + roomSessions.get(roomId).keySet());
 
             if ("new-participant".equals(type)) {
+                // Thông báo cho tất cả các peer hiện tại để khởi tạo kết nối với người mới
                 Map<String, WebSocketSession> sessionsInRoom = roomSessions.getOrDefault(roomId, new ConcurrentHashMap<>());
+                Map<String, Object> newParticipantSignal = new HashMap<>();
+                newParticipantSignal.put("roomId", roomId);
+                newParticipantSignal.put("senderId", senderId);
+                newParticipantSignal.put("type", "new-participant");
+
                 for (WebSocketSession s : sessionsInRoom.values()) {
                     if (s.isOpen() && !s.getId().equals(session.getId())) {
-                        s.sendMessage(new TextMessage(payload));
-                        logger.info("Broadcast new-participant to: " + sessionToParticipantId.get(s.getId()));
+                        s.sendMessage(new TextMessage(objectMapper.writeValueAsString(newParticipantSignal)));
+                        logger.info("Notified new-participant to: " + sessionToParticipantId.get(s.getId()));
                     }
                 }
             } else if ("participant-left".equals(type)) {
+                // Thông báo cho tất cả các peer trong phòng
                 Map<String, WebSocketSession> sessionsInRoom = roomSessions.getOrDefault(roomId, new ConcurrentHashMap<>());
                 for (WebSocketSession s : sessionsInRoom.values()) {
                     if (s.isOpen() && !s.getId().equals(session.getId())) {
@@ -172,6 +161,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                 }
             }
 
+            // Xóa người tham gia khỏi danh sách
             roomSessions.values().forEach(sessions -> sessions.remove(participantId));
             sessionToParticipantId.remove(session.getId());
 
@@ -184,7 +174,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
                     put("type", "participant-left");
                 }});
 
-
+                // Thông báo cho tất cả các peer còn lại
                 for (WebSocketSession s : sessionsInRoom.values()) {
                     if (s.isOpen()) {
                         s.sendMessage(new TextMessage(payload));
@@ -192,7 +182,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
                     }
                 }
             }
-
 
             logger.info("Connection closed: sessionId=" + session.getId() + ", participantId=" + participantId + ", status=" + status);
         }
