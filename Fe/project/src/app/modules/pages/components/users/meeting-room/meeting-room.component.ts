@@ -1,17 +1,10 @@
-import { Meeting } from './../../../../../models/Meeting';
-import { ParticipantsService } from 'src/app/services/participants.service';
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { v4 as uuidv4 } from 'uuid';
-import { MeetingService } from 'src/app/services/meeting.service';
-import * as RecordRTC from 'recordrtc';
+import { HttpClient } from '@angular/common/http';
+import RecordRTC from 'recordrtc';
 import { JwtService } from 'src/app/services/jwt.service';
-
-declare global {
-  interface MediaDevices {
-    getDisplayMedia(constraints: MediaStreamConstraints): Promise<MediaStream>;
-  }
-}
+import { MeetingService } from 'src/app/services/meeting.service';
+import { ParticipantsService } from 'src/app/services/participants.service';
 
 @Component({
   selector: 'app-meeting-room',
@@ -36,6 +29,7 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
   ws: WebSocket | null = null;
   peerConnections: Map<string, RTCPeerConnection> = new Map();
   signalQueue: Map<string, Array<{ type: string; signal: any }>> = new Map();
+  pendingIceCandidates: Map<string, RTCIceCandidate[]> = new Map();
   participantId: string;
   chatMessagesList: { senderId: string; message: string; timestamp: Date }[] = [];
   chatInput: string = '';
@@ -50,37 +44,42 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
     private jwtService: JwtService,
     private route: ActivatedRoute,
     private meetingService: MeetingService,
-    private ParticipantsService: ParticipantsService,
+    private participantsService: ParticipantsService,
     private cdr: ChangeDetectorRef,
     private router: Router
-  ) { }
+  ) {
+    this.participantId = this.jwtService.getName();
+  }
 
   async ngOnInit() {
     this.updateTime();
     this.intervalId = setInterval(() => this.updateTime(), 60000);
-    this.participantId = this.jwtService.getName()
 
     this.roomId = this.route.snapshot.paramMap.get('id') || '';
     this.roomLink = `${window.location.origin}/pages/components/meeting-room/${this.roomId}`;
     console.log('Joining room:', this.roomId, 'with participantId:', this.participantId);
+
     this.meetingService.joinRoom(this.roomId, this.participantId).subscribe({
       next: () => console.log('Joined room successfully'),
       error: (err) => {
         console.error('Error joining room:', err);
+        this.errorMessage = 'Lỗi khi tham gia phòng. Vui lòng thử lại.';
         this.cdr.detectChanges();
       },
     });
+
     await this.startWebRTC();
     this.loadChatHistory();
     this.connectWebSocket();
-    this.ParticipantsService.addParticipant(this.participantId,this.roomId).subscribe({
-      next: () => console.log('save paticipant successfully'),
+
+    this.participantsService.addParticipant(this.participantId, this.roomId).subscribe({
+      next: () => console.log('Saved participant successfully'),
       error: (err) => {
-        console.error('Error save paticipant:', err);
+        console.error('Error saving participant:', err);
         this.cdr.detectChanges();
       },
     });
-    console.log("mt ID:  "+this.roomId)
+
     window.addEventListener('popstate', this.onBackButton);
   }
 
@@ -142,7 +141,7 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
       try {
         this.screenStream = await navigator.mediaDevices.getDisplayMedia({
           video: true,
-          audio: true, // Attempt to capture system audio
+          audio: true,
         });
         this.isScreenSharing = true;
         console.log('Screen stream initialized with tracks:', this.screenStream.getTracks());
@@ -235,19 +234,16 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
       let stream: MediaStream;
       let audioStream: MediaStream | null = null;
 
-      // Always include localStream for audio (microphone)
       if (this.localStream) {
         audioStream = new MediaStream(this.localStream.getAudioTracks());
       }
 
       if (this.isScreenSharing && this.screenStream) {
-        // Combine screenStream (video and possibly audio) with localStream audio
         stream = new MediaStream([
           ...this.screenStream.getVideoTracks(),
           ...(audioStream ? audioStream.getAudioTracks() : this.screenStream.getAudioTracks())
         ]);
       } else if (this.localStream) {
-        // Record only localStream (camera + microphone)
         stream = new MediaStream([
           ...this.localStream.getVideoTracks(),
           ...this.localStream.getAudioTracks()
@@ -369,7 +365,15 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
           console.log('Received ICE candidate from:', peerId);
           if (peerConnection) {
             if (signal.candidate && signal.candidate.candidate) {
-              await peerConnection.addIceCandidate(new RTCIceCandidate(signal.candidate));
+              if (peerConnection.remoteDescription) {
+                await peerConnection.addIceCandidate(new RTCIceCandidate(signal.candidate));
+              } else {
+                if (!this.pendingIceCandidates.has(peerId)) {
+                  this.pendingIceCandidates.set(peerId, []);
+                }
+                this.pendingIceCandidates.get(peerId)!.push(new RTCIceCandidate(signal.candidate));
+                console.log('Stored ICE candidate for:', peerId);
+              }
             } else {
               console.log('Received empty ICE candidate (end of candidates) for:', peerId);
             }
@@ -509,6 +513,7 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
     }
 
     this.signalQueue.delete(peerId);
+    this.pendingIceCandidates.delete(peerId);
 
     const peerExists = this.peers.some(peer => peer.id === peerId);
     if (peerExists) {
@@ -560,10 +565,19 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
           return;
         }
         if (peerConnection.signalingState !== 'stable') {
-          console.warn(`Cannot process offer in signaling state: ${peerConnection.signalingState}`);
+          console.log(`Delaying offer processing for peer ${peerId}, current signaling state: ${peerConnection.signalingState}`);
+          setTimeout(() => this.processSignalQueue(peerId), 100);
           return;
         }
         await peerConnection.setRemoteDescription(new RTCSessionDescription(signal.sdp));
+        if (this.pendingIceCandidates.has(peerId)) {
+          const candidates = this.pendingIceCandidates.get(peerId)!;
+          for (const candidate of candidates) {
+            await peerConnection.addIceCandidate(candidate);
+            console.log('Applied pending ICE candidate for:', peerId);
+          }
+          this.pendingIceCandidates.delete(peerId);
+        }
         const answer = await peerConnection.createAnswer();
         await peerConnection.setLocalDescription(answer);
         this.ws?.send(
@@ -585,10 +599,19 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
           return;
         }
         if (peerConnection.signalingState !== 'have-local-offer') {
-          console.warn(`Cannot process answer in signaling state: ${peerConnection.signalingState}`);
+          console.log(`Delaying answer processing for peer ${peerId}, current signaling state: ${peerConnection.signalingState}`);
+          setTimeout(() => this.processSignalQueue(peerId), 100);
           return;
         }
         await peerConnection.setRemoteDescription(new RTCSessionDescription(signal.sdp));
+        if (this.pendingIceCandidates.has(peerId)) {
+          const candidates = this.pendingIceCandidates.get(peerId)!;
+          for (const candidate of candidates) {
+            await peerConnection.addIceCandidate(candidate);
+            console.log('Applied pending ICE candidate for:', peerId);
+          }
+          this.pendingIceCandidates.delete(peerId);
+        }
       }
       queue.shift();
       await this.processSignalQueue(peerId);
@@ -608,6 +631,8 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
     const peerConnection = new RTCPeerConnection({
       iceServers: [
         { urls: 'stun:stun.l.google.com:19302' },
+        // Thêm TURN server nếu cần
+        // { urls: 'turn:your-turn-server.com', username: 'username', credential: 'credential' }
       ],
     });
 
@@ -810,13 +835,13 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
       );
       console.log('Sent participant-left message');
     }
-    this.meetingService.leaveRoom(this.participantId,this.roomId).subscribe({
-      next: () => console.log('set paticipant time leave OK'),
+    this.meetingService.leaveRoom(this.participantId, this.roomId).subscribe({
+      next: () => console.log('Set participant time leave OK'),
       error: (err) => {
-        console.error('user : '+ this.participantId+'Error set paticipant time leave:', err);
+        console.error('User:', this.participantId, 'Error setting participant time leave:', err);
         this.cdr.detectChanges();
       },
-    });;
+    });
 
     this.stopScreenShare();
     this.localStream?.getTracks().forEach((track) => track.stop());
@@ -839,7 +864,7 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    window.addEventListener('popstate', this.onBackButton);
+    window.removeEventListener('popstate', this.onBackButton);
     clearInterval(this.intervalId);
 
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
@@ -881,14 +906,14 @@ export class MeetingRoomComponent implements OnInit, OnDestroy {
     const date = now.toLocaleDateString('vi-VN', { weekday: 'short', day: '2-digit', month: '2-digit' });
     this.currentTime = `${time} • ${date}`;
   }
+
   onBackButton = (event: PopStateEvent) => {
-    this.meetingService.leaveRoom(this.participantId,this.roomId).subscribe({
-      next: () => console.log('save time leave successfully'),
+    this.meetingService.leaveRoom(this.participantId, this.roomId).subscribe({
+      next: () => console.log('Saved time leave successfully'),
       error: (err) => {
-        console.error('Error time leave paticipant:', err);
+        console.error('Error setting participant time leave:', err);
         this.cdr.detectChanges();
       },
     });
   }
-
 }

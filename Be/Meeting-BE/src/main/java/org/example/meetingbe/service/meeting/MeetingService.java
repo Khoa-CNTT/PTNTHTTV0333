@@ -111,22 +111,4 @@ public class MeetingService implements IMeetingService {
         return savedMeeting.getCode();
     }
 
-
-    public Meeting convertToEntity(MeetingDto dto) {
-        Set<User> users = dto.getUser().stream()
-                .map(id -> userRepo.findById(id)
-                        .orElseThrow(() -> new RuntimeException("User not found: " + id)))
-                .collect(Collectors.toSet());
-
-        Meeting meeting = new Meeting();
-        meeting.setId(dto.getId());
-        meeting.setCode(dto.getCode());
-        meeting.setTitle(dto.getTitle());
-        meeting.setActive(dto.getActive());
-        meeting.setStartTime(dto.getStartTime());
-        meeting.setEndTime(dto.getEndTime());
-        meeting.setCreateAt(dto.getCreateAt());
-        return meeting;
-    }
-
 }
