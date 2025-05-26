@@ -17,6 +17,7 @@ import { SumaryAiComponent } from './users/sumary-ai/sumary-ai.component';
 import { UserInfoComponent } from './users/user-info/user-info.component';
 import { ContactComponent } from './users/contact/contact.component';
 import { AuthGuardService } from 'src/app/services/auth-guard.service';
+import { ResultPayComponent } from './users/result-pay/result-pay.component';
 
 
 
@@ -37,7 +38,8 @@ const routes: Routes = [
       { path: 'recording', component: RecordingComponent, canActivate: [AuthGuardService], data: { roles: ['ADMIN', 'USER'] } },
       { path: 'scheduling', component: SchedulingComponent, canActivate: [AuthGuardService], data: { roles: ['ADMIN', 'USER'] } },
       { path: 'sumary-ai', component: SumaryAiComponent, canActivate: [AuthGuardService], data: { roles: ['ADMIN', 'USER'] } },
-      { path: 'user-info', component: UserInfoComponent, canActivate: [AuthGuardService], data: { roles: ['ADMIN', 'USER'] } }
+      { path: 'user-info', component: UserInfoComponent, canActivate: [AuthGuardService], data: { roles: ['ADMIN', 'USER'] } },
+      { path: 'result-pay', component: ResultPayComponent, canActivate: [AuthGuardService], data: { roles: ['ADMIN', 'USER'] } }
     ]
   }
 ];

@@ -21,6 +21,13 @@ public class Payment {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public Payment(Double total, Boolean status, LocalDateTime createAt, User user) {
+        this.total = total;
+        this.status = status;
+        this.createAt = createAt;
+        this.user = user;
+    }
+
     public Payment() {
     }
 

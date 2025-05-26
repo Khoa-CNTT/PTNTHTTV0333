@@ -1,0 +1,170 @@
+.meeting-history-container {
+  width: 100%;
+  padding: 20px;
+}
+
+.meeting-history-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.meeting-history-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  transition: 0.3s;
+}
+
+.meeting-history-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Ô tìm kiếm */
+.search-bar {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.search-input {
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  width: 100%;
+}
+
+/* Bảng */
+.table-responsive {
+  overflow-x: auto;
+}
+
+.meeting-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+
+.meeting-table thead {
+  background-color: #fae8ea;
+  color: #333;
+}
+
+.meeting-table th,
+.meeting-table td {
+  padding: 16px 12px;
+  text-align: left;
+}
+
+/* Zebra striping */
+.meeting-table tbody tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+.meeting-table tbody tr:nth-child(even) {
+  background-color: #fcf8f8;
+}
+
+.meeting-table tbody tr:hover {
+  background-color: #fae8ea;
+}
+
+/* Nút xem lại */
+.btn-view {
+  padding: 8px 14px;
+  background-color: #c2363f;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn-view:hover {
+  background-color: #a62c33;
+}
+
+/* Nút quay lại */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background-color: transparent;
+  color: #c2363f;
+  border: 2px solid #c2363f;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 24px;
+}
+
+.back-btn:hover {
+  background-color: #c2363f;
+  color: white;
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+
+  .meeting-table th,
+  .meeting-table td {
+    padding: 12px 8px;
+    font-size: 14px;
+  }
+
+  .search-bar {
+    text-align: center;
+  }
+
+  .search-input {
+    width: 100%;
+    margin-bottom: 12px;
+  }
+
+  .btn-view {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination-btn {
+  padding: 10px 15px;
+  margin: 0 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+
+.pagination-btn.active {
+  background-color: #c2363f;
+  color: white;
+  border-color: #c2363f;
+}
+
+.pagination-btn:hover:not(.active):not([disabled]) {
+  background-color: #eaeaea;
+}
+
+.pagination-btn[disabled] {
+  cursor: not-allowed;
+  opacity: 0.6;
+}

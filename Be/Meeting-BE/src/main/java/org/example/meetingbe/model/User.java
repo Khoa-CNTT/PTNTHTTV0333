@@ -27,12 +27,14 @@ public class User {
     @Column(name = "is_vip", columnDefinition = "BIT")
     @ColumnDefault("0")
     private Boolean isVip;
+    @Column(name = "gender")
+    private Integer gender;
     @Column(name = "avater", columnDefinition = "TEXT")
     private String avatar;
     @Column(name = "provider", columnDefinition = "varchar(20)")
     private String provider;
     @Column(name = "create_at", columnDefinition = "DATETIME")
-    private LocalDateTime createAt;
+    private LocalDateTime createAt = LocalDateTime.now();
     @Column(name = "status", columnDefinition = "BIT")
     private Boolean status = false;
     @Column(name = "birthday", columnDefinition = "DATE")
@@ -73,7 +75,7 @@ public class User {
         this.roles = roles;
     }
 
-    public User(Long id, String email, String password, String firstName, String lastName, String userName, Boolean isVip, String avatar, String provider, LocalDateTime createAt, Boolean status, LocalDate birthday, String phone, String address, Set<Role> roles) {
+    public User(Long id, String email, String password, String firstName, String lastName, String userName, Boolean isVip, Integer gender, String avatar, String provider, LocalDateTime createAt, Boolean status, LocalDate birthday, String phone, String address, Set<Role> roles) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -81,6 +83,7 @@ public class User {
         this.lastName = lastName;
         this.userName = userName;
         this.isVip = isVip;
+        this.gender = gender;
         this.avatar = avatar;
         this.provider = provider;
         this.createAt = createAt;
@@ -89,6 +92,16 @@ public class User {
         this.phone = phone;
         this.address = address;
         this.roles = roles;
+    }
+
+
+
+    public Integer getGender() {
+        return gender;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
     }
 
     public LocalDate getBirthday() {
@@ -115,13 +128,14 @@ public class User {
         this.address = address;
     }
 
-    public User(String provider, Boolean isVip, String userName, String password, String email, Set<Role> roles) {
+    public User(String provider, Boolean isVip, String userName, String password, String email, Set<Role> roles, String avatar) {
         this.provider = provider;
         this.isVip = isVip;
         this.userName = userName;
         this.password = password;
         this.email = email;
         this.roles = roles;
+        this.avatar = avatar;
     }
 
     public Boolean getStatus() {

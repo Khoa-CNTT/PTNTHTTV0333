@@ -1,1 +1,53 @@
-<p>payment works!</p>
+<app-navigation></app-navigation>
+
+<div class="profile-container">
+    <div class="profile-wrapper">
+        <div class="profile-card">
+            <button class="back-btn" routerLink="/pages/components/home-main">
+                <i class="fas fa-arrow-left"></i> Quay lại
+            </button>
+            <h3 class="profile-title"><strong>ĐĂNG KÝ THÀNH VIÊN VIP</strong></h3>
+            <table class="benefit-table">
+                <thead>
+                    <tr>
+                        <th>Tính năng</th>
+                        <th>Bình thường</th>
+                        <th class="vip-header">VIP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>AI tóm tắt cuộc họp</td>
+                        <td>❌ Không download file được</td>
+                        <td>✅ Cho phép dowload file tóm tắt</td>
+                    </tr>
+                    <tr>
+                        <td>Số người tham gia</td>
+                        <td>5 người</td>
+                        <td>✅ 100 người</td>
+                    </tr>
+                    <tr>
+                        <td>Thời lượng cuộc họp</td>
+                        <td>40 phút</td>
+                        <td>✅ Không giới hạn</td>
+                    </tr>
+
+                    <tr>
+                        <td>Chia sẻ màn hình HD</td>
+                        <td>❌ Chỉ 720p</td>
+                        <td>✅ Full HD 1080p</td>
+                    </tr>
+
+                    <!-- <tr>
+                        <td>Hỗ trợ kỹ thuật</td>
+                        <td>Email trong 48h</td>
+                        <td>✅ Ưu tiên 24/7</td>
+                    </tr> -->
+                </tbody>
+            </table>
+            <div style="text-align: center; margin-top: 20px;">
+                <button (click)="payment()" class="upgrade-btn">Nâng cấp lên VIP</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,15 +1,12 @@
 package org.example.meetingbe.service.user;
 
 import jakarta.mail.MessagingException;
-import org.example.meetingbe.dto.MonthlyUserCountDTO;
-import org.example.meetingbe.dto.Register;
-import org.example.meetingbe.dto.UserNameDTO;
+import org.example.meetingbe.dto.*;
 import org.example.meetingbe.model.Contact;
 import org.example.meetingbe.model.Role;
 import org.example.meetingbe.model.User;
 import org.example.meetingbe.repository.IRoleRepo;
 import jakarta.persistence.EntityNotFoundException;
-import org.example.meetingbe.dto.UserDto;
 import org.example.meetingbe.model.User;
 import org.example.meetingbe.repository.IUserRepo;
 import org.example.meetingbe.service.mailSender.MailRegister;
@@ -38,9 +35,9 @@ public class UserService implements IUserService {
     @Override
     public void register(Register register) throws MessagingException {
         Set<Role> role = roleRepo.findByRoleName("USER");
-        User user = new User("local", false, register.getUserName(), passwordEncoder.encode(register.getPassword()),register.getEmail(), role);
+        User user = new User("local", false, register.getUserName(), passwordEncoder.encode(register.getPassword()),register.getEmail(), role, "https://scr.vn/wp-content/uploads/2020/07/Avatar-Facebook-trắng.jpg");
         userRepo.save(user);
-        mailRegister.sendEmailRegister(register.getEmail());
+        mailRegister.sendEmailRegister(register.getEmail(), register.getUserName());
     }
 
     @Override
@@ -59,31 +56,43 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public Page<User> getAllByStatusTrue(Pageable pageable) {
+        Page<User> users = userRepo.getAllByStatusTrue(pageable);
+        return users;
+    }
+
+    @Override
+    public Page<User> getAllByStatusFalse(Pageable pageable) {
+        Page<User> users = userRepo.getAllByStatusFalse(pageable);
+        return users;
+    }
+
+    @Override
     public User getUserById(Long userId) {
         return userRepo.findById(userId).get();
     }
 
     @Override
-    public User updateUser(Long userId, UserDto updatedUser) {
-        if (userRepo.existsById(userId)) {
+    public User updateUser(Long id, UserDto updatedUser) {
+        if (userRepo.existsById(id)) {
             return userRepo.save(dtoToObject(updatedUser));
         } else {
+            throw new EntityNotFoundException("User with id " + id + " not found");
+        }
+    }
+
+    @Override
+    public User deleteUser(Long userId) {
+        User user = userRepo.findById(userId).get();
+        if (user == null){
             throw new EntityNotFoundException("User with id " + userId + " not found");
         }
-    }
-
-    @Override
-    public boolean deleteUser(Long userId) {
-        if (userRepo.existsById(userId)){
-            userRepo.updateStatusUser(userRepo.findById(userId).get().getId());
-            return true;
+        if (user.getStatus()){
+            user.setStatus(false);
+        }else {
+            user.setStatus(true);
         }
-        return false;
-    }
-
-    @Override
-    public List<User> getAllUsers() {
-        return userRepo.findAll();
+        return userRepo.save(user);
     }
 
     @Override
@@ -142,17 +151,60 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserNameDTO getByUsername(String username) {
+    public UserEditTO getByUsername(String username) {
         User user = userRepo.findByUserName(username);
-        UserNameDTO userDto = new UserNameDTO();
+        UserEditTO userDto = new UserEditTO();
         userDto.setId(user.getId());
         userDto.setEmail(user.getEmail());
         userDto.setFirstName(user.getFirstName());
         userDto.setLastName(user.getLastName());
-        userDto.setAvatar(user.getAvatar());
+        userDto.setUserName(user.getUserName());
         userDto.setVip(user.getVip());
-        userDto.setCreateAt(user.getCreateAt());
+        userDto.setGender(user.getGender());
+        userDto.setAvatar(user.getAvatar());
+        userDto.setPhone(user.getPhone());
+        userDto.setBirthday(user.getBirthday());
+        userDto.setAddress(user.getAddress());
         return userDto;
+    }
+
+    @Override
+    public Page<User> getByUN(String userName, Pageable pageable) {
+        return userRepo.findByUserName(userName,pageable);
+    }
+
+    @Override
+    public User resetPassword(String password, String email) {
+        Optional<User> user = userRepo.findByEmail(email);
+        user.get().setPassword(passwordEncoder.encode(password));
+        userRepo.save(user.get());
+        return user.get();
+    }
+
+    @Override
+    public User updateProfile(Long id,UserEditTO userEditTO) {
+        if (userRepo.existsById(id)) {
+            User user = userRepo.findById(id).get();
+            user.setId(userEditTO.getId());
+            user.setEmail(userEditTO.getEmail());
+            user.setFirstName(userEditTO.getFirstName());
+            user.setLastName(userEditTO.getLastName());
+            user.setUserName(userEditTO.getUserName());
+            user.setVip(userEditTO.getVip());
+            user.setAvatar(userEditTO.getAvatar());
+            user.setPhone(userEditTO.getPhone());
+            user.setAddress(userEditTO.getAddress());
+            user.setGender(userEditTO.getGender());
+            user.setBirthday(userEditTO.getBirthday());
+            return userRepo.save(user);
+        } else {
+            throw new EntityNotFoundException("User with id " + id + " not found");
+        }
+    }
+
+    @Override
+    public int updateUserVip(String userName) {
+        return userRepo.updateUserVip(userName);
     }
 
     public User dtoToObject(UserDto dto){
@@ -167,6 +219,22 @@ public class UserService implements IUserService {
         user.setAvatar(dto.getAvatar());
         user.setCreateAt(dto.getCreateAt() != null ? dto.getCreateAt() : LocalDateTime.now());
         user.setRoles(dto.getRoleIds());
+        return user;
+    }
+
+    public User userEditToObject(UserEditTO dto){
+        User user = new User();
+        user.setId(dto.getId());
+        user.setEmail(dto.getEmail());
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setUserName(dto.getUserName());
+        user.setVip(dto.getVip());
+        user.setAvatar(dto.getAvatar());
+        user.setPhone(dto.getPhone());
+        user.setAddress(dto.getAddress());
+        user.setGender(dto.getGender());
+        user.setBirthday(dto.getBirthday());
         return user;
     }
 

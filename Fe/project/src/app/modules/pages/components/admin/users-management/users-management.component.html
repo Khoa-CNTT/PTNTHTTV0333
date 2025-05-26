@@ -11,10 +11,10 @@
 
         <!-- Sort Section -->
         <div class="post-filter">
-            <select class="post-sort-select">
+            <select class="post-sort-select" class="sort-select" (change)="onFilterChange($event.target.value)">
                 <option value="all">Tất cả</option>
-                <option value="approved">Đã duyệt</option>
-                <option value="pending">Chưa duyệt</option>
+                <option value="active">Đang hoạt động</option>
+                <option value="banned">Bị khóa</option>
             </select>
         </div>
 
@@ -23,6 +23,7 @@
             <thead>
                 <tr>
                     <th>#</th>
+                    <th>Tên đăng nhập</th>
                     <th>Họ và tên</th>
                     <th>Email</th>
                     <th>Ngày tạo</th>
@@ -33,70 +34,63 @@
             </thead>
             <!-- Add tbody here -->
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Nguyễn Văn A</td>
-                    <!-- <td>nguyenvana@gmail.com</td> -->
-                    <td>2023-10-01</td>
-                    <td>Thành viên thường</td>
-                    <td style="color: green;">Đang hoạt động</td>
-                    <td>
-                        <button class="back-btn" data-bs-toggle="modal" data-bs-target="#duyet">Xử lý</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Nguyễn Văn A</td>
-                    <!-- <td>nguyenvana@gmail.com</td> -->
-                    <td>2023-10-01</td>
-                    <td>Thành viên thường</td>
-                    <td style="color: green;">Đang hoạt động</td>
-                    <td>
-                        <button class="back-btn" data-bs-toggle="modal" data-bs-target="#duyet">Xử lý</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Nguyễn Văn A</td>
-                    <!-- <td>nguyenvana@gmail.com</td> -->
-                    <td>2023-10-01</td>
-                    <td>Thành viên thường</td>
-                    <td style="color: green;">Đang hoạt động</td>
-                    <td>
-                        <button class="back-btn" data-bs-toggle="modal" data-bs-target="#duyet">Xử lý</button>
-                    </td>
-                </tr>
-                
-                <!-- Add more rows as needed -->
-        </table>
-
-        <div class="pagination">
-            <button class="pagination-btn">Trước</button>
-            <div>
-                <button class="pagination-btn">1</button>
-                <button class="pagination-btn">2</button>
-                <button class="pagination-btn">3</button>
-            </div>
-            <button class="pagination-btn">Tiếp</button>
-        </div>
+        <tr *ngFor="let item of users; index as i">
+          <td>{{i+1}}</td>
+          <td class="title-cell">{{item.userName}}</td>
+          <td class="title-cell">{{item.lastName}} {{item.firstName}}</td>
+          <td>{{item.email}}</td>
+          <td>{{item.createAt | date: 'short'}}</td>
+          <td [ngStyle]="{'color': FormatIsVipColor(item.vip)}">
+            <strong>{{FormatIsVip(item.vip)}}</strong>
+          </td>
+          <td [ngStyle]="{'color': FormatStatusColor(item.status)}">
+            <strong>{{FormatStatus(item.status)}}</strong>
+          </td>
+          <td class="btn-cell">
+            
+            <button (click)="getIdUser(item)" class="btn btn-danger btn-sm"
+              data-bs-toggle="modal" data-bs-target="#updateStatus">
+              <i class="fas fa-check-circle"></i> {{FormatUpdateButton(item.status)}}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+      <tr *ngIf="noRecord === 0">
+        <td colspan="19">
+          <h5 style="padding: 20px 10px;" class="text-center validate-msg-color">Không có người dùng</h5>
+        </td>
+      </tr>
+    </table>
+    <div class="pagination" *ngIf="pages">
+      <button class="pagination-btn" (click)="previousPage()" [disabled]="currentPage === 0">Trước</button>
+      <div *ngFor="let page of pageRange">
+        <button class="pagination-btn" [class.active]="page === currentPage" (click)="goToPage(page)">{{ page +
+          1 }}</button>
+      </div>
+      <button class="pagination-btn" (click)="nextPage()" [disabled]="currentPage === totalPages - 1">Tiếp</button>
     </div>
+  </div>
 </div>
 
 <!-- Modal Duyet -->
-<div class="modal fade" id="duyet" tabindex="-1" aria-labelledby="duyetLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-4 modal-title-text" id="duyetLabel">DUYỆT BÀI</h1>
-            </div>
-            <form>
-                <div class="modal-body">
-                    <p>Bạn có muốn duyệt bài viết này không?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn-submit" data-bs-dismiss="modal">Xác nhận</button>
-                </div>
-            </form>
+<div class="modal fade" id="updateStatus" tabindex="-1" aria-labelledby="duyetLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="border-radius: 12px;">
+      <div class="modal-header" style="background-color: #c2363f; color: white;">
+        <h5 class="modal-title" id="duyetLabel">Chỉnh sửa trạng thái</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"
+          style="filter: invert(1);"></button>
+      </div>
+      <form [formGroup]="userUpdateForm" (ngSubmit)="updateStatus()">
+        <div class="modal-body">
+          <p>Bạn có chắc chắn muốn cập nhật lại trạng thái của người dùng này không?</p>
         </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal" style="color: #c2363f;">Hủy</button>
+          <button type="submit" class="btn btn-danger" style="background-color: #c2363f;" data-bs-dismiss="modal">Xác
+            nhận</button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>

@@ -22,9 +22,20 @@ export class ContactService {
     return this.http.get<Contact[]>(blogApprove)
   }
 
-  updateContact(contact: Contact): Observable<Contact> {
-    return this.http.put<Contact>(`${this.API_CONTACT}`, contact);
+  getAllContactTrue(page: number, pageSize: number): Observable<Contact[]> {
+    const blogApprove = `${this.API_CONTACT}/getPageContactTrue?page=${page}&size=${pageSize}`;
+    return this.http.get<Contact[]>(blogApprove)
   }
+
+  getAllContactFalse(page: number, pageSize: number): Observable<Contact[]> {
+    const blogApprove = `${this.API_CONTACT}/getPageContactFalse?page=${page}&size=${pageSize}`;
+    return this.http.get<Contact[]>(blogApprove)
+  }
+
+  updateContact(id: number, contact: Contact): Observable<string> {
+    return this.http.put(`${this.API_CONTACT}/updateContact/${id}`, contact, {responseType: 'text'})
+  }
+
 
   findByIdContact(id: any): Observable<Contact> {
     return this.http.get<Contact>(this.API_CONTACT + '/getContactById/' + id);

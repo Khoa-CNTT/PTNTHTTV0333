@@ -23,6 +23,13 @@ public class Participants {
     public Participants() {
     }
 
+    public Participants(LocalDateTime joinAt, LocalDateTime leftAt, Meeting meeting, User user) {
+        this.joinAt = joinAt;
+        this.leftAt = leftAt;
+        this.meeting = meeting;
+        this.user = user;
+    }
+
     public Long getId() {
         return id;
     }

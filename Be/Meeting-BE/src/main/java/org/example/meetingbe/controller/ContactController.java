@@ -31,9 +31,9 @@ public class ContactController {
     }
     @GetMapping("/getPageContact")
     public ResponseEntity<Page<Contact>> getPageContact(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "dateSend,asc") String[] sort
+            @RequestParam(name = "page",defaultValue = "0") int page,
+            @RequestParam(name = "size",defaultValue = "5") int size,
+            @RequestParam(name = "sort",defaultValue = "dateSend,desc") String[] sort
     ) {
         Sort.Direction direction = Sort.Direction.fromString(sort[1]);
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort[0]));
@@ -41,11 +41,35 @@ public class ContactController {
         Page<Contact> contacts = icontactService.findBy(pageable);
         return ResponseEntity.ok(contacts);
     }
+    @GetMapping("/getPageContactTrue")
+    public ResponseEntity<Page<Contact>> getPageContactTrue(
+            @RequestParam(name = "page",defaultValue = "0") int page,
+            @RequestParam(name = "size",defaultValue = "5") int size,
+            @RequestParam(name = "sort",defaultValue = "dateSend,desc") String[] sort
+    ) {
+        Sort.Direction direction = Sort.Direction.fromString(sort[1]);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort[0]));
 
-    @PutMapping("/updateContact")
-    public ResponseEntity<String> updateContact(@RequestBody  ContactDto contactDto) {
+        Page<Contact> contacts = icontactService.getAllByStatusTrue(pageable);
+        return ResponseEntity.ok(contacts);
+    }
+    @GetMapping("/getPageContactFalse")
+    public ResponseEntity<Page<Contact>> getPageContactFalse(
+            @RequestParam(name = "page",defaultValue = "0") int page,
+            @RequestParam(name = "size",defaultValue = "5") int size,
+            @RequestParam(name = "sort",defaultValue = "dateSend,desc") String[] sort
+    ) {
+        Sort.Direction direction = Sort.Direction.fromString(sort[1]);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort[0]));
+
+        Page<Contact> contacts = icontactService.getAllByStatusFalse(pageable);
+        return ResponseEntity.ok(contacts);
+    }
+
+    @PutMapping("/updateContact/{id}")
+    public ResponseEntity<String> updateContact(@PathVariable("id") Long id,@RequestBody  ContactDto contactDto) {
         try {
-            icontactService.updateContact(contactDto);
+            icontactService.updateContact(id);
             return new ResponseEntity<>("updated successfully", HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(" not found", HttpStatus.NOT_FOUND);

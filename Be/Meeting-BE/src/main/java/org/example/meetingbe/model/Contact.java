@@ -23,11 +23,12 @@ public class Contact {
     private User user;
 
     public Contact() {
+        this.dateSend =LocalDate.now();
     }
 
     public Contact(ContactDto contactDto) {
       this.content = contactDto.getContent();
-      this.dateSend = contactDto.getDateSend();
+      this.dateSend = LocalDate.now();
       this.status = contactDto.getStatus();
       this.user = contactDto.getUser();
     }

@@ -1,1 +1,24 @@
-<p>verify works!</p>
+<!-- HTML -->
+<div class="wrap-container">
+    <div class="contact-container">
+        <div class="form-section">
+            <form class="form" [formGroup]="otpForm" (ngSubmit)="submitOtp()" *ngIf="otpForm">
+                <div class="title">Mã OTP</div>
+                <div class="title">Nhập Mã Xác Minh</div>
+                <p class="message">Chúng tôi đã gửi mã xác minh đến email của bạn</p>
+                <div class="inputs">
+                    <input id="input1" type="text" maxlength="1" formControlName="otp1">
+                    <input id="input2" type="text" maxlength="1" formControlName="otp2">
+                    <input id="input3" type="text" maxlength="1" formControlName="otp3">
+                    <input id="input4" type="text" maxlength="1" formControlName="otp4">
+                </div>
+                <button class="action" type="submit" [disabled]="isLoading">
+                    <span *ngIf="!isLoading">Xác nhận</span>
+                    <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                    <span *ngIf="isLoading" class="ms-2">Đang kiểm tra...</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

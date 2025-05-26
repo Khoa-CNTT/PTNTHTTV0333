@@ -1,6 +1,7 @@
 package org.example.meetingbe.model;
 
 import jakarta.persistence.*;
+import org.example.meetingbe.dto.MeetingDto;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
@@ -10,7 +11,7 @@ public class Meeting {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(columnDefinition = "varchar(12)")
+    @Column(columnDefinition = "varchar(50)")
     private String code;
     @Column(columnDefinition = "varchar(50)")
     private String title;
@@ -29,6 +30,8 @@ public class Meeting {
 
     public Meeting() {
     }
+
+
 
     public Long getId() {
         return id;

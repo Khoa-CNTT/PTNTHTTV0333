@@ -17,8 +17,15 @@
                     <label><input type="checkbox" /> Ghi nhớ đăng nhập</label>
                     <a routerLink="/forgot-password">Quên mật khẩu?</a>
                 </div>
-                <button type="submit" class="submit-btn">Đăng nhập</button>
-                <div id="google-btn" class="google-btn"><i class="fab fa-google"></i>Đăng nhập bằng Google</div>
+                <button class="submit-btn" type="submit" [disabled]="isLoading">
+                    <span *ngIf="!isLoading">Đăng nhập</span>
+                    <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
+                    <span *ngIf="isLoading" class="ms-2">Đang cập nhập...</span>
+                </button>
+                <div id="google-btn" class="google-btn">
+                    <i class="fab fa-google"></i> Đăng nhập bằng Google
+                </div>
                 <div class="register">
                     Chưa có tài khoản? <a routerLink="/registration">Đăng ký ngay</a>
                 </div>

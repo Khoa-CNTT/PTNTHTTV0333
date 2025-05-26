@@ -1,4 +1,5 @@
 import { Component, ElementRef, HostListener, Inject, OnInit, Renderer2 } from '@angular/core';
+import { PaymentService } from 'src/app/services/payment.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -11,12 +12,13 @@ export class NavigationComponent implements OnInit {
   private intervalId: any;
   dropdownVisible = false;
   adminDropdownVisible = false;
-  constructor(private userService: UserService){
+  constructor(private userService: UserService, private paymentService: PaymentService){
 
   }
   ngOnInit() {
     this.updateTime();
     this.intervalId = setInterval(() => this.updateTime(), 60000);
+    this.setupNavi();
   }
 
   updateTime() {
@@ -53,5 +55,28 @@ export class NavigationComponent implements OnInit {
     this.userService.logout();
   }
   
+  // payment(){
+  //   console.log("pay");
+  //   this.paymentService.submitPay(1000000, "abcd").subscribe(next =>{
+  //     this.url = next;
+  //     console.log(this.url);
+  //     const redirectUrl = next.redirectUrl;
+  //     window.location.href = redirectUrl;
+  //   })
+
+    
+  // }
+
+
+  setupNavi(): boolean {
+    const roleData = localStorage.getItem('Role_Key');
+    const roles = JSON.parse(roleData);
+    for (let role of roles) {
+      if (role.authority === 'ADMIN') {
+        return true
+      }
+    }
+    return false;
+  }
 
 }

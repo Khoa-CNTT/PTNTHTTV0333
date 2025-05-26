@@ -1,10 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi"  xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Đăng ký thành công</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            background-color: #ffffff; /* nền trắng */
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid #f0f0f0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.03);
+        }
+        h2 {
+            color: #c2363f; /* màu chủ đạo */
+        }
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        a {
+            color: #c2363f; /* link cũng dùng màu chủ đạo */
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 13px;
+            color: #999;
+            text-align: center;
+        }
+        strong {
+            color: #c2363f;
+        }
+    </style>
 </head>
 <body>
-<h1>Đăng ký tài khoản thành công</h1>
+<div class="container">
+    <h2>Chúc mừng bạn đã đăng ký thành công!</h2>
+    <p>Xin chào <strong th:text="${name}"></strong>,</p>
+    <p>Bạn đã đăng ký tài khoản thành công trên nền tảng <strong>DTU MEET</strong>.</p>
+    <p>Thông tin tài khoản của bạn:</p>
+    <ul>
+        <li><strong>Email:</strong><b th:text="${email}"></b></li>
+        <li><strong>Ngày đăng ký:</strong><b th:text="${#temporals.format(date, 'dd/MM/yyyy HH:mm')}"></b></li>
+    </ul>
+    <p>Bạn có thể đăng nhập vào hệ thống để bắt đầu sử dụng dịch vụ của chúng tôi.</p>
+    <p>Nếu bạn có bất kỳ thắc mắc nào, đừng ngần ngại liên hệ với chúng tôi qua email hỗ trợ:
+        <a href="mailto:support@example.com">support@example.com</a>.</p>
+
+    <p>Trân trọng,<br>
+        Đội ngũ <strong>Admin</strong></p>
+
+    <div class="footer">
+        © 2025. All rights reserved.
+    </div>
+</div>
 </body>
 </html>

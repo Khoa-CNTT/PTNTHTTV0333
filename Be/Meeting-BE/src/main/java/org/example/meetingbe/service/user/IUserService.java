@@ -1,10 +1,7 @@
 package org.example.meetingbe.service.user;
 
 import jakarta.mail.MessagingException;
-import org.example.meetingbe.dto.MonthlyUserCountDTO;
-import org.example.meetingbe.dto.Register;
-import org.example.meetingbe.dto.UserDto;
-import org.example.meetingbe.dto.UserNameDTO;
+import org.example.meetingbe.dto.*;
 import org.example.meetingbe.model.Contact;
 import org.example.meetingbe.model.User;
 import org.springframework.data.domain.Page;
@@ -21,11 +18,11 @@ public interface IUserService {
     Boolean exitsByEmail(String email);
 
     Optional<User> findByEmail(String email);
-
+    Page<User> getAllByStatusTrue(Pageable pageable);
+    Page<User> getAllByStatusFalse(Pageable pageable);
     User getUserById(Long userId);
-    User updateUser(Long userId, UserDto updatedUser);
-    boolean deleteUser(Long userId);
-    List<User> getAllUsers();
+    User updateUser(Long id, UserDto updatedUser);
+    User deleteUser(Long userId);
     Page<User> findBy(Pageable pageable);
     long countTotalUsers(int year);
     long countVipUsers();
@@ -34,5 +31,10 @@ public interface IUserService {
     List<Integer> getAllYears();
     List<User> getAllByYear(int year);
     List<MonthlyUserCountDTO> getUserRegistrationsByYear(int year);
-    UserNameDTO getByUsername(String username);
+    UserEditTO getByUsername(String username);
+    Page<User> getByUN(String userName,Pageable pageable);
+
+    User resetPassword(String password, String email);
+    User updateProfile(Long id,UserEditTO userEditTO);
+    int updateUserVip(String userName);
 }

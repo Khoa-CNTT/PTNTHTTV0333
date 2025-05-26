@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, NgZone, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { JwtService } from 'src/app/services/jwt.service';
 import { UserService } from 'src/app/services/user.service';
 declare const google: any;
@@ -13,8 +14,10 @@ declare const google: any;
 export class LoginComponent implements OnInit {
 
   formLogin: FormGroup;
+  isLoading = false;
 
-  constructor(private userService: UserService, private jwtService: JwtService, private router: Router, private http: HttpClient, private ngZone: NgZone) {
+
+  constructor(private toast: ToastrService, private userService: UserService, private jwtService: JwtService, private router: Router, private http: HttpClient, private ngZone: NgZone) {
     this.formLogin = new FormGroup({
       userName: new FormControl(),
       password: new FormControl()
@@ -22,8 +25,8 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.Load();
     this.loadGoogleScript();
+    this.Load();
   }
   loadGoogleScript(): void {
     const scriptId = 'google-client-script';
@@ -50,10 +53,17 @@ export class LoginComponent implements OnInit {
         callback: (response: any) => this.handleGoogleLogin(response.credential)
       });
 
-      google.accounts.id.renderButton(
-        document.getElementById('google-btn'),
-        { theme: 'outline', size: 'large' }
-      );
+      setTimeout(() => {
+        google.accounts.id.renderButton(
+          document.getElementById('google-btn'),
+          { theme: 'outline', size: 'large' }
+        );
+      }, 0);
+
+      // google.accounts.id.renderButton(
+      //   document.getElementById('google-btn'),
+      //   { theme: 'outline', size: 'large' }
+      // );
     } else {
       console.error('Google object is not defined yet');
     }
@@ -61,21 +71,32 @@ export class LoginComponent implements OnInit {
 
 
   loginSubmit() {
-    this.userService.login(this.formLogin.value).subscribe(next => {
-      if (next.token != undefined) {
-        this.jwtService.setToken(next.token);
-        this.jwtService.setRoles(next.roles);
-        this.jwtService.setName(next.name);
-        this.jwtService.setDate(next.createdTime);
-        this.router.navigateByUrl("/pages/components/home-main");
+    this.isLoading = true;
+    this.userService.login(this.formLogin.value).subscribe( {
+      next: (res) =>{
+        if (res.token != undefined) {
+          this.jwtService.setToken(res.token);
+          this.jwtService.setRoles(res.roles);
+          this.jwtService.setName(res.name);
+          this.jwtService.setDate(res.createdTime);
+          this.isLoading = false;
+          this.toast.success("Đăng nhập thành công");
+          this.router.navigateByUrl("/pages/components/home-main");
+        }
+      },
+      error: (err) =>{
+        this.isLoading = false;
+        const errorMessage = err.error?.message || 'Đăng nhập thất bại. Vui lòng thử lại.';
+        this.toast.error(errorMessage);
       }
+      
     })
+    
   }
 
   handleGoogleLogin(idToken: string): void {
     this.http.post('http://localhost:8080/api/user/google', { idToken }).subscribe({
       next: (res: any) => {
-        // console.log('Google login success:', res);
         this.jwtService.setToken(res.token);
         this.jwtService.setRoles(res.roles);
         this.jwtService.setName(res.name);
@@ -85,13 +106,16 @@ export class LoginComponent implements OnInit {
         });
       },
       error: err => {
-        console.error('Google login failed:', err);
+        const errorMessage = err.error?.message || 'Đăng nhập Google thất bại. Vui lòng thử lại.';
+        this.ngZone.run(() => {
+          this.toast.error(errorMessage);
+        });
       }
     });
   }
 
-  Load(){
-    if(this.jwtService.verifyToken()){
+  Load() {
+    if (this.jwtService.verifyToken()) {
       this.router.navigateByUrl("/pages/components/home-main");
     }
   }

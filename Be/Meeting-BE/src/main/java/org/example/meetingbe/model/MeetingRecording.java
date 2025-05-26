@@ -10,7 +10,7 @@ public class MeetingRecording {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(columnDefinition = "DATETIME")
-    private LocalDateTime uploadAt;
+    private LocalDateTime uploadAt = LocalDateTime.now();
     @Column(columnDefinition = "TEXT")
     private String recordUrl;
     @ManyToOne
