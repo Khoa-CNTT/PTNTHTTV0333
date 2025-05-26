@@ -13,15 +13,18 @@
         </div>
     </div>
 </div>
-<div class="card" *ngIf="!result">
-    <div class="error-icon">
-          <svg viewBox="0 0 52 52">
-            <line x1="16" y1="16" x2="36" y2="36" />
-            <line x1="36" y1="16" x2="16" y2="36" />
-          </svg>
+<div class="container" *ngIf="!result">
+    <div class="success-container">
+        <div class="card">
+            <div class="checkmark">
+            <svg viewBox="0 0 52 52">
+                <path d="M14 27l8 8 16-16" />
+            </svg>
+            </div>
+            <div class="title">Thanh toán thất bại!</div>
+            <div class="message">Đã có lỗi xảy ra trong quá trình thanh toán. Vui lòng thử lại hoặc liên hệ hỗ trợ.</div>
+            <a routerLink="/pages/components/home-main" class="btn-home">Quay lại trang chủ</a>
+        </div>
     </div>
-    <div class="title">Thanh toán thất bại!</div>
-    <div class="message">Đã có lỗi xảy ra trong quá trình thanh toán. Vui lòng thử lại hoặc liên hệ hỗ trợ.</div>
-    <a href="/" class="btn-home">Quay lại trang chủ</a>
 </div>
 
